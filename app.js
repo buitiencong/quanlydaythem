@@ -25,6 +25,15 @@ initSqlJs({
   });
 });
 
+function formatDate(isoDate) {
+  const d = new Date(isoDate);
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const yy = String(d.getFullYear()).slice(-2);
+  return `${dd}-${mm}-${yy}`;
+}
+
+
 function loadClasses() {
   const tabs = document.getElementById("tabs");
   const contents = document.getElementById("tabContents");
@@ -99,7 +108,7 @@ function showClassData(classId) {
 
     const thead = document.createElement("thead");
     const headRow = document.createElement("tr");
-    ["Họ và tên", "Số buổi", "Số tiền", ...allDates].forEach(title => {
+   ["Họ và tên", "Số buổi", "Số tiền", ...allDates.map(formatDate)].forEach(title => {
       const th = document.createElement("th");
       th.textContent = title;
       headRow.appendChild(th);
@@ -125,19 +134,25 @@ function showClassData(classId) {
       const soBuoi = buoiRes[0]?.values[0][0] || 0;
       const tdBuoi = document.createElement("td");
       tdBuoi.textContent = soBuoi;
+      tdBuoi.style.textAlign = "center";
       row.appendChild(tdBuoi);
 
-      // Tổng số tiền đã đóng (từ bảng Thuhocphi)
-      const tienRes = db.exec(`
-        SELECT SUM(Thuhocphi_money) FROM Thuhocphi
-        WHERE student_id = ${student_id} AND class_name = (
-          SELECT class_name FROM Classes WHERE class_id = ${classId}
-        )
-      `);
-      const soTien = tienRes[0]?.values[0][0] || 0;
-      const tdTien = document.createElement("td");
-      tdTien.textContent = parseInt(soTien) + " đ";
-      row.appendChild(tdTien);
+      // Tính số tiền = số buổi x học phí lớp
+    
+
+      
+
+      const hocphiRes = db.exec(`
+    SELECT class_hocphi FROM Classes WHERE class_id = ${classId}
+    `);
+    const hocphi = hocphiRes[0]?.values[0][0] || 0;
+    const soTien = soBuoi * hocphi;
+
+    const tdTien = document.createElement("td");
+    tdTien.textContent = soTien.toLocaleString() + " đ";
+    tdTien.style.textAlign = "center";
+    row.appendChild(tdTien);
+
 
       // Các cột ngày điểm danh
       for (const date of allDates) {
@@ -148,8 +163,16 @@ function showClassData(classId) {
         `);
         const td = document.createElement("td");
         td.style.textAlign = "center";
-        td.textContent = ddRes.length > 0 ? "✔️" : "";
+
+        if (ddRes.length > 0) {
+        td.textContent = "🟢";
+        } else {
+        td.textContent = "❌";
+        td.style.color = "red";
+        }
+
         row.appendChild(td);
+
       }
 
       tbody.appendChild(row);
