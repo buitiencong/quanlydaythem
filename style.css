@@ -63,6 +63,7 @@ body {
   white-space: nowrap;
   cursor: pointer;
   color: black;
+  background-color: #f0faff;
 }
 .submenu li:hover {
   background-color: #f0f0f0;
