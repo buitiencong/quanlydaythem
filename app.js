@@ -177,3 +177,14 @@ function showClassData(classId) {
     container.innerHTML = "<p style='color:red'>Lỗi hiển thị dữ liệu: " + err.message + "</p>";
   }
 }
+
+function toggleSubmenu(el) {
+  const li = el.parentElement;
+  const openMenus = document.querySelectorAll(".has-submenu.open");
+
+  openMenus.forEach(menu => {
+    if (menu !== li) menu.classList.remove("open");
+  });
+
+  li.classList.toggle("open");
+}
