@@ -171,8 +171,7 @@ function showClassData(classId) {
       // Số tiền = số buổi x học phí
       const soTien = soBuoi * class_hocphi;
       const tdTien = document.createElement("td");
-      //tdTien.textContent = soTien.toLocaleString() + " đ";
-      tdTien.textContent = Math.round(soTien / 1000) + "k";
+      tdTien.textContent = soTien.toLocaleString() + " đ";
       tdTien.style.textAlign = "center";
       row.appendChild(tdTien);
 
