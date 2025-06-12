@@ -172,7 +172,7 @@ function showClassData(classId) {
       const soTien = soBuoi * class_hocphi;
       const tdTien = document.createElement("td");
       //tdTien.textContent = soTien.toLocaleString() + " đ";
-      tdTien.textContent = Math.round(soTien / 1000) + " k";
+      tdTien.textContent = Math.round(soTien / 1000) + "k";
       tdTien.style.textAlign = "center";
       row.appendChild(tdTien);
 
