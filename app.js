@@ -262,3 +262,61 @@ document.addEventListener("touchstart", function (e) {
     });
   }
 });
+
+
+function toggleSubmenu(el) {
+  const li = el.closest(".has-submenu");
+
+  // Nếu menu đang mở → đóng lại
+  const isOpen = li.classList.contains("open");
+
+  // Đóng tất cả menu khác
+  document.querySelectorAll(".has-submenu.open").forEach(menu => {
+    menu.classList.remove("open");
+  });
+
+  // Nếu menu đó chưa mở thì mở nó
+  if (!isOpen) {
+    li.classList.add("open");
+  }
+}
+
+// Đóng tất cả menu khi click/chạm ra ngoài
+document.addEventListener("click", function (e) {
+  if (!e.target.closest(".has-submenu")) {
+    document.querySelectorAll(".has-submenu.open").forEach(menu => {
+      menu.classList.remove("open");
+    });
+  }
+});
+
+document.addEventListener("touchstart", function (e) {
+  if (!e.target.closest(".has-submenu")) {
+    document.querySelectorAll(".has-submenu.open").forEach(menu => {
+      menu.classList.remove("open");
+    });
+  }
+});
+
+// Khi chọn menu con, ẩn tất cả menu cha
+function onMenuAction(action) {
+  // Ẩn menu đang mở
+  document.querySelectorAll(".has-submenu.open").forEach(menu => {
+    menu.classList.remove("open");
+  });
+
+  // Thực hiện hành động tùy theo ID
+  switch (action) {
+    case "them-lop":
+      alert("👉 Thêm lớp");
+      break;
+    case "sua-lop":
+      alert("👉 Sửa thông tin lớp");
+      break;
+    case "xoa-lop":
+      alert("👉 Xóa lớp");
+      break;
+    default:
+      alert("⚠️ Chưa xử lý: " + action);
+  }
+}
