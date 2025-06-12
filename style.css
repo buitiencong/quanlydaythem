@@ -129,7 +129,7 @@ table {
   justify-content: center;  /* ✅ Căn giữa ngang */
   flex-wrap: wrap;
   gap: 8px;
-  margin: 10px 0;
+  margin: 10px 0 0 0;
 }
 
 .tab-button {
