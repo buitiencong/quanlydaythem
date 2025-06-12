@@ -13,6 +13,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <script defer src="app.js"></script>
+  <link rel="stylesheet" href="style.css">
 
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
@@ -23,8 +24,35 @@
   </style>
 </head>
 <body>
-  <h2>📂 Chọn file SQLite (.db):</h2>
-  <input type="file" id="dbfile" accept=".db,.sqlite">
+    <nav class="menu-bar">
+    <ul class="menu">
+        <li>
+        <span>Lớp</span>
+        <ul class="submenu">
+            <li>Thêm lớp</li>
+            <li>Sửa thông tin lớp</li>
+            <li>Xóa lớp</li>
+        </ul>
+        </li>
+        <li>
+        <span>Học sinh</span>
+        <ul class="submenu">
+            <li>Thêm học sinh</li>
+            <li>Sửa thông tin học sinh</li>
+            <li>Xóa học sinh</li>
+        </ul>
+        </li>
+        <li><span>Điểm danh</span></li>
+        <li><span>Thu học phí</span></li>
+        <li><span>Thông tin</span></li>
+        <li><span>Lưu cơ sở dữ liệu</span></li>
+    </ul>
+    </nav>
+
+    <div id="fileSelect">
+        <h2>📂 Chọn file SQLite (.db):</h2>
+        <input type="file" id="dbfile" accept=".db,.sqlite">
+    </div>
 
   <div id="tabs"></div>
   <div id="tabContents"></div>
