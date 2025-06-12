@@ -21,9 +21,6 @@ body {
 
 .menu-bar {
   background-color: #007acc;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-
 }
 .menu {
   list-style: none;
@@ -85,6 +82,9 @@ body {
   border: none;
   width: 100%;
   text-align: left;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
 }
 
 @media (max-width: 768px) {
