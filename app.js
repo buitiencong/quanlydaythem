@@ -6,33 +6,26 @@ initSqlJs({
 }).then(SQLLib => {
   SQL = SQLLib;
 
-  // Khi app khởi động, thử load DB từ IndexedDB trước
   localforage.getItem("userDB").then(buffer => {
     if (buffer) {
       db = new SQL.Database(new Uint8Array(buffer));
-      loadClassesAndStudents();
+      loadClasses();
     }
   });
 
-  // Nghe sự kiện chọn file .db mới
   document.getElementById("dbfile").addEventListener("change", event => {
     const reader = new FileReader();
     reader.onload = function () {
       const uint8array = new Uint8Array(reader.result);
       db = new SQL.Database(uint8array);
-
-      // ✅ Lưu vào IndexedDB
-      localforage.setItem("userDB", uint8array).then(() => {
-        console.log("Đã lưu .db vào IndexedDB");
-      });
-
-      loadClassesAndStudents();
+      localforage.setItem("userDB", uint8array);
+      loadClasses();
     };
     reader.readAsArrayBuffer(event.target.files[0]);
   });
 });
 
-function loadClassesAndStudents() {
+function loadClasses() {
   const tabs = document.getElementById("tabs");
   const contents = document.getElementById("tabContents");
   tabs.innerHTML = "";
@@ -42,7 +35,7 @@ function loadClassesAndStudents() {
   try {
     classes = db.exec("SELECT class_id, class_name FROM Classes");
   } catch (err) {
-    tabs.innerHTML = "<p>Lỗi DB: " + err.message + "</p>";
+    tabs.innerHTML = "<p>Lỗi: " + err.message + "</p>";
     return;
   }
 
@@ -62,29 +55,9 @@ function loadClassesAndStudents() {
     const contentDiv = document.createElement("div");
     contentDiv.className = "tab-content" + (index === 0 ? " active" : "");
     contentDiv.id = `tab-${classId}`;
-
-    let studentResult;
-    try {
-      studentResult = db.exec(`SELECT student_name FROM Students WHERE class_id = ${classId}`);
-    } catch (err) {
-      contentDiv.innerHTML = "<p>Lỗi học sinh: " + err.message + "</p>";
-      contents.appendChild(contentDiv);
-      return;
-    }
-
-    if (studentResult.length > 0 && studentResult[0].values.length > 0) {
-      const ul = document.createElement("ul");
-      studentResult[0].values.forEach(([name]) => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        ul.appendChild(li);
-      });
-      contentDiv.appendChild(ul);
-    } else {
-      contentDiv.innerHTML = "<i>Không có học sinh.</i>";
-    }
-
     contents.appendChild(contentDiv);
+
+    if (index === 0) showClassData(classId);
   });
 }
 
@@ -95,4 +68,97 @@ function switchTab(classId) {
   document.querySelectorAll(".tab-content").forEach(div => {
     div.classList.toggle("active", div.id === `tab-${classId}`);
   });
+  showClassData(classId);
+}
+
+function showClassData(classId) {
+  const container = document.getElementById(`tab-${classId}`);
+  container.innerHTML = "<p>Đang tải...</p>";
+
+  try {
+    // Lấy học sinh của lớp
+    const studentResult = db.exec(`
+      SELECT student_id, student_name FROM Students WHERE class_id = ${classId}
+    `);
+    const students = studentResult[0]?.values || [];
+
+    // Lấy tất cả ngày điểm danh (status = 1) của lớp
+    const datesResult = db.exec(`
+      SELECT DISTINCT attendance_date FROM Attendance
+      WHERE class_id = ${classId} AND status = 1
+      ORDER BY attendance_date ASC
+    `);
+    const allDates = datesResult[0]?.values.map(r => r[0]) || [];
+
+    // Tạo bảng
+    const table = document.createElement("table");
+    table.border = "1";
+    table.cellPadding = "5";
+    table.style.borderCollapse = "collapse";
+    table.style.minWidth = "100%";
+
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+    ["Họ và tên", "Số buổi", "Số tiền", ...allDates].forEach(title => {
+      const th = document.createElement("th");
+      th.textContent = title;
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    for (const [student_id, student_name] of students) {
+      const row = document.createElement("tr");
+
+      // Họ và tên
+      const tdName = document.createElement("td");
+      tdName.textContent = student_name;
+      row.appendChild(tdName);
+
+      // Số buổi điểm danh
+      const buoiRes = db.exec(`
+        SELECT COUNT(*) FROM Attendance
+        WHERE student_id = ${student_id} AND class_id = ${classId} AND status = 1
+      `);
+      const soBuoi = buoiRes[0]?.values[0][0] || 0;
+      const tdBuoi = document.createElement("td");
+      tdBuoi.textContent = soBuoi;
+      row.appendChild(tdBuoi);
+
+      // Tổng số tiền đã đóng (từ bảng Thuhocphi)
+      const tienRes = db.exec(`
+        SELECT SUM(Thuhocphi_money) FROM Thuhocphi
+        WHERE student_id = ${student_id} AND class_name = (
+          SELECT class_name FROM Classes WHERE class_id = ${classId}
+        )
+      `);
+      const soTien = tienRes[0]?.values[0][0] || 0;
+      const tdTien = document.createElement("td");
+      tdTien.textContent = parseInt(soTien) + " đ";
+      row.appendChild(tdTien);
+
+      // Các cột ngày điểm danh
+      for (const date of allDates) {
+        const ddRes = db.exec(`
+          SELECT 1 FROM Attendance
+          WHERE student_id = ${student_id} AND class_id = ${classId}
+          AND attendance_date = '${date}' AND status = 1
+        `);
+        const td = document.createElement("td");
+        td.style.textAlign = "center";
+        td.textContent = ddRes.length > 0 ? "✔️" : "";
+        row.appendChild(td);
+      }
+
+      tbody.appendChild(row);
+    }
+
+    table.appendChild(tbody);
+    container.innerHTML = "";
+    container.appendChild(table);
+  } catch (err) {
+    container.innerHTML = "<p style='color:red'>Lỗi hiển thị dữ liệu: " + err.message + "</p>";
+  }
 }
