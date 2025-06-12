@@ -150,3 +150,29 @@ table {
 .action-buttons button:hover {
   background-color: #005fa3;
 }
+
+
+/* Mặc định submenu ẩn + hiệu ứng mượt */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+/* Khi mở, trượt xuống */
+.has-submenu.open .submenu {
+  max-height: 300px; /* tùy theo số dòng */
+}
+
+/* Hiển thị menu */
+.submenu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: black;
+  white-space: nowrap;
+}
+.submenu li:hover {
+  background-color: #f0f0f0;
+}

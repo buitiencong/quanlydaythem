@@ -242,3 +242,23 @@ function handleDiemDanh() {
 function handleThuHocPhi() {
   alert("👉 Chức năng Thu học phí đang được phát triển.");
 }
+
+
+// Tự động đón menu con khi chạm ra ngoài
+// Đóng tất cả submenu khi click ra ngoài
+document.addEventListener("click", function (e) {
+  const isMenuToggle = e.target.closest(".has-submenu");
+  if (!isMenuToggle) {
+    document.querySelectorAll(".has-submenu.open").forEach(el => {
+      el.classList.remove("open");
+    });
+  }
+});
+document.addEventListener("touchstart", function (e) {
+  const isMenuToggle = e.target.closest(".has-submenu");
+  if (!isMenuToggle) {
+    document.querySelectorAll(".has-submenu.open").forEach(el => {
+      el.classList.remove("open");
+    });
+  }
+});
