@@ -1,3 +1,24 @@
+/* Reset margin/padding mặc định trình duyệt */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* Đảm bảo phần nội dung chiếm toàn bộ chiều ngang */
+body {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+/* Nếu có container bao quanh, đảm bảo nó cũng full width */
+#tabs, #tabContents, .menu-bar, .action-buttons {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+
 .menu-bar {
   background-color: #007acc;
 }
