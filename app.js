@@ -1,12 +1,12 @@
 let db;
 let SQL;
 
+// Khởi tạo SQLite và kiểm tra dữ liệu từ IndexedDB
 initSqlJs({
   locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`
 }).then(SQLLib => {
   SQL = SQLLib;
 
-  // Nếu đã có DB trong IndexedDB, dùng luôn
   localforage.getItem("userDB").then(buffer => {
     if (buffer) {
       db = new SQL.Database(new Uint8Array(buffer));
@@ -15,7 +15,6 @@ initSqlJs({
     }
   });
 
-  // Khi người dùng chọn file .db
   document.getElementById("dbfile").addEventListener("change", event => {
     const reader = new FileReader();
     reader.onload = function () {
@@ -29,7 +28,7 @@ initSqlJs({
   });
 });
 
-// Hàm định dạng ngày dd-mm-yy
+// Định dạng ngày dd-mm-yy
 function formatDate(isoDate) {
   const d = new Date(isoDate);
   const dd = String(d.getDate()).padStart(2, '0');
@@ -106,6 +105,7 @@ function showClassData(classId) {
     table.cellPadding = "5";
     table.style.borderCollapse = "collapse";
     table.style.minWidth = "100%";
+    table.style.overflowX = "auto";
 
     const thead = document.createElement("thead");
     const headRow = document.createElement("tr");
@@ -119,13 +119,19 @@ function showClassData(classId) {
 
     const tbody = document.createElement("tbody");
 
-    for (const [student_id, student_name] of students) {
+    for (let index = 0; index < students.length; index++) {
+      const [student_id, student_name] = students[index];
       const row = document.createElement("tr");
 
+      // ✅ Tô màu xen kẽ
+      row.style.backgroundColor = index % 2 === 0 ? "#ffffff" : "#f0faff";
+
+      // Họ và tên
       const tdName = document.createElement("td");
       tdName.textContent = student_name;
       row.appendChild(tdName);
 
+      // Số buổi điểm danh
       const buoiRes = db.exec(`
         SELECT COUNT(*) FROM Attendance
         WHERE student_id = ${student_id} AND class_id = ${classId} AND status = 1
@@ -137,6 +143,7 @@ function showClassData(classId) {
       tdBuoi.style.textAlign = "center";
       row.appendChild(tdBuoi);
 
+      // Số tiền = số buổi x học phí
       const hocphiRes = db.exec(`
         SELECT class_hocphi FROM Classes WHERE class_id = ${classId}
       `);
@@ -148,6 +155,7 @@ function showClassData(classId) {
       tdTien.style.textAlign = "center";
       row.appendChild(tdTien);
 
+      // Cột các ngày điểm danh
       for (const date of allDates) {
         const ddRes = db.exec(`
           SELECT 1 FROM Attendance
@@ -178,17 +186,7 @@ function showClassData(classId) {
   }
 }
 
-function toggleSubmenu(el) {
-  const li = el.parentElement;
-  const openMenus = document.querySelectorAll(".has-submenu.open");
-
-  openMenus.forEach(menu => {
-    if (menu !== li) menu.classList.remove("open");
-  });
-
-  li.classList.toggle("open");
-}
-
+// ✅ Hàm xử lý mở menu (cho mobile)
 document.addEventListener("DOMContentLoaded", () => {
   const toggleBtn = document.getElementById("menuToggle");
   const menuBar = document.querySelector(".menu-bar");
@@ -199,3 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// ✅ Hàm mở/đóng submenu (cho iPhone)
+function toggleSubmenu(el) {
+  const li = el.parentElement;
+  const openMenus = document.querySelectorAll(".has-submenu.open");
+
+  openMenus.forEach(menu => {
+    if (menu !== li) menu.classList.remove("open");
+  });
+
+  li.classList.toggle("open");
+}
