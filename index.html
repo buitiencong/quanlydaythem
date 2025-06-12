@@ -25,29 +25,35 @@
 <body>
     <button id="menuToggle" class="menu-toggle">☰ Menu</button>
     <nav class="menu-bar">
-    <ul class="menu">
-        <li class="has-submenu">
-        <span onclick="toggleSubmenu(this)">Lớp</span>
-        <ul class="submenu">
-            <li>Thêm lớp</li>
-            <li>Sửa thông tin lớp</li>
-            <li>Xóa lớp</li>
+        <ul class="menu">
+            <li class="has-submenu">
+            <span onclick="toggleSubmenu(this)">Lớp</span>
+            <ul class="submenu">
+                <li>Thêm lớp</li>
+                <li>Sửa thông tin lớp</li>
+                <li>Xóa lớp</li>
+            </ul>
+            </li>
+            <li class="has-submenu">
+            <span onclick="toggleSubmenu(this)">Học sinh</span>
+            <ul class="submenu">
+                <li>Thêm học sinh</li>
+                <li>Sửa thông tin học sinh</li>
+                <li>Xóa học sinh</li>
+            </ul>
+            </li>
+            <li><span>Điểm danh</span></li>
+            <li><span>Thu học phí</span></li>
+            <li><span>Thông tin</span></li>
+            <li><span>Lưu cơ sở dữ liệu</span></li>
         </ul>
-        </li>
-        <li class="has-submenu">
-        <span onclick="toggleSubmenu(this)">Học sinh</span>
-        <ul class="submenu">
-            <li>Thêm học sinh</li>
-            <li>Sửa thông tin học sinh</li>
-            <li>Xóa học sinh</li>
-        </ul>
-        </li>
-        <li><span>Điểm danh</span></li>
-        <li><span>Thu học phí</span></li>
-        <li><span>Thông tin</span></li>
-        <li><span>Lưu cơ sở dữ liệu</span></li>
-    </ul>
     </nav>
+
+    <div class="action-buttons">
+        <button onclick="handleDiemDanh()">📅 Điểm danh</button>
+        <button onclick="handleThuHocPhi()">💵 Thu học phí</button>
+    </div>
+
 
 
     <div id="fileSelect">

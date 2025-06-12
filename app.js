@@ -209,3 +209,12 @@ function toggleSubmenu(el) {
 
   li.classList.toggle("open");
 }
+
+// Xử lý nút Điểm danh và Thu học phí
+function handleDiemDanh() {
+  alert("👉 Chức năng Điểm danh đang được phát triển.");
+}
+
+function handleThuHocPhi() {
+  alert("👉 Chức năng Thu học phí đang được phát triển.");
+}
