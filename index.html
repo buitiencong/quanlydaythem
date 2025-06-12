@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Web App Quản Lý Lớp</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
+  <script defer src="app.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .tab-button { padding: 10px; margin-right: 5px; border: 1px solid #ccc; cursor: pointer; display: inline-block; }
+    .tab-button.active { background: #d0e8ff; font-weight: bold; }
+    .tab-content { display: none; margin-top: 20px; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <h2>📂 Chọn file SQLite (.db):</h2>
+  <input type="file" id="dbfile" accept=".db,.sqlite">
+
+  <div id="tabs"></div>
+  <div id="tabContents"></div>
+</body>
+</html>
