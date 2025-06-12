@@ -122,7 +122,7 @@ function showClassData(classId) {
     infoDiv.style.borderRadius = "6px";
     infoDiv.style.textAlign = "center";
     infoDiv.textContent =
-      `Lớp: ${class_name} - Tổng số: ${students.length} học sinh - Học phí: ${Number(class_hocphi).toLocaleString()} ₫ - Thời gian: ${class_time} - Địa điểm: ${class_diadiem}`;
+      `Lớp: ${class_name} - Tổng số: ${students.length} học sinh - Học phí: ${Number(class_hocphi).toLocaleString()}₫ - Thời gian: ${class_time} - Địa điểm: ${class_diadiem}`;
 
     // ✅ Tạo bảng
     const table = document.createElement("table");
