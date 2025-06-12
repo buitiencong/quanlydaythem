@@ -188,3 +188,14 @@ function toggleSubmenu(el) {
 
   li.classList.toggle("open");
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const toggleBtn = document.getElementById("menuToggle");
+  const menuBar = document.querySelector(".menu-bar");
+
+  if (toggleBtn && menuBar) {
+    toggleBtn.addEventListener("click", () => {
+      menuBar.classList.toggle("open");
+    });
+  }
+});
