@@ -124,6 +124,14 @@ table {
 }
 
 /* Tab button tên lớp */
+#tabs {
+  display: flex;
+  justify-content: center;  /* ✅ Căn giữa ngang */
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
 .tab-button {
   padding: 10px 16px;
   margin: 4px;
