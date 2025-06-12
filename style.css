@@ -95,8 +95,8 @@
 }
 
 /* Cho phép bảng cuộn ngang trên màn hình nhỏ */
-/* table {
+table {
   overflow-x: auto;
   display: block;
   width: 100%;
-} */
+}
