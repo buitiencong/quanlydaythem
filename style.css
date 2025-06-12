@@ -131,7 +131,6 @@ table {
   border: 1px solid #ccc;
   cursor: pointer;
   border-radius: 6px; /* ✅ Thêm dòng này */
-  transition: background-color 0.2s ease;
 }
 
 .tab-button:hover {
