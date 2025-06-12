@@ -316,7 +316,59 @@ function onMenuAction(action) {
     case "xoa-lop":
       alert("👉 Xóa lớp");
       break;
+    case "them-hocsinh":
+      alert("👉 Thêm học sinh");
+      break;
+    case "sua-hocsinh":
+      alert("👉 Sửa thông tin học sinh");
+      break;
+    case "xoa-hocsinh":
+      alert("👉 Xóa học sinh");
+      break;
+    case "xuat-excel":
+      alert("👉 Xuất file excel");
+      break;
+    case "xuat-sqlite":
+      alert("👉 Xuất file sqlite");
+      break;
+    case "xuat-pdf":
+      alert("👉 Xuất file pdf");
+      break;
     default:
       alert("⚠️ Chưa xử lý: " + action);
   }
 }
+
+document.addEventListener("click", function (e) {
+  const clickedInsideMenu = e.target.closest(".menu-bar") || e.target.closest("#menuToggle");
+
+  if (!clickedInsideMenu) {
+    // Thu menu con
+    document.querySelectorAll(".has-submenu.open").forEach(menu => {
+      menu.classList.remove("open");
+    });
+
+    // Nếu đang trên thiết bị nhỏ → ẩn luôn menu chính
+    const menuBar = document.querySelector(".menu-bar");
+    if (window.innerWidth <= 768 && menuBar.classList.contains("open")) {
+      menuBar.classList.remove("open");
+    }
+  }
+});
+
+document.addEventListener("touchstart", function (e) {
+  const touchedInsideMenu = e.target.closest(".menu-bar") || e.target.closest("#menuToggle");
+
+  if (!touchedInsideMenu) {
+    // Thu menu con
+    document.querySelectorAll(".has-submenu.open").forEach(menu => {
+      menu.classList.remove("open");
+    });
+
+    // Ẩn menu chính nếu đang mở trên thiết bị nhỏ
+    const menuBar = document.querySelector(".menu-bar");
+    if (window.innerWidth <= 768 && menuBar.classList.contains("open")) {
+      menuBar.classList.remove("open");
+    }
+  }
+});
