@@ -172,7 +172,7 @@ function showClassData(classId) {
       const soTien = soBuoi * class_hocphi;
       const tdTien = document.createElement("td");
       //tdTien.textContent = soTien.toLocaleString() + " đ";
-      tdTien.textContent = soTien.toLocaleString('fr-FR') + " đ"; // Sử dụng tiếng Pháp để thay . bằng space
+      tdTien.textContent = soTien.toLocaleString().replace(/\./g, ' ') + " đ";
       tdTien.style.textAlign = "center";
       row.appendChild(tdTien);
 
