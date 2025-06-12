@@ -83,16 +83,20 @@ function switchTab(classId) {
   showClassData(classId);
 }
 
+
+// Hiển thị bảng danh sách học sinh
 function showClassData(classId) {
   const container = document.getElementById(`tab-${classId}`);
   container.innerHTML = "<p>Đang tải...</p>";
 
   try {
+    // ✅ Lấy danh sách học sinh
     const studentResult = db.exec(`
       SELECT student_id, student_name FROM Students WHERE class_id = ${classId}
     `);
     const students = studentResult[0]?.values || [];
 
+    // ✅ Lấy danh sách ngày điểm danh
     const datesResult = db.exec(`
       SELECT DISTINCT attendance_date FROM Attendance
       WHERE class_id = ${classId} AND status = 1
@@ -100,6 +104,27 @@ function showClassData(classId) {
     `);
     const allDates = datesResult[0]?.values.map(r => r[0]) || [];
 
+    // ✅ Lấy thông tin lớp
+    const classInfoRes = db.exec(`
+      SELECT class_name, class_hocphi, class_time, class_diadiem
+      FROM Classes
+      WHERE class_id = ${classId}
+    `);
+    const [class_name, class_hocphi, class_time, class_diadiem] = classInfoRes[0]?.values[0] || [];
+
+    // ✅ Tạo dòng thông tin lớp
+    const infoDiv = document.createElement("div");
+    infoDiv.style.margin = "10px 0";
+    infoDiv.style.fontWeight = "normal";
+    infoDiv.style.padding = "10px";
+    infoDiv.style.background = "#f1f9ff";
+    infoDiv.style.border = "1px solid #ccc";
+    infoDiv.style.borderRadius = "6px";
+    infoDiv.style.textAlign = "center";
+    infoDiv.textContent =
+      `Lớp: ${class_name} - Tổng số: ${students.length} học sinh - Học phí: ${Number(class_hocphi).toLocaleString()} ₫ - Thời gian: ${class_time} - Địa điểm: ${class_diadiem}`;
+
+    // ✅ Tạo bảng
     const table = document.createElement("table");
     table.border = "1";
     table.cellPadding = "5";
@@ -144,12 +169,7 @@ function showClassData(classId) {
       row.appendChild(tdBuoi);
 
       // Số tiền = số buổi x học phí
-      const hocphiRes = db.exec(`
-        SELECT class_hocphi FROM Classes WHERE class_id = ${classId}
-      `);
-      const hocphi = hocphiRes[0]?.values[0][0] || 0;
-      const soTien = soBuoi * hocphi;
-
+      const soTien = soBuoi * class_hocphi;
       const tdTien = document.createElement("td");
       tdTien.textContent = soTien.toLocaleString() + " đ";
       tdTien.style.textAlign = "center";
@@ -179,12 +199,16 @@ function showClassData(classId) {
     }
 
     table.appendChild(tbody);
+
+    // ✅ Hiển thị lên giao diện
     container.innerHTML = "";
-    container.appendChild(table);
+    container.appendChild(infoDiv);   // dòng thông tin lớp
+    container.appendChild(table);     // bảng học sinh
   } catch (err) {
     container.innerHTML = "<p style='color:red'>Lỗi hiển thị dữ liệu: " + err.message + "</p>";
   }
 }
+
 
 // ✅ Hàm xử lý mở menu (cho mobile)
 document.addEventListener("DOMContentLoaded", () => {
