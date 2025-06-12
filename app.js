@@ -1,23 +1,38 @@
 let db;
+let SQL;
 
 initSqlJs({
   locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/${file}`
-}).then(SQL => {
+}).then(SQLLib => {
+  SQL = SQLLib;
+
+  // Khi app khởi động, thử load DB từ IndexedDB trước
+  localforage.getItem("userDB").then(buffer => {
+    if (buffer) {
+      db = new SQL.Database(new Uint8Array(buffer));
+      loadClassesAndStudents();
+    }
+  });
+
+  // Nghe sự kiện chọn file .db mới
   document.getElementById("dbfile").addEventListener("change", event => {
     const reader = new FileReader();
     reader.onload = function () {
-      try {
-        db = new SQL.Database(new Uint8Array(reader.result));
-        loadTabsAndStudents();
-      } catch (err) {
-        alert("Lỗi khi đọc file database: " + err.message);
-      }
+      const uint8array = new Uint8Array(reader.result);
+      db = new SQL.Database(uint8array);
+
+      // ✅ Lưu vào IndexedDB
+      localforage.setItem("userDB", uint8array).then(() => {
+        console.log("Đã lưu .db vào IndexedDB");
+      });
+
+      loadClassesAndStudents();
     };
     reader.readAsArrayBuffer(event.target.files[0]);
   });
 });
 
-function loadTabsAndStudents() {
+function loadClassesAndStudents() {
   const tabs = document.getElementById("tabs");
   const contents = document.getElementById("tabContents");
   tabs.innerHTML = "";
@@ -27,17 +42,16 @@ function loadTabsAndStudents() {
   try {
     classes = db.exec("SELECT class_id, class_name FROM Classes");
   } catch (err) {
-    alert("Không tìm thấy bảng Classes hoặc cột class_id/class_name.\nChi tiết: " + err.message);
+    tabs.innerHTML = "<p>Lỗi DB: " + err.message + "</p>";
     return;
   }
 
-  if (!classes || classes.length === 0) {
+  if (!classes.length) {
     tabs.innerHTML = "<p>Không có lớp học nào.</p>";
     return;
   }
 
   classes[0].values.forEach(([classId, className], index) => {
-    // Tạo tab
     const tabBtn = document.createElement("div");
     tabBtn.className = "tab-button" + (index === 0 ? " active" : "");
     tabBtn.textContent = className;
@@ -45,17 +59,15 @@ function loadTabsAndStudents() {
     tabBtn.onclick = () => switchTab(classId);
     tabs.appendChild(tabBtn);
 
-    // Tạo nội dung tab
     const contentDiv = document.createElement("div");
     contentDiv.className = "tab-content" + (index === 0 ? " active" : "");
     contentDiv.id = `tab-${classId}`;
 
-    // Lấy học sinh trong lớp
     let studentResult;
     try {
       studentResult = db.exec(`SELECT student_name FROM Students WHERE class_id = ${classId}`);
     } catch (err) {
-      contentDiv.innerHTML = "<p>Lỗi truy vấn học sinh: " + err.message + "</p>";
+      contentDiv.innerHTML = "<p>Lỗi học sinh: " + err.message + "</p>";
       contents.appendChild(contentDiv);
       return;
     }
@@ -69,7 +81,7 @@ function loadTabsAndStudents() {
       });
       contentDiv.appendChild(ul);
     } else {
-      contentDiv.innerHTML = "<i>Không có học sinh nào trong lớp này.</i>";
+      contentDiv.innerHTML = "<i>Không có học sinh.</i>";
     }
 
     contents.appendChild(contentDiv);
