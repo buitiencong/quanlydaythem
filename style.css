@@ -21,6 +21,9 @@ body {
 
 .menu-bar {
   background-color: #007acc;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
 }
 .menu {
   list-style: none;
@@ -131,6 +134,7 @@ table {
   gap: 10px;
   background: #f8f8f8;
   border-bottom: 1px solid #ccc;
+  
 }
 
 .action-buttons button {
@@ -175,4 +179,26 @@ table {
 }
 .submenu li:hover {
   background-color: #f0f0f0;
+}
+
+/* Giao diện bảng */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+thead tr {
+  background-color: #007acc;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f0faff;
 }
