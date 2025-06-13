@@ -47,7 +47,7 @@ function formatDate(isoDate) {
   return `${dd}-${mm}-${yy}`;
 }
 
-function loadClasses() {
+function loadClasses(selectedClassId = null) {
   const tabs = document.getElementById("tabs");
   const contents = document.getElementById("tabContents");
   tabs.innerHTML = "";
@@ -68,20 +68,26 @@ function loadClasses() {
 
   classes[0].values.forEach(([classId, className], index) => {
     const tabBtn = document.createElement("div");
-    tabBtn.className = "tab-button" + (index === 0 ? " active" : "");
+    tabBtn.className = "tab-button";
     tabBtn.textContent = className;
     tabBtn.dataset.classId = classId;
     tabBtn.onclick = () => switchTab(classId);
+
+    // ✅ Chọn đúng lớp được truyền vào (nếu có), nếu không thì mặc định lớp đầu tiên
+    const isActive = selectedClassId ? classId == selectedClassId : index === 0;
+    if (isActive) tabBtn.classList.add("active");
+
     tabs.appendChild(tabBtn);
 
     const contentDiv = document.createElement("div");
-    contentDiv.className = "tab-content" + (index === 0 ? " active" : "");
+    contentDiv.className = "tab-content" + (isActive ? " active" : "");
     contentDiv.id = `tab-${classId}`;
     contents.appendChild(contentDiv);
 
-    if (index === 0) showClassData(classId);
+    if (isActive) showClassData(classId);
   });
 }
+
 
 function switchTab(classId) {
   document.querySelectorAll(".tab-button").forEach(btn => {
@@ -482,4 +488,338 @@ function submitDiemDanh(status) {
       closeDiemDanh();
     }, 10);
   }
+}
+
+
+// Thêm lớp
+function handleThemLop() {
+  document.getElementById("themLopModal").style.display = "flex";
+
+  // Gán ngày hôm nay làm mặc định
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("lop-ngay").value = today;
+}
+
+function closeThemLop() {
+  document.getElementById("themLopModal").style.display = "none";
+}
+
+function submitThemLop() {
+  const ten = document.getElementById("lop-ten").value.trim();
+  const ngay = document.getElementById("lop-ngay").value;
+  const hocphi = parseInt(document.getElementById("lop-hocphi").value) || 0;
+  const thoigian = document.getElementById("lop-thoigian").value.trim();
+  const diadiem = document.getElementById("lop-diadiem").value.trim();
+
+  if (!ten || !ngay) {
+    alert("Vui lòng nhập đầy đủ Tên lớp và Ngày bắt đầu.");
+    return;
+  }
+
+  // Thêm vào CSDL
+  db.run(`
+    INSERT INTO Classes (class_name, class_date_start, class_hocphi, class_time, class_diadiem)
+    VALUES (?, ?, ?, ?, ?)
+  `, [ten, ngay, hocphi, thoigian, diadiem]);
+
+  // ✅ Lấy class_id vừa thêm (SQLite lưu vào bảng sqlite_sequence)
+  const result = db.exec(`SELECT seq FROM sqlite_sequence WHERE name='Classes'`);
+  const newClassId = result?.[0]?.values?.[0]?.[0];
+
+  saveToLocal();
+  closeThemLop();
+
+  // ✅ Load lại và chọn lớp vừa thêm
+  loadClasses(newClassId);
+}
+
+
+
+// Sửa lớp
+function handleSuaLop() {
+  document.getElementById("suaLopModal").style.display = "flex";
+
+  const classSelect = document.getElementById("edit-class-select");
+  classSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const allClasses = result[0].values;
+
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  allClasses.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    if (id == activeClassId) opt.selected = true;
+    classSelect.appendChild(opt);
+  });
+
+  loadLopInfoToForm();
+}
+
+function closeSuaLop() {
+  document.getElementById("suaLopModal").style.display = "none";
+}
+
+function loadLopInfoToForm() {
+  const classId = document.getElementById("edit-class-select").value;
+  const result = db.exec(`
+    SELECT class_name, class_date_start, class_hocphi, class_time, class_diadiem
+    FROM Classes WHERE class_id = ${classId}
+  `);
+
+  if (result.length === 0) return;
+
+  const [ten, ngay, hocphi, thoigian, diadiem] = result[0].values[0];
+
+  document.getElementById("edit-ten").value = ten;
+  document.getElementById("edit-ngay").value = ngay;
+  document.getElementById("edit-hocphi").value = hocphi;
+  document.getElementById("edit-thoigian").value = thoigian;
+  document.getElementById("edit-diadiem").value = diadiem;
+}
+
+function submitSuaLop() {
+  const classId = document.getElementById("edit-class-select").value;
+  const ten = document.getElementById("edit-ten").value.trim();
+  const ngay = document.getElementById("edit-ngay").value;
+  const hocphi = parseInt(document.getElementById("edit-hocphi").value) || 0;
+  const thoigian = document.getElementById("edit-thoigian").value.trim();
+  const diadiem = document.getElementById("edit-diadiem").value.trim();
+
+  if (!ten || !ngay) {
+    alert("Vui lòng nhập đầy đủ Tên lớp và Ngày bắt đầu.");
+    return;
+  }
+
+  db.run(`
+    UPDATE Classes
+    SET class_name = ?, class_date_start = ?, class_hocphi = ?, class_time = ?, class_diadiem = ?
+    WHERE class_id = ?
+  `, [ten, ngay, hocphi, thoigian, diadiem, classId]);
+
+  saveToLocal();
+  closeSuaLop();
+
+  // ✅ Load lại danh sách lớp và chọn đúng lớp vừa sửa
+  loadClasses(classId);
+}
+
+
+// Xóa lớp
+function handleXoaLop() {
+  document.getElementById("xoaLopModal").style.display = "flex";
+
+  const select = document.getElementById("xoa-class-select");
+  select.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    select.appendChild(opt);
+  });
+}
+
+function closeXoaLop() {
+  document.getElementById("xoaLopModal").style.display = "none";
+}
+
+function submitXoaLop() {
+  const classId = document.getElementById("xoa-class-select").value;
+
+  // Xoá lớp khỏi CSDL
+  db.run(`DELETE FROM Classes WHERE class_id = ?`, [classId]);
+
+  // Xoá học sinh và điểm danh của lớp này (nếu muốn an toàn dữ liệu)
+  db.run(`DELETE FROM Students WHERE class_id = ?`, [classId]);
+  db.run(`DELETE FROM Attendance WHERE class_id = ?`, [classId]);
+
+  saveToLocal();
+  closeXoaLop();
+  loadClasses(); // Cập nhật lại giao diện
+}
+
+
+// Thêm học sinh
+function handleThemHs() {
+  document.getElementById("themHsModal").style.display = "flex";
+
+  const select = document.getElementById("hs-class-select");
+  select.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    if (id == activeClassId) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  // ✅ Focus vào trường tên và bôi đen nội dung hiện có (nếu có)
+  const tenInput = document.getElementById("hs-ten");
+  setTimeout(() => {
+    tenInput.focus();
+    if (tenInput.value.trim() !== "") {
+      tenInput.select();
+    }
+  }, 10);
+}
+
+
+function closeThemHs() {
+  document.getElementById("themHsModal").style.display = "none";
+}
+
+function submitThemHs() {
+  const classId = document.getElementById("hs-class-select").value;
+  const tenInput = document.getElementById("hs-ten");
+  const ten = tenInput.value.trim();
+
+  if (!ten) {
+    alert("Vui lòng nhập họ và tên học sinh.");
+    return;
+  }
+
+  // Thêm học sinh
+  db.run(`
+    INSERT INTO Students (student_name, class_id)
+    VALUES (?, ?)
+  `, [ten, classId]);
+
+  saveToLocal();
+  loadClasses(classId); // cập nhật tab đang mở nếu cần
+
+  // ✅ Không đóng form — mà reset trường tên
+  tenInput.focus();              // Đưa lại con trỏ vào ô nhập
+  tenInput.select();             // ✅ Bôi đen nội dung vừa nhập
+}
+
+
+
+// Sửa học sinh
+function handleSuaHs() {
+  document.getElementById("suaHsModal").style.display = "flex";
+
+  const classSelect = document.getElementById("edit-hs-class");
+  classSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    if (id == activeClassId) opt.selected = true;
+    classSelect.appendChild(opt);
+  });
+
+  loadStudentsForEdit();
+}
+
+function closeSuaHs() {
+  document.getElementById("suaHsModal").style.display = "none";
+}
+
+function loadStudentsForEdit() {
+  const classId = document.getElementById("edit-hs-class").value;
+  const studentSelect = document.getElementById("edit-hs-select");
+  studentSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId}`);
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    studentSelect.appendChild(opt);
+  });
+
+  fillOldStudentName(); // tự động điền tên hiện tại vào ô sửa
+}
+
+function fillOldStudentName() {
+  const studentSelect = document.getElementById("edit-hs-select");
+  const selectedOption = studentSelect.options[studentSelect.selectedIndex];
+  document.getElementById("edit-hs-name").value = selectedOption ? selectedOption.textContent : "";
+}
+
+function submitSuaHs() {
+  const studentId = document.getElementById("edit-hs-select").value;
+  const newName = document.getElementById("edit-hs-name").value.trim();
+  const classId = document.getElementById("edit-hs-class").value;
+
+  if (!newName) {
+    alert("Vui lòng nhập tên mới.");
+    return;
+  }
+
+  db.run(`UPDATE Students SET student_name = ? WHERE student_id = ?`, [newName, studentId]);
+
+  saveToLocal();
+  closeSuaHs();
+  loadClasses(classId); // cập nhật lại tab lớp nếu đang mở
+}
+
+
+// XÓa học sinh
+function handleXoaHs() {
+  document.getElementById("xoaHsModal").style.display = "flex";
+
+  const classSelect = document.getElementById("xoa-hs-class");
+  classSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    if (id == activeClassId) opt.selected = true;
+    classSelect.appendChild(opt);
+  });
+
+  loadStudentsForXoa();
+}
+
+function closeXoaHs() {
+  document.getElementById("xoaHsModal").style.display = "none";
+}
+
+function loadStudentsForXoa() {
+  const classId = document.getElementById("xoa-hs-class").value;
+  const studentSelect = document.getElementById("xoa-hs-select");
+  studentSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId}`);
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    studentSelect.appendChild(opt);
+  });
+}
+
+function submitXoaHs() {
+  const studentId = document.getElementById("xoa-hs-select").value;
+  const classId = document.getElementById("xoa-hs-class").value;
+
+  // Xoá học sinh và dữ liệu liên quan
+  db.run(`DELETE FROM Students WHERE student_id = ?`, [studentId]);
+  db.run(`DELETE FROM Attendance WHERE student_id = ?`, [studentId]);
+  db.run(`DELETE FROM Thuhocphi WHERE student_id = ?`, [studentId]);
+
+  saveToLocal();
+  closeXoaHs();
+  loadClasses(classId); // cập nhật lại tab nếu cần
 }
