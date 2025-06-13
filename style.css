@@ -138,11 +138,13 @@ table {
 
 .tab-button {
   padding: 10px 16px;
-  margin: 4px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   cursor: pointer;
-  border-radius: 6px; /* ✅ Thêm dòng này */
+  border-radius: 10px; /* ✅ Thêm dòng này */
 }
 
 .tab-button:hover {
