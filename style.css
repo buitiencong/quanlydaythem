@@ -9,6 +9,7 @@ body, html {
 body {
   box-sizing: border-box;
   font-family: sans-serif;
+  background-color: #86e5f7;
 }
 
 /* Nếu có container bao quanh, đảm bảo nó cũng full width */
