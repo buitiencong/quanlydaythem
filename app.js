@@ -132,7 +132,7 @@ function showClassData(classId) {
 
     // ✅ Tạo dòng thông tin lớp
     const infoDiv = document.createElement("div");
-    infoDiv.style.margin = "10px 0";
+    infoDiv.style.margin = "-10px 0 10px 0";
     infoDiv.style.fontWeight = "normal";
     infoDiv.style.padding = "10px";
     infoDiv.style.background = "#f1f9ff";
