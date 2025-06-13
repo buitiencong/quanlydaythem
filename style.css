@@ -8,7 +8,7 @@ body, html {
 /* Đảm bảo phần nội dung chiếm toàn bộ chiều ngang */
 body {
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* background: linear-gradient(to bottom, #AAEBF7 0%, white 21.3%, white 80.7%, #AAEBF7 100%); */
   background-color: #AAEBF7;
   padding: 10px;
@@ -34,7 +34,6 @@ body {
 }
 .menu > li {
   position: relative;
-  padding-left: 100px;
 }
 .menu > li > span {
   display: block;
