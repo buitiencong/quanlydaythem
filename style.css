@@ -233,7 +233,7 @@ tr:nth-child(even) {
 }
 
 
-/* Form Điểm danh */
+/* Form */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -271,6 +271,8 @@ tr:nth-child(even) {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
+  font-size: 16px;         /* 👈 Thêm dòng này */
+  font-family: inherit;    /* 👈 (khuyến khích) kế thừa font chính */
 }
 
 .modal-actions {
