@@ -72,10 +72,10 @@
             </ul>
             </li>
             <li onclick="handleSuaNgay()"><span>📅 Sửa ngày điểm danh</span></li>
-            <li><span>📊 Thu học phí</span></li>
+            <li><span>📊 Thống kê thu học phí</span></li>
             <li><span>💬 Thông tin</span></li>
             <li class="has-submenu">
-            <span onclick="toggleSubmenu(this)">Xuất dữ liệu 
+            <span onclick="toggleSubmenu(this)">💾 Cơ sở dữ liệu
                 <svg xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -86,9 +86,10 @@
                 </svg>
             </span>
             <ul class="submenu">
-                <li onclick="onMenuAction('xuat-excel')">Excel</li>
-                <li onclick="onMenuAction('xuat-sqlite')">SQLite</li>
-                <li onclick="onMenuAction('xuat-pdf')">Pdf</li>
+                <li onclick="onMenuAction('load-data')">🔄 Load file database</li>
+                <li onclick="onMenuAction('xuat-sqlite')">📤 Xuất file SQLite</li>
+                <li onclick="onMenuAction('xuat-excel')">📗 Xuất file Excel</li>                
+                <li onclick="onMenuAction('xuat-pdf')">📕 Xuất file Pdf</li>
             </ul>
             </li>
         </ul>
