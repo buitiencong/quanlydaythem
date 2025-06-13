@@ -273,6 +273,9 @@ tr:nth-child(even) {
   margin-bottom: 10px;
   font-size: 16px;         /* 👈 Thêm dòng này */
   font-family: inherit;    /* 👈 (khuyến khích) kế thừa font chính */
+  box-sizing: border-box;     /* ✅ Quan trọng: đảm bảo không tràn khung */
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .modal-actions {
