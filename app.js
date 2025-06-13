@@ -372,3 +372,98 @@ document.addEventListener("touchstart", function (e) {
     }
   }
 });
+
+
+
+// Form Điểm danh
+function handleDiemDanh() {
+  document.getElementById("diemdanhModal").style.display = "flex";
+
+  // Tự động chọn hôm nay
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("dd-date").value = today;
+
+  // Tải danh sách lớp vào select
+  const classSelect = document.getElementById("dd-class");
+  classSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const allClasses = result[0].values;
+
+  // Tìm class_id đang được chọn trong tabs
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  allClasses.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+
+    // ✅ Tự động chọn lớp đang được chọn ở tab
+    if (id == activeClassId) {
+      opt.selected = true;
+    }
+
+    classSelect.appendChild(opt);
+  });
+
+  loadStudentsForClass(); // Load học sinh theo lớp vừa chọn
+}
+
+
+function closeDiemDanh() {
+  document.getElementById("diemdanhModal").style.display = "none";
+}
+
+function loadStudentsForClass() {
+  const classId = document.getElementById("dd-class").value;
+  const studentSelect = document.getElementById("dd-student");
+  studentSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId}`);
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    studentSelect.appendChild(opt);
+  });
+}
+
+function submitDiemDanh(status) {
+  const classId = document.getElementById("dd-class").value;
+  const studentSelect = document.getElementById("dd-student");
+  const studentId = studentSelect.value;
+  const date = document.getElementById("dd-date").value;
+
+  // Xoá bản ghi cũ nếu có
+  const check = db.exec(`
+    SELECT * FROM Attendance
+    WHERE class_id = ${classId} AND student_id = ${studentId} AND attendance_date = '${date}'
+  `);
+  if (check.length > 0) {
+    db.run(`
+      DELETE FROM Attendance
+      WHERE class_id = ${classId} AND student_id = ${studentId} AND attendance_date = '${date}'
+    `);
+  }
+
+  // Chỉ thêm mới nếu không phải hủy
+  if (status === 0 || status === 1) {
+    db.run(`
+      INSERT INTO Attendance (class_id, student_id, attendance_date, status)
+      VALUES (${classId}, ${studentId}, '${date}', ${status})
+    `);
+  }
+
+  // ✅ Cập nhật bảng dữ liệu hiện tại (tab lớp)
+  showClassData(classId);
+
+  // ✅ Di chuyển đến học sinh tiếp theo
+  const nextIndex = studentSelect.selectedIndex + 1;
+  if (nextIndex < studentSelect.options.length) {
+    studentSelect.selectedIndex = nextIndex;
+  } else {
+    alert("✅ Đã điểm danh xong");
+    closeDiemDanh();
+  }
+}

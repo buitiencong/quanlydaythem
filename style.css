@@ -9,7 +9,8 @@ body, html {
 body {
   box-sizing: border-box;
   font-family: sans-serif;
-  background-color: #86e5f7;
+  /* background: linear-gradient(to bottom, #AAEBF7 0%, white 21.3%, white 80.7%, #AAEBF7 100%); */
+  background-color: #AAEBF7;
 }
 
 /* Nếu có container bao quanh, đảm bảo nó cũng full width */
@@ -228,4 +229,67 @@ thead tr {
 
 tr:nth-child(even) {
   background-color: #f0faff;
+}
+
+
+/* Form Điểm danh */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.modal-content label {
+  display: block;
+  margin: 12px 0 8px;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.modal-actions button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  border: none;
+  background: #007acc;
+  color: white;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal-actions button:hover {
+  background: #005fa3;
 }
