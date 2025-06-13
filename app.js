@@ -28,6 +28,16 @@ initSqlJs({
   });
 });
 
+// Hàm để lưu các thay đổi cơ sở dữ liệu
+function saveToLocal() {
+  if (db) {
+    const data = db.export();
+    localforage.setItem("userDB", data);
+  }
+}
+
+
+
 // Định dạng ngày dd-mm-yy
 function formatDate(isoDate) {
   const d = new Date(isoDate);
@@ -454,16 +464,22 @@ function submitDiemDanh(status) {
       VALUES (${classId}, ${studentId}, '${date}', ${status})
     `);
   }
+ // ✅ Lưu lại thay đổi
+  saveToLocal();
 
-  // ✅ Cập nhật bảng dữ liệu hiện tại (tab lớp)
+  
+  // ✅ Cập nhật bảng ngay sau mỗi điểm danh
   showClassData(classId);
 
-  // ✅ Di chuyển đến học sinh tiếp theo
+  // ✅ Chuyển sang học sinh tiếp theo hoặc kết thúc
   const nextIndex = studentSelect.selectedIndex + 1;
   if (nextIndex < studentSelect.options.length) {
     studentSelect.selectedIndex = nextIndex;
   } else {
-    alert("✅ Đã điểm danh xong");
-    closeDiemDanh();
+    // ✅ Cập nhật bảng rồi mới thông báo
+    setTimeout(() => {
+      alert("✅ Đã điểm danh xong");
+      closeDiemDanh();
+    }, 10);
   }
 }
