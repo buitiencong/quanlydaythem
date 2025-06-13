@@ -263,19 +263,20 @@ tr:nth-child(even) {
 
 .modal-content label {
   display: block;
-  margin: 12px 0 8px;
+  margin: 12px 0 12px;
 }
 
 .modal-content input,
 .modal-content select {
   width: 100%;
   padding: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
   font-size: 16px;         /* 👈 Thêm dòng này */
   font-family: inherit;    /* 👈 (khuyến khích) kế thừa font chính */
   box-sizing: border-box;     /* ✅ Quan trọng: đảm bảo không tràn khung */
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-top: 4px;
 }
 
 .modal-actions {
