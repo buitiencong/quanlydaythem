@@ -476,12 +476,24 @@ function closeThemLop() {
 function submitThemLop() {
   const ten = document.getElementById("lop-ten").value.trim();
   const ngay = document.getElementById("lop-ngay").value;
-  const hocphi = parseInt(document.getElementById("lop-hocphi").value) || 0;
+  const hocphiValue = document.getElementById("lop-hocphi").value.trim();
+  const hocphi = parseInt(hocphiValue);
   const thoigian = document.getElementById("lop-thoigian").value.trim();
   const diadiem = document.getElementById("lop-diadiem").value.trim();
 
-  if (!ten || !ngay) {
-    alert("Vui lòng nhập đầy đủ Tên lớp và Ngày bắt đầu.");
+  let messages = [];
+
+  if (!ten) {
+    messages.push("Tên lớp");
+  }
+
+  // Kiểm tra người dùng chưa nhập gì hoặc nhập sai (vd: chữ)
+  if (!hocphiValue || isNaN(hocphi)) {
+    messages.push("Học phí");
+  }
+
+  if (messages.length > 0) {
+    alert("Vui lòng nhập: " + messages.join(" và "));
     return;
   }
 
@@ -491,16 +503,15 @@ function submitThemLop() {
     VALUES (?, ?, ?, ?, ?)
   `, [ten, ngay, hocphi, thoigian, diadiem]);
 
-  // ✅ Lấy class_id vừa thêm (SQLite lưu vào bảng sqlite_sequence)
+  // Lấy ID vừa thêm
   const result = db.exec(`SELECT seq FROM sqlite_sequence WHERE name='Classes'`);
   const newClassId = result?.[0]?.values?.[0]?.[0];
 
   saveToLocal();
   closeThemLop();
-
-  // ✅ Load lại và chọn lớp vừa thêm
   loadClasses(newClassId);
 }
+
 
 
 
