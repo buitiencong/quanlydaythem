@@ -823,3 +823,92 @@ function submitXoaHs() {
   closeXoaHs();
   loadClasses(classId); // cập nhật lại tab nếu cần
 }
+
+
+// Sửa ngày điểm danh
+function handleSuaNgay() {
+  document.getElementById("suaNgayModal").style.display = "flex";
+
+  const select = document.getElementById("sua-ngay-class");
+  select.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    if (id == activeClassId) opt.selected = true;
+    select.appendChild(opt);
+  });
+
+  loadDatesForClass();
+}
+
+function closeSuaNgay() {
+  document.getElementById("suaNgayModal").style.display = "none";
+}
+
+function loadDatesForClass() {
+  const classId = document.getElementById("sua-ngay-class").value;
+  const select = document.getElementById("sua-ngay-cu");
+  select.innerHTML = "";
+
+  const result = db.exec(`
+    SELECT DISTINCT substr(attendance_date, 1, 10)
+    FROM Attendance
+    WHERE class_id = ${classId}
+    ORDER BY attendance_date ASC
+  `);
+
+  result[0]?.values.forEach(([date]) => {
+    const opt = document.createElement("option");
+    opt.value = date;
+    opt.textContent = formatDate(date); // dùng hàm formatDate dd-mm-yy
+    select.appendChild(opt);
+  });
+}
+
+function submitSuaNgay() {
+  const classId = document.getElementById("sua-ngay-class").value;
+  const oldDate = document.getElementById("sua-ngay-cu").value;
+  const newDate = document.getElementById("sua-ngay-moi").value;
+
+  if (!oldDate || !newDate) {
+    alert("Vui lòng chọn đủ ngày cũ và ngày mới.");
+    return;
+  }
+
+  db.run(`
+    UPDATE Attendance
+    SET attendance_date = ?
+    WHERE class_id = ? AND substr(attendance_date, 1, 10) = ?
+  `, [newDate, classId, oldDate]);
+
+  saveToLocal();
+  closeSuaNgay();
+  loadClasses(classId);
+}
+
+function submitXoaNgay() {
+  const classId = document.getElementById("sua-ngay-class").value;
+  const date = document.getElementById("sua-ngay-cu").value;
+
+  if (!date) {
+    alert("Vui lòng chọn ngày cần xoá.");
+    return;
+  }
+
+  if (!confirm("Bạn có chắc muốn xoá toàn bộ điểm danh ngày này?")) return;
+
+  db.run(`
+    DELETE FROM Attendance
+    WHERE class_id = ? AND substr(attendance_date, 1, 10) = ?
+  `, [classId, date]);
+
+  saveToLocal();
+  closeSuaNgay();
+  loadClasses(classId);
+}

@@ -70,7 +70,7 @@
                 <li onclick="handleXoaHs()"><img src="icon/xoahocsinh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Xóa học sinh</li>
             </ul>
             </li>
-            <li><span><img src="icon/diemdanh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Điểm danh</span></li>
+            <li onclick="handleSuaNgay()"><span><img src="icon/diemdanh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Sửa ngày điểm danh</span></li>
             <li><span><img src="icon/thuhocphi.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Thu học phí</span></li>
             <li><span><img src="icon/icon.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Thông tin</span></li>
             <li class="has-submenu">
@@ -287,6 +287,33 @@
     </div>
   </div>
 </div>
+
+
+<!-- Form Sửa ngày điểm danh -->
+<div id="suaNgayModal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h3>✏️ Sửa ngày điểm danh</h3>
+
+    <label>Chọn lớp:
+      <select id="sua-ngay-class" onchange="loadDatesForClass()"></select>
+    </label>
+
+    <label>Chọn ngày cần sửa:
+      <select id="sua-ngay-cu"></select>
+    </label>
+
+    <label>Ngày mới:
+      <input type="date" id="sua-ngay-moi" />
+    </label>
+
+    <div class="modal-actions">
+      <button onclick="submitSuaNgay()">✏️ Sửa</button>
+      <button onclick="submitXoaNgay()">🗑 Xoá</button>
+      <button onclick="closeSuaNgay()">❌ Huỷ</button>
+    </div>
+  </div>
+</div>
+
 
 </body>
 </html>
