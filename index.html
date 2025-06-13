@@ -67,8 +67,8 @@
             </span>
             <ul class="submenu">
                 <li onclick="handleThemHs()"><img src="icon/themhocsinh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Thêm học sinh</li>
-                <li onclick="handleSuaHs()"><img src="icon/suahocsinh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Sửa thông tin học sinh</li>
-                <li onclick="handleXoaHs()"><img src="icon/xoahocsinh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Xóa học sinh</li>
+                <li onclick="handleSuaHs()">✏️ Sửa tên học sinh</li>
+                <li onclick="handleXoaHs()">🙅‍♂️ Xóa học sinh</li>
             </ul>
             </li>
             <li onclick="handleSuaNgay()"><span><img src="icon/diemdanh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Sửa ngày điểm danh</span></li>
@@ -138,7 +138,7 @@
 <!-- Form Thêm lớp -->
 <div id="themLopModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>➕ Thêm lớp</h3>
+    <h3>🆕 Thêm lớp</h3>
 
     <label>Tên lớp:
       <input type="text" id="lop-ten" required />
@@ -171,7 +171,7 @@
 <!-- Form Sửa lớp -->
 <div id="suaLopModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>✏️ Sửa thông tin lớp</h3>
+    <h3>🛠️ Sửa thông tin lớp</h3>
 
     <label>Chọn lớp:
       <select id="edit-class-select" onchange="loadLopInfoToForm()"></select>
@@ -209,7 +209,7 @@
 <!-- Form Xoá lớp -->
 <div id="xoaLopModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>🗑 Xoá lớp</h3>
+    <h3>🗑️ Xoá lớp</h3>
 
     <label>Chọn lớp cần xoá:
       <select id="xoa-class-select" onchange="switchTab(this.value)"></select>
@@ -272,7 +272,7 @@
 <!-- Form Xoá học sinh -->
 <div id="xoaHsModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>🗑 Xoá học sinh</h3>
+    <h3>🙅‍♂️ Xoá học sinh</h3>
 
     <label>Chọn lớp:
       <select id="xoa-hs-class" onchange="loadStudentsForXoa(); onChangeClassInXoaHs();"></select>
