@@ -97,6 +97,8 @@ function switchTab(classId) {
     div.classList.toggle("active", div.id === `tab-${classId}`);
   });
   showClassData(classId);
+    // ✅ Cập nhật thống kê thu học phí
+  updateThuHocPhiThongKe(classId);
 }
 
 
@@ -320,39 +322,6 @@ function onMenuAction(action) {
   document.querySelectorAll(".has-submenu.open").forEach(menu => {
     menu.classList.remove("open");
   });
-
-  // Thực hiện hành động tùy theo ID
-  switch (action) {
-    case "them-lop":
-      alert("👉 Thêm lớp");
-      break;
-    case "sua-lop":
-      alert("👉 Sửa thông tin lớp");
-      break;
-    case "xoa-lop":
-      alert("👉 Xóa lớp");
-      break;
-    case "them-hocsinh":
-      alert("👉 Thêm học sinh");
-      break;
-    case "sua-hocsinh":
-      alert("👉 Sửa thông tin học sinh");
-      break;
-    case "xoa-hocsinh":
-      alert("👉 Xóa học sinh");
-      break;
-    case "xuat-excel":
-      alert("👉 Xuất file excel");
-      break;
-    case "xuat-sqlite":
-      alert("👉 Xuất file sqlite");
-      break;
-    case "xuat-pdf":
-      alert("👉 Xuất file pdf");
-      break;
-    default:
-      alert("⚠️ Chưa xử lý: " + action);
-  }
 }
 
 document.addEventListener("click", function (e) {
@@ -579,6 +548,8 @@ function loadLopInfoToForm() {
   document.getElementById("edit-hocphi").value = hocphi;
   document.getElementById("edit-thoigian").value = thoigian;
   document.getElementById("edit-diadiem").value = diadiem;
+    // ✅ Chọn tab tương ứng khi chọn lớp
+  switchTab(classId);
 }
 
 function submitSuaLop() {
@@ -616,12 +587,26 @@ function handleXoaLop() {
   select.innerHTML = "";
 
   const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const activeTab = document.querySelector(".tab-button.active");
+  const activeClassId = activeTab ? activeTab.dataset.classId : null;
+
+  let selectedClassId = null;
+
   result[0].values.forEach(([id, name]) => {
     const opt = document.createElement("option");
     opt.value = id;
     opt.textContent = name;
+    if (id == activeClassId) {
+      opt.selected = true;
+      selectedClassId = id;
+    }
     select.appendChild(opt);
   });
+
+  // ✅ Chuyển tab lớp tương ứng
+  if (selectedClassId) {
+    switchTab(selectedClassId);
+  }
 }
 
 function closeXoaLop() {
@@ -631,17 +616,16 @@ function closeXoaLop() {
 function submitXoaLop() {
   const classId = document.getElementById("xoa-class-select").value;
 
-  // Xoá lớp khỏi CSDL
+  // Xoá lớp và dữ liệu liên quan
   db.run(`DELETE FROM Classes WHERE class_id = ?`, [classId]);
-
-  // Xoá học sinh và điểm danh của lớp này (nếu muốn an toàn dữ liệu)
   db.run(`DELETE FROM Students WHERE class_id = ?`, [classId]);
   db.run(`DELETE FROM Attendance WHERE class_id = ?`, [classId]);
 
   saveToLocal();
   closeXoaLop();
-  loadClasses(); // Cập nhật lại giao diện
+  loadClasses(); // Không truyền classId vì lớp đã bị xoá
 }
+
 
 
 // Thêm học sinh
@@ -866,10 +850,14 @@ function loadDatesForClass() {
   result[0]?.values.forEach(([date]) => {
     const opt = document.createElement("option");
     opt.value = date;
-    opt.textContent = formatDate(date); // dùng hàm formatDate dd-mm-yy
+    opt.textContent = formatDate(date); // dd-mm-yy
     select.appendChild(opt);
   });
+
+  // ✅ Chọn tab tương ứng khi chọn lớp
+  switchTab(classId);
 }
+
 
 function submitSuaNgay() {
   const classId = document.getElementById("sua-ngay-class").value;
@@ -911,4 +899,42 @@ function submitXoaNgay() {
   saveToLocal();
   closeSuaNgay();
   loadClasses(classId);
+}
+
+// Nhảy tab lớp theo lớp chọn trên Form
+function onChangeClassInThemHs() {
+  const classId = document.getElementById("hs-class-select").value;
+  switchTab(classId);
+}
+function onChangeClassInSuaHs() {
+  const classId = document.getElementById("edit-hs-class").value;
+  switchTab(classId);
+}
+function onChangeClassInXoaHs() {
+  const classId = document.getElementById("xoa-hs-class").value;
+  switchTab(classId);
+}
+
+// THống kê thu học phí
+function updateThuHocPhiThongKe(classId) {
+  // Đã thu
+  const resultThu = db.exec(`
+    SELECT COUNT(DISTINCT student_id), SUM(Thuhocphi_money)
+    FROM Thuhocphi
+    WHERE class_name = (SELECT class_name FROM Classes WHERE class_id = ${classId})
+  `);
+  const [countThu, sumThu] = resultThu[0]?.values[0] || [0, 0];
+
+  // Tổng số học sinh
+  const resultAll = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`);
+  const totalStudents = resultAll[0]?.values[0][0] || 0;
+
+  const countChuaThu = totalStudents - countThu;
+
+  // Cập nhật giao diện
+  document.getElementById("count-dathu").textContent = countThu;
+  document.getElementById("sum-dathu").textContent = (sumThu || 0).toLocaleString() + " đ";
+
+  document.getElementById("count-chuathu").textContent = countChuaThu;
+  document.getElementById("sum-chuathu").textContent = "0 đ"; // nếu bạn không lưu chi tiết "chưa thu"
 }

@@ -211,7 +211,7 @@
     <h3>🗑 Xoá lớp</h3>
 
     <label>Chọn lớp cần xoá:
-      <select id="xoa-class-select"></select>
+      <select id="xoa-class-select" onchange="switchTab(this.value)"></select>
     </label>
 
     <div class="modal-actions">
@@ -228,7 +228,7 @@
     <h3>➕ Thêm học sinh</h3>
 
     <label>Chọn lớp:
-      <select id="hs-class-select"></select>
+      <select id="hs-class-select" onchange="onChangeClassInThemHs()"></select>
     </label>
 
     <label>Họ và tên học sinh:
@@ -249,7 +249,7 @@
     <h3>✏️ Sửa học sinh</h3>
 
     <label>Chọn lớp:
-      <select id="edit-hs-class" onchange="loadStudentsForEdit()"></select>
+      <select id="edit-hs-class" onchange="loadStudentsForEdit(); onChangeClassInSuaHs();"></select>
     </label>
 
     <label>Chọn học sinh:
@@ -274,7 +274,7 @@
     <h3>🗑 Xoá học sinh</h3>
 
     <label>Chọn lớp:
-      <select id="xoa-hs-class" onchange="loadStudentsForXoa()"></select>
+      <select id="xoa-hs-class" onchange="loadStudentsForXoa(); onChangeClassInXoaHs();"></select>
     </label>
 
     <label>Chọn học sinh:
@@ -314,6 +314,18 @@
   </div>
 </div>
 
+<!-- Khung theo dõi thu học phí -->
+<div id="hophithongke" style="margin-top: 20px; padding: 12px; border-top: 1px solid #ccc;">
+  <h3>📊 Theo dõi học phí</h3>
+  <div style="display: flex; gap: 16px; flex-direction: column; max-width: 300px;">
+    <button id="btn-dathu" style="text-align: left; padding: 10px;">
+      ✅ Đã thu: <span id="count-dathu">0</span> học sinh – <span id="sum-dathu">0 đ</span>
+    </button>
+    <button id="btn-chuathu" style="text-align: left; padding: 10px;">
+      ❌ Chưa thu: <span id="count-chuathu">0</span> học sinh – <span id="sum-chuathu">0 đ</span>
+    </button>
+  </div>
+</div>
 
 </body>
 </html>
