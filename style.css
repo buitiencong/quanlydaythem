@@ -269,18 +269,47 @@ tr:nth-child(even) {
   margin: 12px 0 12px;
 }
 
-.modal-content input,
+
+
+
+
+
+
+
+.modal-content input:not([type="date"]) {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-size: 16px;
+  font-family: inherit;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.modal-content input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-size: 20px;
+  font-family: inherit;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 .modal-content select {
   width: 100%;
   padding: 8px;
-  margin-bottom: 0px;
-  font-size: 16px;         /* 👈 Thêm dòng này */
-  font-family: inherit;    /* 👈 (khuyến khích) kế thừa font chính */
-  box-sizing: border-box;     /* ✅ Quan trọng: đảm bảo không tràn khung */
+  margin-top: 4px;
+  margin-bottom: 0;
+  font-size: 20px;
+  font-family: inherit;
+  box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-top: 4px;
 }
+
 
 .modal-actions {
   display: flex;
