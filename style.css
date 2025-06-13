@@ -1,8 +1,8 @@
 /* Reset margin/padding mặc định trình duyệt */
 body, html {
   margin: 0;
-  padding: 0;
   width: 100%;
+  padding: 0;
 }
 
 /* Đảm bảo phần nội dung chiếm toàn bộ chiều ngang */
@@ -11,6 +11,7 @@ body {
   font-family: sans-serif;
   /* background: linear-gradient(to bottom, #AAEBF7 0%, white 21.3%, white 80.7%, #AAEBF7 100%); */
   background-color: #AAEBF7;
+  padding: 10px;
 }
 
 /* Nếu có container bao quanh, đảm bảo nó cũng full width */
