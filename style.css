@@ -326,8 +326,9 @@ tr:nth-child(even) {
 .thongke-button {
   padding: 5px 10px;
   text-align: left;
-  background-color: #f3f4f6;
-  border: 1px solid #ccc;
+  border: 1px solid white;
+  background: #007acc;
+  color: white;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
@@ -341,7 +342,7 @@ tr:nth-child(even) {
 }
 
 .thongke-button:hover {
-  background-color: #e5e7eb;
+  background-color: #005fa3;
 }
 
 .thongke-info {
