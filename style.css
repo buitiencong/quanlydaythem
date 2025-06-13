@@ -300,3 +300,75 @@ tr:nth-child(even) {
 .modal-actions button:hover {
   background: #005fa3;
 }
+
+/* Phần thống kê thu học phí */
+.thongke-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 400px;
+  font-family: sans-serif;
+  margin-top: 20px;
+}
+
+.thongke-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ⬇️ Đảm bảo cả 2 nút có cùng kích thước */
+.same-width {
+  width: 100%;
+  max-width: 120px; /* hoặc tùy theo nội dung dài nhất */
+}
+
+.thongke-button {
+  padding: 5px 10px;
+  text-align: left;
+  background-color: #f3f4f6;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+
+.thongke-button:hover {
+  background-color: #e5e7eb;
+}
+
+.thongke-info {
+  font-size: 16px;
+  color: #333;
+}
+
+.progress-wrapper {
+  margin-top: 0px;
+}
+
+.progress-label {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.progress-bar-bg {
+  background: #eee;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 14px;
+}
+
+.progress-bar-fill {
+  background: #4caf50;
+  width: 0%;
+  height: 100%;
+  transition: width 0.5s;
+}
+

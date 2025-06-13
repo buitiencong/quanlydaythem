@@ -317,25 +317,38 @@
 </div>
 
 <!-- Khung theo dõi thu học phí -->
-<div id="hophithongke" style="margin-top: 20px; padding: 12px; border-top: 1px solid #ccc;">
-  <h3>📊 Theo dõi học phí</h3>
-  <div style="display: flex; gap: 16px; flex-direction: column; max-width: 300px;">
-    <button id="btn-dathu" style="text-align: left; padding: 10px;">
-      ✅ Đã thu: <span id="count-dathu">0</span> học sinh – <span id="sum-dathu">0 đ</span>
-    </button>
-    <button id="btn-chuathu" style="text-align: left; padding: 10px;">
-      ❌ Chưa thu: <span id="count-chuathu">0</span> học sinh – <span id="sum-chuathu">0 đ</span>
-    </button>
+<div id="hophithongke">
+  <div class="thongke-container">
 
-    <!-- ✅ Thêm thanh tiến trình -->
-    <div style="margin-top: 10px;">
-      <div style="font-size: 14px;">📈 Tỷ lệ thu học phí: <span id="progress-percent">0%</span></div>
-      <div style="background: #eee; border-radius: 6px; overflow: hidden; height: 14px; margin-top: 4px;">
-        <div id="progress-bar" style="background: #4caf50; width: 0%; height: 100%; transition: width 0.5s;"></div>
+    <!-- Hàng "Đã thu" -->
+    <div class="thongke-row">
+      <button id="btn-dathu" class="thongke-button same-width">✅ Đã thu</button>
+      <div class="thongke-info">
+        <span id="count-dathu">0</span> học sinh – Số tiền: <span id="sum-dathu">0 đ</span>
       </div>
     </div>
+
+    <!-- Hàng "Chưa thu" -->
+    <div class="thongke-row">
+      <button id="btn-chuathu" class="thongke-button same-width">❌ Chưa thu</button>
+      <div class="thongke-info">
+        <span id="count-chuathu">0</span> học sinh – Số tiền: <span id="sum-chuathu">0 đ</span>
+      </div>
+    </div>
+
+    <!-- Tiến độ -->
+    <div class="progress-wrapper">
+      <div class="progress-label">📈 Tỷ lệ thu học phí: <span id="progress-percent">0%</span></div>
+      <div class="progress-bar-bg">
+        <div id="progress-bar" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
   </div>
 </div>
+
+
+
 
 
 </body>
