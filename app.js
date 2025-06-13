@@ -917,24 +917,54 @@ function onChangeClassInXoaHs() {
 
 // THống kê thu học phí
 function updateThuHocPhiThongKe(classId) {
-  // Đã thu
-  const resultThu = db.exec(`
-    SELECT COUNT(DISTINCT student_id), SUM(Thuhocphi_money)
-    FROM Thuhocphi
-    WHERE class_name = (SELECT class_name FROM Classes WHERE class_id = ${classId})
-  `);
-  const [countThu, sumThu] = resultThu[0]?.values[0] || [0, 0];
+  try {
+    // Lấy học phí mỗi buổi của lớp
+    const hocphiRes = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`);
+    const hocphi = hocphiRes[0]?.values[0][0] || 0;
 
-  // Tổng số học sinh
-  const resultAll = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`);
-  const totalStudents = resultAll[0]?.values[0][0] || 0;
+    // Danh sách học sinh có noptien = 1 (đã thu)
+    const dathuRes = db.exec(`SELECT student_id FROM Students WHERE class_id = ${classId} AND noptien = 1`);
+    const daThuIds = dathuRes[0]?.values.map(row => row[0]) || [];
 
-  const countChuaThu = totalStudents - countThu;
+    // Danh sách học sinh có noptien = 0 (chưa thu)
+    const chuathuRes = db.exec(`SELECT student_id FROM Students WHERE class_id = ${classId} AND noptien = 0`);
+    const chuaThuIds = chuathuRes[0]?.values.map(row => row[0]) || [];
 
-  // Cập nhật giao diện
-  document.getElementById("count-dathu").textContent = countThu;
-  document.getElementById("sum-dathu").textContent = (sumThu || 0).toLocaleString() + " đ";
+    let tongTienDaThu = 0;
+    for (const id of daThuIds) {
+      const buoiRes = db.exec(`
+        SELECT COUNT(*) FROM Attendance
+        WHERE student_id = ${id} AND class_id = ${classId} AND status = 1
+      `);
+      const soBuoi = buoiRes[0]?.values[0][0] || 0;
+      tongTienDaThu += soBuoi * hocphi;
+    }
 
-  document.getElementById("count-chuathu").textContent = countChuaThu;
-  document.getElementById("sum-chuathu").textContent = "0 đ"; // nếu bạn không lưu chi tiết "chưa thu"
+    let tongTienChuaThu = 0;
+    for (const id of chuaThuIds) {
+      const buoiRes = db.exec(`
+        SELECT COUNT(*) FROM Attendance
+        WHERE student_id = ${id} AND class_id = ${classId} AND status = 1
+      `);
+      const soBuoi = buoiRes[0]?.values[0][0] || 0;
+      tongTienChuaThu += soBuoi * hocphi;
+    }
+
+    // Cập nhật giao diện
+    document.getElementById("count-dathu").textContent = daThuIds.length;
+    document.getElementById("sum-dathu").textContent = tongTienDaThu.toLocaleString() + " đ";
+
+    document.getElementById("count-chuathu").textContent = chuaThuIds.length;
+    document.getElementById("sum-chuathu").textContent = tongTienChuaThu.toLocaleString() + " đ";
+    
+    // ✅ Cập nhật progress
+    const tong = tongTienDaThu + tongTienChuaThu;
+    const percent = tong > 0 ? Math.round((tongTienDaThu / tong) * 100) : 0;
+
+    document.getElementById("progress-percent").textContent = percent + "%";
+    document.getElementById("progress-bar").style.width = percent + "%";
+
+  } catch (err) {
+    console.error("Lỗi thống kê thu học phí:", err.message);
+  }
 }
