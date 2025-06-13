@@ -55,7 +55,7 @@
             </ul>
             </li>
             <li class="has-submenu">
-            <span onclick="toggleSubmenu(this)"><img src="icon/friend.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;"> Học sinh 
+            <span onclick="toggleSubmenu(this)">💁‍♂️ Học sinh 
                 <svg xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
@@ -66,12 +66,12 @@
                 </svg>
             </span>
             <ul class="submenu">
-                <li onclick="handleThemHs()"><img src="icon/themhocsinh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Thêm học sinh</li>
-                <li onclick="handleSuaHs()">✏️ Sửa tên học sinh</li>
+                <li onclick="handleThemHs()">🙆‍♂️ Thêm học sinh</li>
+                <li onclick="handleSuaHs()">✍️ Sửa tên học sinh</li>
                 <li onclick="handleXoaHs()">🙅‍♂️ Xóa học sinh</li>
             </ul>
             </li>
-            <li onclick="handleSuaNgay()"><span><img src="icon/diemdanh.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Sửa ngày điểm danh</span></li>
+            <li onclick="handleSuaNgay()"><span>🗓️ Sửa ngày điểm danh</span></li>
             <li><span><img src="icon/thuhocphi.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Thu học phí</span></li>
             <li><span><img src="icon/icon.ico" alt="Home icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">Thông tin</span></li>
             <li class="has-submenu">
@@ -226,7 +226,7 @@
 <!-- Form Thêm học sinh -->
 <div id="themHsModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>➕ Thêm học sinh</h3>
+    <h3>🙆‍♂️ Thêm học sinh</h3>
 
     <label>Chọn lớp:
       <select id="hs-class-select" onchange="onChangeClassInThemHs()"></select>
@@ -247,7 +247,7 @@
 <!-- Form Sửa học sinh -->
 <div id="suaHsModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>✏️ Sửa học sinh</h3>
+    <h3>✍️ Sửa học sinh</h3>
 
     <label>Chọn lớp:
       <select id="edit-hs-class" onchange="loadStudentsForEdit(); onChangeClassInSuaHs();"></select>
@@ -293,7 +293,7 @@
 <!-- Form Sửa ngày điểm danh -->
 <div id="suaNgayModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>✏️ Sửa ngày điểm danh</h3>
+    <h3>🗓️ Sửa ngày điểm danh</h3>
 
     <label>Chọn lớp:
       <select id="sua-ngay-class" onchange="loadDatesForClass()"></select>
