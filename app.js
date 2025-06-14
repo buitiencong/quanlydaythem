@@ -1,5 +1,10 @@
 let db;
 let SQL;
+let thuFilterState = {
+  dathu: false,
+  chuathu: false
+};
+
 
 // Khởi tạo SQLite và kiểm tra dữ liệu từ IndexedDB
 initSqlJs({
@@ -103,16 +108,20 @@ function switchTab(classId) {
 
 
 // Hiển thị bảng danh sách học sinh
-function showClassData(classId) {
+function showClassData(classId, filter = null) {
   const container = document.getElementById(`tab-${classId}`);
   container.innerHTML = "<p>Đang tải...</p>";
 
   try {
     // ✅ Lấy danh sách học sinh
-    const studentResult = db.exec(`
-      SELECT student_id, student_name FROM Students WHERE class_id = ${classId}
-    `);
+    let query = `SELECT student_id, student_name, noptien FROM Students WHERE class_id = ${classId}`;
+    if (filter !== null) {
+      query += ` AND noptien = ${filter}`;
+    }
+    const studentResult = db.exec(query);
     const students = studentResult[0]?.values || [];
+
+
 
     // ✅ Lấy danh sách ngày điểm danh
     const datesResult = db.exec(`
@@ -1088,6 +1097,8 @@ function submitThuHocPhi() {
 
   saveToLocal();
   loadClasses(classId);
+  updateThuHocPhiThongKe(classId);
+
 
   // Chuyển sang học sinh tiếp theo
   currentIndex++;
@@ -1122,4 +1133,76 @@ function skipThuHocPhi() {
   updateTienThuHocPhi();
 }
 
+function updateThuHocPhiThongKe(classId) {
+  if (!classId) return;
+
+  // Tổng số học sinh trong lớp
+  const all = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
+
+  // Số học sinh đã thu
+  const dathu = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId} AND noptien = 1`)?.[0]?.values[0][0] || 0;
+
+  // Số học sinh chưa thu
+  const chuathu = all - dathu;
+
+  // Tổng tiền đã thu
+  const sumDathu = db.exec(`SELECT SUM(Thuhocphi_money) FROM Thuhocphi WHERE student_id IN (
+    SELECT student_id FROM Students WHERE class_id = ${classId} AND noptien = 1
+  )`)?.[0]?.values[0][0] || 0;
+
+  // Tổng tiền còn lại = số buổi x học phí của học sinh chưa thu
+  const hocphi = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
+  const sobuoiRes = db.exec(`SELECT COUNT(DISTINCT attendance_date) FROM Attendance WHERE class_id = ${classId}`);
+  const sobuoi = sobuoiRes?.[0]?.values[0][0] || 0;
+  const sumChuathu = chuathu * hocphi * sobuoi;
+
+  // Cập nhật DOM
+  document.getElementById("count-dathu").textContent = dathu;
+  document.getElementById("sum-dathu").textContent = Number(sumDathu).toLocaleString() + " đ";
+
+  document.getElementById("count-chuathu").textContent = chuathu;
+  document.getElementById("sum-chuathu").textContent = Number(sumChuathu).toLocaleString() + " đ";
+
+  const percent = all === 0 ? 0 : Math.round((dathu / all) * 100);
+  document.getElementById("progress-percent").textContent = percent + "%";
+  document.getElementById("progress-bar").style.width = percent + "%";
+}
+
+// Gán sự kiến cho 2 nút Đã Thu và Chưa Thu
+const btnDaThu = document.getElementById("btn-dathu");
+btnDaThu.addEventListener("click", () => {
+  const classId = document.querySelector(".tab-button.active")?.dataset.classId;
+  if (!classId) return;
+
+  thuFilterState.dathu = !thuFilterState.dathu;
+  thuFilterState.chuathu = false;
+
+  btnDaThu.classList.toggle("active", thuFilterState.dathu);
+  document.getElementById("btn-chuathu").classList.remove("active");
+
+  if (thuFilterState.dathu) {
+    showClassData(classId, 1);
+  } else {
+    showClassData(classId);
+  }
+});
+
+
+const btnChuaThu = document.getElementById("btn-chuathu");
+btnChuaThu.addEventListener("click", () => {
+  const classId = document.querySelector(".tab-button.active")?.dataset.classId;
+  if (!classId) return;
+
+  thuFilterState.chuathu = !thuFilterState.chuathu;
+  thuFilterState.dathu = false;
+
+  btnChuaThu.classList.toggle("active", thuFilterState.chuathu);
+  document.getElementById("btn-dathu").classList.remove("active");
+
+  if (thuFilterState.chuathu) {
+    showClassData(classId, 0);
+  } else {
+    showClassData(classId);
+  }
+});
 
