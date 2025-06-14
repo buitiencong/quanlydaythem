@@ -261,23 +261,21 @@ function showClassData(classId, filter = null) {
 setTimeout(() => {
   const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
   if (targetCell) {
-    const cellRect = targetCell.getBoundingClientRect();
-    const container = document.querySelector(`#tab-${classId}`);
-    const containerRect = container.getBoundingClientRect();
+    const rect = targetCell.getBoundingClientRect();
 
-    // Tính vị trí cần cuộn tới để đưa ô về góc dưới bên phải
-    const offsetX = cellRect.left - containerRect.left - container.clientWidth + cellRect.width + 16;
-    const offsetY = cellRect.top - containerRect.top - container.clientHeight + cellRect.height + 16;
+    // Tính vị trí cuộn thực tế của toàn trang
+    const scrollX = window.scrollX + rect.left - window.innerWidth + rect.width + 20;
+    const scrollY = window.scrollY + rect.top - window.innerHeight + rect.height + 100;
 
-    container.scrollBy({
-      top: offsetY > 0 ? offsetY : 0,
-      left: offsetX > 0 ? offsetX : 0,
+    window.scrollTo({
+      left: scrollX > 0 ? scrollX : 0,
+      top: scrollY > 0 ? scrollY : 0,
       behavior: "smooth"
     });
 
     targetCell.classList.remove("just-marked");
   }
-}, 100); // tăng nhẹ delay để DOM render chắc chắn
+}, 100);
 
     
   } catch (err) {
