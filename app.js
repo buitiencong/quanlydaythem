@@ -1160,21 +1160,27 @@ function submitThuHocPhi() {
   `, [date, money, className, studentName, studentId]);
 
   saveToLocal();
+
+  // Ghi nhớ học sinh vừa thu học phí để highlight
   window.lastDiemDanh = {
-  classId,
-  studentId,
-  active: true // ✅ để trigger scroll & highlight trong showClassData
-};
+    classId,
+    studentId,
+    active: true // ✅ để trigger highlight
+  };
 
-  loadClasses(classId);
-  updateThuHocPhiThongKe(classId);
-
+  // ✅ Trì hoãn một chút để Safari có thời gian render animation
+  setTimeout(() => {
+    loadClasses(classId);
+    updateThuHocPhiThongKe(classId);
+  }, 30);
 
   // Chuyển sang học sinh tiếp theo
   currentIndex++;
   if (currentIndex >= pendingStudents.length) {
-    alert("🎉 Đã thu học phí xong.");
-    closeThuHocPhi();
+    setTimeout(() => {
+      alert("🎉 Đã thu học phí xong.");
+      closeThuHocPhi();
+    }, 100);
     return;
   }
 
@@ -1182,6 +1188,7 @@ function submitThuHocPhi() {
   document.getElementById("thu-student").value = nextStudent[0];
   updateTienThuHocPhi();
 }
+
 
 function skipThuHocPhi() {
   if (pendingStudents.length === 0) {
