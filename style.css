@@ -151,10 +151,11 @@ table {
 }
 
 .tab-button.active {
-  background-color: #007acc;
-  color: white;
   border: 1px solid white;
   font-weight: bold;
+  background-color: #3b82f6;
+  box-shadow: 0 0 0 5px #3b83f65f;
+  color: #fff;
 }
 
 
