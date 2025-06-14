@@ -34,7 +34,20 @@ function loadPaymentHistory(query = null) {
       <td>${name}</td>
       <td>${classname}</td>
       <td>${Number(money).toLocaleString()} đ</td>
-      <td><button onclick="deletePayment(${id})">🗑</button></td>
+      <td>
+        <button onclick="deletePayment(${id})"
+            style="
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-size: 18px;
+            "
+            title="Xoá">
+            🗑️
+        </button>
+    </td>
+
     `;
     table.appendChild(tr);
   });
