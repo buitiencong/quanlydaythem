@@ -1,42 +1,63 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Thống kê thu học phí</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Quản Lý Lớp Học">
+  <link rel="apple-touch-icon" href="icon-512.png">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
-  <link rel="stylesheet" href="style.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="style.css">
+  <script defer src="thuhocphi.js"></script>
 </head>
 <body>
-  <h2>📊 Thống kê thu học phí</h2>
+  <!-- Menu dùng lại từ index.html -->
+  <button id="menuToggle" class="menu-toggle">☰ Menu quản lý</button>
+  <nav class="menu-bar">
+    <ul class="menu">
+      <li><a href="index.html" style="color: white; text-decoration: none;">🏠 Trang chính</a></li>
+      <li><a href="thuhocphi.html" style="color: white; text-decoration: none;">📊 Thống kê thu học phí</a></li>
+    </ul>
+  </nav>
 
-  <div style="margin-bottom: 10px;">
-    🔍 Tìm theo tên: <input type="text" id="search-name" placeholder="Nhập tên học sinh..." />
-    <button onclick="searchByName()">Tìm</button>
+  <div class="action-buttons">
+    <button onclick="window.location.href='index.html'">🔙 Về trang chính</button>
   </div>
 
-  <div style="margin-bottom: 10px;">
-    📅 Từ: <input type="date" id="start-date" />
-    đến: <input type="date" id="end-date" />
-    <button onclick="searchByDate()">Lọc</button>
-    <button onclick="loadPaymentHistory()">🔄 Tải lại</button>
+  <!-- Nội dung trang -->
+  <div style="padding: 16px;">
+    <h2>📊 Lịch sử thu học phí</h2>
+
+    <div style="margin-bottom: 10px;">
+      🔍 Tên học sinh: <input type="text" id="search-name" placeholder="Nhập tên...">
+      <button onclick="searchByName()">Tìm</button>
+    </div>
+
+    <div style="margin-bottom: 10px;">
+      📅 Từ: <input type="date" id="start-date">
+      đến: <input type="date" id="end-date">
+      <button onclick="searchByDate()">Lọc</button>
+      <button onclick="loadPaymentHistory()">🔄 Tải lại</button>
+    </div>
+
+    <table id="paymentTable" border="1" style="width:100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Ngày</th>
+          <th>Họ và tên</th>
+          <th>Lớp</th>
+          <th>Số tiền</th>
+          <th>Xoá</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
-
-  <table id="paymentTable" border="1" style="width:100%; border-collapse: collapse;">
-    <thead>
-      <tr>
-        <th>STT</th>
-        <th>Ngày</th>
-        <th>Họ và tên</th>
-        <th>Lớp</th>
-        <th>Số tiền</th>
-        <th>Xoá</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-
-  <script src="thuhocphi.js"></script>
 </body>
 </html>
