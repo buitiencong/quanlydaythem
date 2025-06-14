@@ -20,10 +20,12 @@ function loadPaymentHistory(query = null) {
   table.innerHTML = "";
 
   let sql = `
-    SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date) AS date, student_name, class_name, Thuhocphi_money
-    FROM Thuhocphi
-    ORDER BY date(Thuhocphi_date) DESC
-  `;
+  SELECT Thuhocphi_id, strftime('%d/%m/%Y %H:%M', Thuhocphi_date) AS date,
+         student_name, class_name, Thuhocphi_money
+  FROM Thuhocphi
+  ORDER BY Thuhocphi_date DESC
+`;
+
 
   let rows = db.exec(query || sql)[0]?.values || [];
 
@@ -59,11 +61,13 @@ function searchByName() {
   if (!name) return;
 
   const sql = `
-    SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date), student_name, class_name, Thuhocphi_money
+    SELECT Thuhocphi_id, strftime('%d/%m/%Y %H:%M', Thuhocphi_date),
+          student_name, class_name, Thuhocphi_money
     FROM Thuhocphi
     WHERE student_name LIKE '%${name}%'
-    ORDER BY date(Thuhocphi_date) DESC
+    ORDER BY Thuhocphi_date DESC
   `;
+
 
   loadPaymentHistory(sql);
 }
@@ -78,11 +82,13 @@ function searchByDate() {
   }
 
   const sql = `
-    SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date), student_name, class_name, Thuhocphi_money
+    SELECT Thuhocphi_id, strftime('%d/%m/%Y %H:%M', Thuhocphi_date),
+          student_name, class_name, Thuhocphi_money
     FROM Thuhocphi
     WHERE date(Thuhocphi_date) BETWEEN '${start}' AND '${end}'
     ORDER BY Thuhocphi_date DESC
   `;
+
   loadPaymentHistory(sql);
 }
 
