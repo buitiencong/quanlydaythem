@@ -328,6 +328,19 @@ tr:nth-child(even) {
   background: #005fa3;
 }
 
+
+/* 🎨 Nút Huỷ */
+.modal-actions .btn-cancel {
+  background-color: #F7BE38;
+  color: #1f2937;
+  border: 1px solid white;
+}
+
+.modal-actions .btn-cancel:hover {
+  background-color: rgba(247, 190, 56, 0.9);
+}
+
+
 /* Phần thống kê thu học phí */
 .thongke-container {
   display: flex;
