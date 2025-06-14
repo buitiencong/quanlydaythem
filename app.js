@@ -1240,6 +1240,10 @@ function closeDbModal() {
 
 
 // Hàm xuất file .db
+function isStandaloneIOS() {
+  return window.navigator.standalone === true;
+}
+
 function exportSQLite() {
   if (!db) {
     alert("⚠️ Không có dữ liệu để xuất.");
@@ -1249,7 +1253,6 @@ function exportSQLite() {
   const binaryArray = db.export();
   const blob = new Blob([binaryArray], { type: "application/octet-stream" });
 
-  // ✅ Tạo tên file dạng QuanLyDayThem_yyyy-mm-dd.db
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -1259,13 +1262,20 @@ function exportSQLite() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = fileName; // 👈 Tên file động theo ngày
+  a.download = fileName;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
+
+  // ✅ Hiển thị thông báo phù hợp theo môi trường
+  if (isStandaloneIOS()) {
+    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn 'Chia sẻ' > 'Lưu vào Tệp'");
+  } else {
+    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
+  }
 }
+
 
 function autoExportIfNeeded() {
   const LAST_EXPORT_KEY = "lastDbExportDate";
