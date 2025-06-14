@@ -190,6 +190,19 @@ function showClassData(classId, filter = null) {
       const [student_id, student_name] = students[index];
       const row = document.createElement("tr");
 
+        // Gắn class để highlight nếu là học sinh vừa điểm danh
+        if (
+          window.lastDiemDanh &&
+          String(window.lastDiemDanh.classId) === String(classId) &&
+          String(window.lastDiemDanh.studentId) === String(student_id)
+        ) {
+          row.classList.add("just-updated");
+          setTimeout(() => {
+            row.classList.remove("just-updated");
+          }, 1000); // hiệu ứng 1 giây
+        }
+
+
       // ✅ Tô màu xen kẽ
       row.style.backgroundColor = index % 2 === 0 ? "#ffffff" : "#f0faff";
 
@@ -258,23 +271,23 @@ function showClassData(classId, filter = null) {
     container.appendChild(infoDiv);   // dòng thông tin lớp
     container.appendChild(table);     // bảng học sinh
 
-setTimeout(() => {
-  const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
-  if (targetCell) {
-    const rect = targetCell.getBoundingClientRect();
+    setTimeout(() => {
+      const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
+      if (targetCell) {
+        const rect = targetCell.getBoundingClientRect();
 
-    const scrollX = window.scrollX + rect.left + rect.width - window.innerWidth + 32;
-    const scrollY = window.scrollY + rect.top + rect.height - window.innerHeight + 120;
+        const scrollX = window.scrollX + rect.left + rect.width - window.innerWidth + 32;
+        const scrollY = window.scrollY + rect.top + rect.height - window.innerHeight + 120;
 
-    window.scrollTo({
-      left: scrollX > 0 ? scrollX : 0,
-      top: scrollY > 0 ? scrollY : 0,
-      behavior: "smooth"
-    });
+        window.scrollTo({
+          left: scrollX > 0 ? scrollX : 0,
+          top: scrollY > 0 ? scrollY : 0,
+          behavior: "smooth"
+        });
 
-    targetCell.classList.remove("just-marked");
-  }
-}, 100);
+        targetCell.classList.remove("just-marked");
+      }
+    }, 100);
 
     
   } catch (err) {
