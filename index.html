@@ -70,7 +70,7 @@
             </ul>
             </li>
             <li onclick="handleSuaNgay()"><span>📅 Sửa ngày điểm danh</span></li>
-            <li><a href="thuhocphi.html" style="text-decoration: none;  display: block;  padding: 12px 20px;  color: white;  cursor: pointer;  font-weight: bold;">📊 Lịch sử thu học phí</a></li>
+            <li onclick="location.href='thuhocphi.html'"><span>📊 Lịch sử thu học phí</span></li>
             <li><span>💬 Thông tin</span></li>
             <li class="has-submenu">
             <span onclick="toggleSubmenu(this)">💾 Cơ sở dữ liệu
@@ -205,17 +205,17 @@
 
 
 
-<!-- Form Xoá lớp -->
+<!-- Form Xóa lớp -->
 <div id="xoaLopModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>🗑️ Xoá lớp</h3>
+    <h3>🗑️ Xóa lớp</h3>
 
-    <label>Chọn lớp cần xoá:
+    <label>Chọn lớp cần xóa:
       <select id="xoa-class-select" onchange="switchTab(this.value)"></select>
     </label>
 
     <div class="modal-actions">
-      <button onclick="submitXoaLop()">🗑 Xoá</button>
+      <button onclick="submitXoaLop()">🗑️ Xóa</button>
       <button onclick="closeXoaLop()">❌ Huỷ</button>
     </div>
   </div>
@@ -268,10 +268,10 @@
 </div>
 
 
-<!-- Form Xoá học sinh -->
+<!-- Form Xóa học sinh -->
 <div id="xoaHsModal" class="modal-overlay" style="display: none;">
   <div class="modal-content">
-    <h3>🙅‍♂️ Xoá học sinh</h3>
+    <h3>🙅‍♂️ Xóa học sinh</h3>
 
     <label>Chọn lớp:
       <select id="xoa-hs-class" onchange="loadStudentsForXoa(); onChangeClassInXoaHs();"></select>
@@ -282,7 +282,7 @@
     </label>
 
     <div class="modal-actions">
-      <button onclick="submitXoaHs()">🗑 Xoá</button>
+      <button onclick="submitXoaHs()">🗑️ Xóa</button>
       <button onclick="closeXoaHs()">❌ Huỷ</button>
     </div>
   </div>
@@ -308,7 +308,7 @@
 
     <div class="modal-actions">
       <button onclick="submitSuaNgay()">✏️ Sửa</button>
-      <button onclick="submitXoaNgay()">🗑 Xoá</button>
+      <button onclick="submitXoaNgay()">🗑️ Xóa</button>
       <button onclick="closeSuaNgay()">❌ Huỷ</button>
     </div>
   </div>
