@@ -70,7 +70,7 @@
             </ul>
             </li>
             <li onclick="handleSuaNgay()"><span>📅 Sửa ngày điểm danh</span></li>
-            <li><span>📊 Thống kê thu học phí</span></li>
+            <li><a href="thuhocphi.html" style="color: white; text-decoration: none;">📊 Thống kê thu học phí</a></li>
             <li><span>💬 Thông tin</span></li>
             <li class="has-submenu">
             <span onclick="toggleSubmenu(this)">💾 Cơ sở dữ liệu
@@ -345,8 +345,31 @@
   </div>
 </div>
 
-<!-- Nút cuộn xuống cuối trang -->
-<button id="scrollToBottomBtn" onclick="scrollToBottom()">⬇️</button>
+
+<!-- Form Thu học phí -->
+<div id="thuHocPhiModal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h3>💰 Thu học phí</h3>
+
+    <label>Chọn lớp:
+      <select id="thu-class" onchange="onChangeClassInThu()"></select>
+    </label>
+
+    <label>Chọn học sinh:
+      <select id="thu-student" onchange="updateTienThuHocPhi()"></select>
+    </label>
+
+    <label>Số tiền cần thu:
+      <input type="text" id="thu-money" readonly />
+    </label>
+
+    <div class="modal-actions">
+      <button onclick="submitThuHocPhi()">✅ Thu</button>
+      <button onclick="closeThuHocPhi()">❌ Huỷ</button>
+    </div>
+  </div>
+</div>
+
 
 
 
