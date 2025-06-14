@@ -40,46 +40,42 @@
     </div>
 
 
-    <!-- Lọc theo ngày -->
-    <div style="
+<!-- Lọc theo ngày -->
+<div style="
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 16px;
+  font-size: 16px;
+  padding: 12px;
+  border: 1px solid white;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+">
+  <!-- Cột trái: input ngày -->
+  <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 200px;">
+    <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center; gap: 8px;">
+      <span>📅 Từ ngày:</span>
+      <input type="date" id="start-date" style="font-size: 18px; padding: 6px; width: 100%;" />
+    </div>
+    <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center; gap: 8px;">
+      <span>📅 Đến ngày:</span>
+      <input type="date" id="end-date" style="font-size: 18px; padding: 6px; width: 100%;" />
+    </div>
+  </div>
+
+  <!-- Cột phải: nút Lọc -->
+  <div style="
     display: flex;
-    gap: 16px;
-    align-items: stretch;
-    margin-bottom: 16px;
-    font-size: 16px;
-    padding: 12px;
-    border: 1px solid white;
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    flex-wrap: wrap;
-    ">
-    <!-- Cột trái: 2 dòng input thẳng hàng -->
-    <div style="display: flex; flex-direction: column; gap: 10px; flex: 1;">
-        
-        <!-- Dòng 1: Từ ngày -->
-        <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center; gap: 8px;">
-        <span>📅 Từ ngày:</span>
-        <input type="date" id="start-date" style="font-size: 18px; padding: 6px; width: 100%;" />
-        </div>
-
-        <!-- Dòng 2: Đến ngày -->
-        <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center; gap: 8px;">
-        <span>📅 Đến ngày:</span>
-        <input type="date" id="end-date" style="font-size: 18px; padding: 6px; width: 100%;" />
-        </div>
-    </div>
-
-    <!-- Cột phải: nút lọc -->
-    <div style="
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        min-width: 180px;
-        padding-left: 8px;
-    ">
-        <button onclick="searchByDate()" style="font-size: 16px; padding: 10px 16px;">🔍 Lọc</button>
-    </div>
-    </div>
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 130px;
+    flex-shrink: 0;
+  ">
+    <button onclick="searchByDate()" style="font-size: 16px; padding: 10px 16px; white-space: nowrap;">🔍 Lọc</button>
+  </div>
+</div>
 
     <div style="text-align: center; margin-bottom: 16px;">
     <button onclick="loadPaymentHistory()" style="font-size: 16px; padding: 10px 16px;">🔄 Tải lại</button>
