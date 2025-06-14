@@ -1264,7 +1264,7 @@ function exportSQLite() {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  alert("📦 Đã sao lưu dữ liệu vào máy thành công!");
+  alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
 }
 
 function autoExportIfNeeded() {
