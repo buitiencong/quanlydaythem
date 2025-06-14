@@ -489,11 +489,14 @@ function submitDiemDanh(status) {
 // Thêm lớp
 function handleThemLop() {
   document.getElementById("themLopModal").style.display = "flex";
-
-  // Gán ngày hôm nay làm mặc định
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("lop-ngay").value = today;
+  // Xóa toàn bộ nội dung đã nhập trước đó
+  document.getElementById("lop-ten").value = "";
+  document.getElementById("lop-hocphi").value = "";
+  document.getElementById("lop-ngay").value = new Date().toISOString().split("T")[0]; // Gán mặc định hôm nay
+  document.getElementById("lop-thoigian").value = "";
+  document.getElementById("lop-diadiem").value = "";
 }
+
 
 function closeThemLop() {
   document.getElementById("themLopModal").style.display = "none";
