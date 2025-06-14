@@ -782,6 +782,12 @@ function loadStudentsForEdit() {
   });
 
   fillOldStudentName(); // tự động điền tên hiện tại vào ô sửa
+  // ✅ Đảm bảo tab đã được tạo rồi mới nhảy
+  setTimeout(() => {
+    if (document.querySelector(`.tab-button[data-class-id="${classId}"]`)) {
+      switchTab(classId);
+    }
+  }, 0);
 }
 
 function fillOldStudentName() {
@@ -961,14 +967,7 @@ function onChangeClassInThemHs() {
   const classId = document.getElementById("hs-class-select").value;
   switchTab(classId);
 }
-function onChangeClassInSuaHs() {
-  const classId = document.getElementById("edit-hs-class").value;
-  switchTab(classId);
-}
-function onChangeClassInXoaHs() {
-  const classId = document.getElementById("xoa-hs-class").value;
-  switchTab(classId);
-}
+
 
 // THống kê thu học phí
 function updateThuHocPhiThongKe(classId) {
