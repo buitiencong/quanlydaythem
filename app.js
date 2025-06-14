@@ -16,10 +16,14 @@ initSqlJs({
     if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
+
+      // ✅ Thêm dòng này — CHỈ GỌI khi DB đã sẵn sàng
+      autoExportIfNeeded();
     } else {
-      setTimeout(openDbModal, 100); // ✅ Trì hoãn để hiển thị như popup
+      setTimeout(openDbModal, 100);
     }
   });
+
 
 
 
@@ -250,9 +254,6 @@ function showClassData(classId, filter = null) {
 
 // ✅ Hàm xử lý mở menu (cho mobile)
 document.addEventListener("DOMContentLoaded", () => {
-  // Tự động backup
-  autoExportIfNeeded();
-  
   const toggleBtn = document.getElementById("menuToggle");
   const menuBar = document.querySelector(".menu-bar");
 
