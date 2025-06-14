@@ -318,7 +318,7 @@ tr:nth-child(even) {
   border: none;
   background: #007acc;
   color: white;
-  border: 1px solid white;
+  border: 1.5px solid white;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
@@ -333,7 +333,7 @@ tr:nth-child(even) {
 .modal-actions .btn-cancel {
   background-color: #F7BE38;
   color: #1f2937;
-  border: 1px solid white;
+  border: 1.5px solid white;
 }
 
 .modal-actions .btn-cancel:hover {
