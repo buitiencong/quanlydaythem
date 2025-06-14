@@ -202,6 +202,17 @@ function showClassData(classId, filter = null) {
           }, 1000); // hiệu ứng 1 giây
         }
 
+        // Highlight học sinh vừa thu học phí
+        if (
+          window.lastDiemDanh &&
+          String(window.lastDiemDanh.classId) === String(classId) &&
+          String(window.lastDiemDanh.studentId) === String(student_id)
+        ) {
+          row.classList.add("just-updated");
+          setTimeout(() => {
+            row.classList.remove("just-updated");
+          }, 1000);
+        }
 
       // ✅ Tô màu xen kẽ
       row.style.backgroundColor = index % 2 === 0 ? "#ffffff" : "#f0faff";
@@ -272,20 +283,23 @@ function showClassData(classId, filter = null) {
     container.appendChild(table);     // bảng học sinh
 
     setTimeout(() => {
-      const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
-      if (targetCell && window.lastDiemDanh?.active === true) {
-        const rect = targetCell.getBoundingClientRect();
+      const targetRow = document.querySelector(`#tab-${classId} tr.just-updated`);
+      if (targetRow && window.lastDiemDanh?.active === true) {
+        const rect = targetRow.getBoundingClientRect();
+
         const scrollX = window.scrollX + rect.left + rect.width - window.innerWidth + 32;
         const scrollY = window.scrollY + rect.top + rect.height - window.innerHeight + 120;
+
         window.scrollTo({
           left: scrollX > 0 ? scrollX : 0,
           top: scrollY > 0 ? scrollY : 0,
           behavior: "smooth"
         });
-        targetCell.classList.remove("just-marked");
-        window.lastDiemDanh = null; // 🧹 xoá để tránh ảnh hưởng các chức năng khác
+
+        window.lastDiemDanh = null; // reset để tránh cuộn sai lần sau
       }
     }, 100);
+
 
 
     
@@ -1157,6 +1171,12 @@ function submitThuHocPhi() {
   `, [date, money, className, studentName, studentId]);
 
   saveToLocal();
+  window.lastDiemDanh = {
+  classId,
+  studentId,
+  active: true // ✅ để trigger scroll & highlight trong showClassData
+};
+
   loadClasses(classId);
   updateThuHocPhiThongKe(classId);
 
