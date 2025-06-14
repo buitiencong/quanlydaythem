@@ -250,6 +250,9 @@ function showClassData(classId, filter = null) {
 
 // ✅ Hàm xử lý mở menu (cho mobile)
 document.addEventListener("DOMContentLoaded", () => {
+  // Tự động backup
+  autoExportIfNeeded();
+  
   const toggleBtn = document.getElementById("menuToggle");
   const menuBar = document.querySelector(".menu-bar");
 
@@ -1245,12 +1248,41 @@ function exportSQLite() {
   const binaryArray = db.export();
   const blob = new Blob([binaryArray], { type: "application/octet-stream" });
 
+  // ✅ Tạo tên file dạng QuanLyDayThem_yyyy-mm-dd.db
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const fileName = `QuanLyDayThem_${dd}-${mm}-${yyyy}.db`;
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "dulieu_lophoc.db"; // Tên file khi tải xuống
+  a.download = fileName; // 👈 Tên file động theo ngày
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+  alert("📦 Đã sao lưu dữ liệu vào máy thành công!");
+}
+
+function autoExportIfNeeded() {
+  const LAST_EXPORT_KEY = "lastDbExportDate";
+  // const EXPORT_INTERVAL_DAYS = 7;
+  const EXPORT_INTERVAL_DAYS = 0.0001; // ~8 giây
+
+
+  const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
+  const now = new Date();
+
+  if (lastExport) {
+    const lastDate = new Date(lastExport);
+    const diffTime = now - lastDate;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+    if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến 7 ngày, không export
+  }
+
+  exportSQLite(); // ✅ Gọi export
+  localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
