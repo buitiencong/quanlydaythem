@@ -666,13 +666,15 @@ function submitXoaLop() {
 }
 
 // Viết hoa chữ cái đầu trong tên học sinh
-function capitalizeWords(str) {
-  return str
-    .toLocaleLowerCase('vi-VN') // ✅ lowercase theo chuẩn tiếng Việt
-    .normalize('NFD')            // ✅ tách dấu để xử lý chính xác hơn
-    .replace(/\b\w/g, c => c.toLocaleUpperCase('vi-VN')) // ✅ viết hoa đúng
-    .normalize('NFC');           // ✅ ghép lại dấu sau xử lý
-}
+  function capitalizeWords(str) {
+    return str
+      .toLocaleLowerCase('vi-VN')
+      .split(' ')
+      .filter(word => word) // bỏ khoảng trắng thừa
+      .map(word => word.charAt(0).toLocaleUpperCase('vi-VN') + word.slice(1))
+      .join(' ');
+  }
+
 
 
 
