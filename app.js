@@ -761,8 +761,15 @@ function handleSuaHs() {
     classSelect.appendChild(opt);
   });
 
-  loadStudentsForEdit();
+  // ✅ Load lại danh sách lớp trước để tab chắc chắn tồn tại
+  const selectedClassId = classSelect.value;
+  loadClasses(selectedClassId);
+
+  setTimeout(() => {
+    loadStudentsForEdit();
+  }, 50); // delay nhỏ để tabs được tạo
 }
+
 
 function closeSuaHs() {
   document.getElementById("suaHsModal").style.display = "none";
@@ -834,8 +841,15 @@ function handleXoaHs() {
     classSelect.appendChild(opt);
   });
 
-  loadStudentsForXoa();
+  // 🛠 Thay đổi: luôn load tab và danh sách lại
+  const selectedClassId = classSelect.value;
+  loadClasses(selectedClassId);  // <- Đảm bảo tab được tạo
+
+  setTimeout(() => {
+    loadStudentsForXoa();
+  }, 50); // delay nhỏ để chờ DOM render tabs
 }
+
 
 function closeXoaHs() {
   document.getElementById("xoaHsModal").style.display = "none";
