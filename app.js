@@ -697,13 +697,12 @@ function handleThemHs() {
     select.appendChild(opt);
   });
 
-  // ✅ Focus vào trường tên và bôi đen nội dung hiện có (nếu có)
+  // ✅ Focus vào trường tên và xóa tên (nếu có)
   const tenInput = document.getElementById("hs-ten");
+  tenInput.value = ""; // ✅ Xoá nội dung cũ
+
   setTimeout(() => {
     tenInput.focus();
-    if (tenInput.value.trim() !== "") {
-      tenInput.select();
-    }
   }, 10);
 }
 
