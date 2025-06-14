@@ -199,20 +199,9 @@ function showClassData(classId, filter = null) {
           row.classList.add("just-updated");
           setTimeout(() => {
             row.classList.remove("just-updated");
-          }, 1000); // hiệu ứng 1 giây
-        }
-
-        // Highlight học sinh vừa thu học phí
-        if (
-          window.lastDiemDanh &&
-          String(window.lastDiemDanh.classId) === String(classId) &&
-          String(window.lastDiemDanh.studentId) === String(student_id)
-        ) {
-          row.classList.add("just-updated");
-          setTimeout(() => {
-            row.classList.remove("just-updated");
           }, 1000);
         }
+
 
       // ✅ Tô màu xen kẽ
       row.style.backgroundColor = index % 2 === 0 ? "#ffffff" : "#f0faff";
