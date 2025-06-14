@@ -11,17 +11,29 @@
 <body>
   <h2>📊 Lịch sử thu học phí</h2>
 
-  <div style="margin-bottom: 10px;">
+  <div style="margin-bottom: 16px;">
     🔍 Tìm theo tên: <input type="text" id="search-name" placeholder="Nhập tên học sinh..." />
     <button onclick="searchByName()">Tìm</button>
   </div>
 
-    <div style="margin-bottom: 10px;">
-    📅 Từ: <input type="date" id="start-date" style="font-size: 20px;" />
-    đến: <input type="date" id="end-date" style="font-size: 20px;" />
-    <button onclick="searchByDate()">Lọc</button>
-    <button onclick="loadPaymentHistory()">🔄 Tải lại</button>
+    <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px;">
+    <!-- Cột trái: 2 input date -->
+    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
+        <label>📅 Từ:
+        <input type="date" id="start-date" style="font-size: 20px; height: 36px; width: 100%;" />
+        </label>
+        <label>đến:
+        <input type="date" id="end-date" style="font-size: 20px; height: 36px; width: 100%;" />
+        </label>
     </div>
+
+    <!-- Cột phải: 2 nút nằm ngang -->
+    <div style="display: flex; gap: 8px; flex-shrink: 0;">
+        <button onclick="searchByDate()" style="font-size: 16px; padding: 10px 16px;">Lọc</button>
+        <button onclick="loadPaymentHistory()" style="font-size: 16px; padding: 10px 16px;">🔄 Tải lại</button>
+    </div>
+    </div>
+
 
 
   <table id="paymentTable" border="1" style="width:100%; border-collapse: collapse;">
