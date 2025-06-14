@@ -667,8 +667,13 @@ function submitXoaLop() {
 
 // Viết hoa chữ cái đầu trong tên học sinh
 function capitalizeWords(str) {
-  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+  return str
+    .toLocaleLowerCase('vi-VN') // ✅ lowercase theo chuẩn tiếng Việt
+    .normalize('NFD')            // ✅ tách dấu để xử lý chính xác hơn
+    .replace(/\b\w/g, c => c.toLocaleUpperCase('vi-VN')) // ✅ viết hoa đúng
+    .normalize('NFC');           // ✅ ghép lại dấu sau xử lý
 }
+
 
 
 // Thêm học sinh
