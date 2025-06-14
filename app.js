@@ -229,6 +229,17 @@ function showClassData(classId, filter = null) {
 
         if (ddRes.length > 0) {
           td.textContent = "🟢";
+
+          // ✅ Nếu là học sinh và ngày vừa điểm danh thì gắn class để scroll tới
+          if (
+            window.lastDiemDanh &&
+            String(window.lastDiemDanh.classId) === String(classId) &&
+            String(window.lastDiemDanh.studentId) === String(student_id) &&
+            window.lastDiemDanh.date === date
+          ) {
+            td.classList.add("just-marked");
+          }
+
         } else {
           td.textContent = "❌";
           td.style.color = "red";
@@ -236,6 +247,7 @@ function showClassData(classId, filter = null) {
 
         row.appendChild(td);
       }
+
 
       tbody.appendChild(row);
     }
@@ -246,6 +258,15 @@ function showClassData(classId, filter = null) {
     container.innerHTML = "";
     container.appendChild(infoDiv);   // dòng thông tin lớp
     container.appendChild(table);     // bảng học sinh
+
+    setTimeout(() => {
+      const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
+      if (targetCell) {
+        targetCell.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        targetCell.classList.remove("just-marked");
+      }
+    }, 50);
+    
   } catch (err) {
     container.innerHTML = "<p style='color:red'>Lỗi hiển thị dữ liệu: " + err.message + "</p>";
   }
@@ -465,7 +486,13 @@ function submitDiemDanh(status) {
  // ✅ Lưu lại thay đổi
   saveToLocal();
 
-  
+  // Ghi nhớ thông tin để scroll đến
+  window.lastDiemDanh = {
+    classId,
+    studentId,
+    date
+  };
+
   // ✅ Cập nhật bảng ngay sau mỗi điểm danh
   showClassData(classId);
 
