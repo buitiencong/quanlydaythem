@@ -1156,39 +1156,63 @@ function skipThuHocPhi() {
 }
 
 function updateThuHocPhiThongKe(classId) {
-  if (!classId) return;
+  try {
+    // Lấy học phí mỗi buổi của lớp
+    const hocphiRes = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`);
+    const hocphi = hocphiRes[0]?.values[0][0] || 0;
 
-  // Tổng số học sinh trong lớp
-  const all = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
+    // Đếm số học sinh đã thu và chưa thu
+    const daThuCountRes = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId} AND noptien = 1`);
+    const daThuCount = daThuCountRes[0]?.values[0][0] || 0;
 
-  // Số học sinh đã thu
-  const dathu = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId} AND noptien = 1`)?.[0]?.values[0][0] || 0;
+    const chuaThuCountRes = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId} AND noptien = 0`);
+    const chuaThuCount = chuaThuCountRes[0]?.values[0][0] || 0;
 
-  // Số học sinh chưa thu
-  const chuathu = all - dathu;
+    // Tính tổng số tiền đã thu (giống logic C#)
+    const daThuAmountRes = db.exec(`
+      SELECT SUM(Tong_so * class_hocphi) FROM (
+        SELECT student_id, COUNT(*) AS Tong_so FROM Attendance
+        WHERE student_id IN (
+          SELECT student_id FROM Students WHERE class_id = ${classId} AND noptien = 1
+        ) AND status = 1
+        GROUP BY student_id
+      ) AS AttendanceSummary
+      JOIN Students ON AttendanceSummary.student_id = Students.student_id
+      JOIN Classes ON Students.class_id = Classes.class_id
+    `);
+    const tongTienDaThu = daThuAmountRes[0]?.values[0][0] || 0;
 
-  // Tổng tiền đã thu
-  const sumDathu = db.exec(`SELECT SUM(Thuhocphi_money) FROM Thuhocphi WHERE student_id IN (
-    SELECT student_id FROM Students WHERE class_id = ${classId} AND noptien = 1
-  )`)?.[0]?.values[0][0] || 0;
+    // Tính tổng số tiền chưa thu (giống logic C#)
+    const chuaThuAmountRes = db.exec(`
+      SELECT SUM(Tong_so * class_hocphi) FROM (
+        SELECT student_id, COUNT(*) AS Tong_so FROM Attendance
+        WHERE student_id IN (
+          SELECT student_id FROM Students WHERE class_id = ${classId} AND noptien = 0
+        ) AND status = 1
+        GROUP BY student_id
+      ) AS AttendanceSummary
+      JOIN Students ON AttendanceSummary.student_id = Students.student_id
+      JOIN Classes ON Students.class_id = Classes.class_id
+    `);
+    const tongTienChuaThu = chuaThuAmountRes[0]?.values[0][0] || 0;
 
-  // Tổng tiền còn lại = số buổi x học phí của học sinh chưa thu
-  const hocphi = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
-  const sobuoiRes = db.exec(`SELECT COUNT(DISTINCT attendance_date) FROM Attendance WHERE class_id = ${classId}`);
-  const sobuoi = sobuoiRes?.[0]?.values[0][0] || 0;
-  const sumChuathu = chuathu * hocphi * sobuoi;
+    // Cập nhật giao diện
+    document.getElementById("count-dathu").textContent = daThuCount;
+    document.getElementById("sum-dathu").textContent = tongTienDaThu.toLocaleString() + " đ";
 
-  // Cập nhật DOM
-  document.getElementById("count-dathu").textContent = dathu;
-  document.getElementById("sum-dathu").textContent = Number(sumDathu).toLocaleString() + " đ";
+    document.getElementById("count-chuathu").textContent = chuaThuCount;
+    document.getElementById("sum-chuathu").textContent = tongTienChuaThu.toLocaleString() + " đ";
 
-  document.getElementById("count-chuathu").textContent = chuathu;
-  document.getElementById("sum-chuathu").textContent = Number(sumChuathu).toLocaleString() + " đ";
-
-  const percent = all === 0 ? 0 : Math.round((dathu / all) * 100);
-  document.getElementById("progress-percent").textContent = percent + "%";
-  document.getElementById("progress-bar").style.width = percent + "%";
+    // Cập nhật progress
+    const tong = tongTienDaThu + tongTienChuaThu;
+    const percent = tong > 0 ? Math.round((tongTienDaThu / tong) * 100) : 0;
+    document.getElementById("progress-percent").textContent = percent + "%";
+    document.getElementById("progress-bar").style.width = percent + "%";
+  } catch (err) {
+    console.error("Lỗi thống kê thu học phí:", err.message);
+  }
 }
+
 
 // Gán sự kiến cho 2 nút Đã Thu và Chưa Thu
 const btnDaThu = document.getElementById("btn-dathu");
@@ -1270,7 +1294,7 @@ function exportSQLite() {
 
   // ✅ Hiển thị thông báo phù hợp theo môi trường
   if (isStandaloneIOS()) {
-    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn 'Chia sẻ' > 'Lưu vào Tệp'");
+    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn: 'Mở trong...' > 'Lưu vào Tệp' > 'Lưu'");
   } else {
     alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
   }
@@ -1279,10 +1303,7 @@ function exportSQLite() {
 
 function autoExportIfNeeded() {
   const LAST_EXPORT_KEY = "lastDbExportDate";
-  // const EXPORT_INTERVAL_DAYS = 15; // 7 ngày 
-  const EXPORT_INTERVAL_DAYS = 0.0001; // ~8 giây
-
-
+  const EXPORT_INTERVAL_DAYS = 15; // 15 ngày
   const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
   const now = new Date();
 
