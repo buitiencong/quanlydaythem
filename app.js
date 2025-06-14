@@ -273,21 +273,20 @@ function showClassData(classId, filter = null) {
 
     setTimeout(() => {
       const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
-      if (targetCell) {
+      if (targetCell && window.lastDiemDanh?.active === true) {
         const rect = targetCell.getBoundingClientRect();
-
         const scrollX = window.scrollX + rect.left + rect.width - window.innerWidth + 32;
         const scrollY = window.scrollY + rect.top + rect.height - window.innerHeight + 120;
-
         window.scrollTo({
           left: scrollX > 0 ? scrollX : 0,
           top: scrollY > 0 ? scrollY : 0,
           behavior: "smooth"
         });
-
         targetCell.classList.remove("just-marked");
+        window.lastDiemDanh = null; // 🧹 xoá để tránh ảnh hưởng các chức năng khác
       }
     }, 100);
+
 
     
   } catch (err) {
@@ -513,8 +512,10 @@ function submitDiemDanh(status) {
   window.lastDiemDanh = {
     classId,
     studentId,
-    date
+    date,
+    active: true // 🟢 Đánh dấu là điểm danh
   };
+
 
   // ✅ Cập nhật bảng ngay sau mỗi điểm danh
   showClassData(classId);
