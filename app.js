@@ -89,7 +89,11 @@ function loadClasses(selectedClassId = null) {
     contentDiv.id = `tab-${classId}`;
     contents.appendChild(contentDiv);
 
-    if (isActive) showClassData(classId);
+    if (isActive) {
+      showClassData(classId);
+      updateThuHocPhiThongKe(classId); // 👈 THÊM DÒNG NÀY
+    }
+
   });
 }
 
@@ -247,7 +251,14 @@ document.addEventListener("DOMContentLoaded", () => {
       menuBar.classList.toggle("open");
     });
   }
+
+  // 👇 Thêm đoạn này để cập nhật thống kê khi vừa vào trang
+  const classId = document.querySelector(".tab-button.active")?.dataset.classId;
+  if (classId) {
+    updateThuHocPhiThongKe(classId);
+  }
 });
+
 
 // ✅ Hàm mở/đóng submenu (cho iPhone)
 function toggleSubmenu(el) {
