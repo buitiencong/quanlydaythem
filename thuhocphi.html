@@ -9,17 +9,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
-  <h2>📊 Lịch sử thu học phí</h2>
+ <h2 style="text-align: center;">📊 Lịch sử thu học phí</h2>
 
-  <!-- Tìm theo tên -->
-    <div style="margin-bottom: 10px; font-size: 16px;">
+    <!-- Tìm theo tên -->
+    <div style="
+    margin-bottom: 16px;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid white;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    ">
     🔍 Tìm theo tên:
-    <input type="text" id="search-name" placeholder="Nhập tên học sinh..." style="font-size: 16px; padding: 6px;" />
+    <input type="text" id="search-name" placeholder="Nhập tên học sinh..."
+            style="font-size: 16px; padding: 6px;" />
     <button onclick="searchByName()" style="font-size: 16px; padding: 8px 14px;">Tìm</button>
     </div>
 
-    <!-- Lọc theo ngày: 2 cột -->
-    <div style="display: flex; gap: 16px; align-items: stretch; margin-bottom: 10px; font-size: 16px;">
+    <!-- Lọc theo ngày -->
+    <div style="
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    margin-bottom: 16px;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px solid white;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    ">
     <!-- Cột trái: input ngày -->
     <div style="display: flex; flex-direction: column; gap: 10px; flex: 1;">
         <label>📅 Từ ngày:
@@ -30,7 +48,7 @@
         </label>
     </div>
 
-    <!-- Cột phải: 2 nút căn giữa -->
+    <!-- Cột phải: nút lọc -->
     <div style="
         display: flex;
         justify-content: center;
@@ -42,6 +60,7 @@
         <button onclick="loadPaymentHistory()" style="font-size: 16px; padding: 10px 16px;">🔄 Tải lại</button>
     </div>
     </div>
+
 
 
 
