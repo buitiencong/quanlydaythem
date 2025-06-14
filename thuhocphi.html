@@ -11,24 +11,33 @@
 <body>
   <h2>📊 Lịch sử thu học phí</h2>
 
-  <div style="margin-bottom: 10px; font-size: 16px;">
-    🔍 Tìm theo tên: <input type="text" id="search-name" placeholder="Nhập tên học sinh..." />
-    <button onclick="searchByName()">Tìm</button>
-  </div>
+  <!-- Tìm theo tên -->
+    <div style="margin-bottom: 10px; font-size: 16px;">
+    🔍 Tìm theo tên:
+    <input type="text" id="search-name" placeholder="Nhập tên học sinh..." style="font-size: 16px; padding: 6px;" />
+    <button onclick="searchByName()" style="font-size: 16px; padding: 8px 14px;">Tìm</button>
+    </div>
 
-    <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px;">
-    <!-- Cột trái: 2 input date -->
-    <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
+    <!-- Lọc theo ngày: 2 cột -->
+    <div style="display: flex; gap: 16px; align-items: stretch; margin-bottom: 10px; font-size: 16px;">
+    <!-- Cột trái: input ngày -->
+    <div style="display: flex; flex-direction: column; gap: 10px; flex: 1;">
         <label>📅 Từ ngày:
-        <input type="date" id="start-date" style="font-size: 20px; height: 36px; width: 100%; margin-top: 5px;" />
+        <input type="date" id="start-date" style="font-size: 18px; width: 100%; margin-top: 4px; padding: 6px;" />
         </label>
         <label>Đến ngày:
-        <input type="date" id="end-date" style="font-size: 20px; height: 36px; width: 100%; margin-top: 5px" />
+        <input type="date" id="end-date" style="font-size: 18px; width: 100%; margin-top: 4px; padding: 6px;" />
         </label>
     </div>
 
-    <!-- Cột phải: 2 nút nằm ngang -->
-    <div style="display: flex; gap: 8px; flex-shrink: 0;">
+    <!-- Cột phải: 2 nút căn giữa -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        min-width: 180px;
+    ">
         <button onclick="searchByDate()" style="font-size: 16px; padding: 10px 16px;">Lọc</button>
         <button onclick="loadPaymentHistory()" style="font-size: 16px; padding: 10px 16px;">🔄 Tải lại</button>
     </div>
