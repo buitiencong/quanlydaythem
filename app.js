@@ -13,14 +13,18 @@ initSqlJs({
   SQL = SQLLib;
 
   localforage.getItem("userDB").then(buffer => {
-    if (buffer) {
+    if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
     } else {
-      // Chưa có dữ liệu → hiển thị modal
-      openDbModal();
+      // Chỉ hiển thị nếu chưa từng load DB
+      if (!localStorage.getItem("hasOpenedDb")) {
+        openDbModal();
+      }
     }
   });
+
+
 
 
   document.getElementById("dbfile").addEventListener("change", event => {
@@ -29,9 +33,11 @@ initSqlJs({
       const uint8array = new Uint8Array(reader.result);
       db = new SQL.Database(uint8array);
       localforage.setItem("userDB", uint8array);
+      localStorage.setItem("hasOpenedDb", "1"); // ✅ đánh dấu đã chọn DB
       closeDbModal();
       loadClasses();
     };
+
     reader.readAsArrayBuffer(event.target.files[0]);
   });
 });
