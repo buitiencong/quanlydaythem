@@ -347,6 +347,7 @@ tr:nth-child(even) {
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .modal-actions button:hover {
@@ -359,6 +360,7 @@ tr:nth-child(even) {
   background-color: #F7BE38;
   color: #1f2937;
   border: 1.5px solid white;
+  text-shadow: 0 1px 2px #ffffff;
 }
 
 .modal-actions .btn-cancel:hover {
