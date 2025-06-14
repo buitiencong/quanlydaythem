@@ -853,6 +853,12 @@ function loadStudentsForXoa() {
     opt.textContent = name;
     studentSelect.appendChild(opt);
   });
+  // ✅ Đảm bảo tab lớp nhảy đúng kể cả khi không có học sinh
+  setTimeout(() => {
+    if (document.querySelector(`.tab-button[data-class-id="${classId}"]`)) {
+      switchTab(classId);
+    }
+  }, 0);
 }
 
 function submitXoaHs() {
