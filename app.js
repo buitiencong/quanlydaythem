@@ -979,3 +979,32 @@ function updateThuHocPhiThongKe(classId) {
     console.error("Lỗi thống kê thu học phí:", err.message);
   }
 }
+
+
+// Nút cuộn cuối trang
+function scrollToBottom() {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const scrollBtn = document.getElementById("scrollToBottomBtn");
+
+  function toggleScrollButton() {
+    const scrollY = window.scrollY;
+    const viewportHeight = window.innerHeight;
+    const totalHeight = document.body.scrollHeight;
+
+    if (scrollY + viewportHeight >= totalHeight - 100) {
+      scrollBtn.style.display = "none";
+    } else {
+      scrollBtn.style.display = "block";
+    }
+  }
+
+  // Gán sự kiện theo dõi cuộn
+  window.addEventListener("scroll", toggleScrollButton);
+
+  // Kiểm tra ban đầu khi tải trang
+  toggleScrollButton();
+});
+
