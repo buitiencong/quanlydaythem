@@ -54,12 +54,12 @@
   background-color: rgba(255, 255, 255, 0.1);
 ">
   <!-- Cột trái: input ngày -->
-  <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 200px;">
-    <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center; gap: 8px;">
+  <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 200px; margin-right: 8px;">
+    <div style="display: grid; grid-template-columns: 80px 1fr; align-items: center; column-gap: 6px;">
       <span>📅 Từ:</span>
       <input type="date" id="start-date" style="font-size: 18px; padding: 6px; width: 100%;" />
     </div>
-    <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center; gap: 8px;">
+    <div style="display: grid; grid-template-columns: 80px 1fr; align-items: center; column-gap: 6px;">
       <span>📅 Đến:</span>
       <input type="date" id="end-date" style="font-size: 18px; padding: 6px; width: 100%;" />
     </div>
@@ -76,6 +76,7 @@
     <button onclick="searchByDate()" style="font-size: 16px; padding: 10px 16px; white-space: nowrap;">🔍 Lọc</button>
   </div>
 </div>
+
 
     <div style="text-align: center; margin-bottom: 16px;">
     <button onclick="loadPaymentHistory()" style="font-size: 16px; padding: 10px 16px;">🔄 Tải lại</button>
