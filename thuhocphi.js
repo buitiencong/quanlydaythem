@@ -22,8 +22,9 @@ function loadPaymentHistory(query = null) {
   let sql = `
     SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date) AS date, student_name, class_name, Thuhocphi_money
     FROM Thuhocphi
-    ORDER BY Thuhocphi_date DESC
+    ORDER BY date(Thuhocphi_date) DESC
   `;
+
   let rows = db.exec(query || sql)[0]?.values || [];
 
   rows.forEach(([id, date, name, classname, money], index) => {
@@ -61,8 +62,9 @@ function searchByName() {
     SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date), student_name, class_name, Thuhocphi_money
     FROM Thuhocphi
     WHERE student_name LIKE '%${name}%'
-    ORDER BY Thuhocphi_date DESC
+    ORDER BY date(Thuhocphi_date) DESC
   `;
+
   loadPaymentHistory(sql);
 }
 
