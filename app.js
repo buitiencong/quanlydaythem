@@ -974,6 +974,10 @@ function updateThuHocPhiThongKe(classId) {
 
 
 // Mở form Thu học phí
+let pendingStudents = []; // Danh sách học sinh chưa thu
+let currentIndex = 0;     // Vị trí hiện tại trong danh sách
+
+
 function handleThuHocPhi() {
   document.getElementById("thuHocPhiModal").style.display = "flex";
 
@@ -1000,25 +1004,39 @@ function closeThuHocPhi() {
 
 function onChangeClassInThu() {
   const classId = document.getElementById("thu-class").value;
-
-  // Nhảy tab lớp tương ứng
   switchTab(classId);
 
-  // Tải danh sách học sinh
   const studentSelect = document.getElementById("thu-student");
   studentSelect.innerHTML = "";
 
-  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId}`);
-  result[0]?.values.forEach(([id, name]) => {
+  // Lấy học sinh chưa thu học phí
+  const result = db.exec(`
+    SELECT student_id, student_name FROM Students
+    WHERE class_id = ${classId} AND noptien = 0
+  `);
+
+  pendingStudents = result[0]?.values || [];
+  currentIndex = 0;
+
+  if (pendingStudents.length === 0) {
+    studentSelect.innerHTML = '<option disabled selected>🎉 Tất cả học sinh đã thu</option>';
+    document.getElementById("thu-money").value = "";
+    return;
+  }
+
+  // Tạo danh sách chọn
+  pendingStudents.forEach(([id, name]) => {
     const opt = document.createElement("option");
     opt.value = id;
     opt.textContent = name;
     studentSelect.appendChild(opt);
   });
 
-  // Tự động cập nhật số tiền cần thu
+  // Chọn người đầu tiên
+  studentSelect.value = pendingStudents[0][0];
   updateTienThuHocPhi();
 }
+
 
 
 function updateTienThuHocPhi() {
@@ -1042,18 +1060,17 @@ function updateTienThuHocPhi() {
 
 function submitThuHocPhi() {
   const classId = document.getElementById("thu-class").value;
-  const studentId = document.getElementById("thu-student").value;
 
-  if (!classId || !studentId) {
-    alert("Vui lòng chọn lớp và học sinh.");
+  if (pendingStudents.length === 0) {
+    alert("🎉 Đã thu học phí xong.");
+    closeThuHocPhi();
     return;
   }
 
-  // Lấy tên lớp và tên học sinh
+  const [studentId, studentName] = pendingStudents[currentIndex];
   const className = document.getElementById("thu-class").selectedOptions[0].textContent;
-  const studentName = document.getElementById("thu-student").selectedOptions[0].textContent;
 
-  // Tính lại số tiền
+  // Tính tiền
   const hocphi = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
   const sobuoi = db.exec(`
     SELECT COUNT(*) FROM Attendance
@@ -1061,10 +1078,8 @@ function submitThuHocPhi() {
   `)?.[0]?.values[0][0] || 0;
   const money = sobuoi * hocphi;
 
-  // Cập nhật nộp tiền
+  // Cập nhật DB
   db.run(`UPDATE Students SET noptien = 1 WHERE student_id = ?`, [studentId]);
-
-  // Thêm bản ghi vào Thuhocphi
   const date = new Date().toISOString().split("T")[0];
   db.run(`
     INSERT INTO Thuhocphi (Thuhocphi_date, Thuhocphi_money, class_name, student_name, student_id)
@@ -1072,9 +1087,39 @@ function submitThuHocPhi() {
   `, [date, money, className, studentName, studentId]);
 
   saveToLocal();
-  closeThuHocPhi();
   loadClasses(classId);
 
-  alert("✅ Đã ghi nhận thu học phí.");
+  // Chuyển sang học sinh tiếp theo
+  currentIndex++;
+  if (currentIndex >= pendingStudents.length) {
+    alert("🎉 Đã thu học phí xong.");
+    closeThuHocPhi();
+    return;
+  }
+
+  const nextStudent = pendingStudents[currentIndex];
+  document.getElementById("thu-student").value = nextStudent[0];
+  updateTienThuHocPhi();
 }
+
+function skipThuHocPhi() {
+  if (pendingStudents.length === 0) {
+    alert("🎉 Đã duyệt hết danh sách.");
+    closeThuHocPhi();
+    return;
+  }
+
+  currentIndex++;
+
+  if (currentIndex >= pendingStudents.length) {
+    alert("🎉 Đã duyệt hết danh sách.");
+    closeThuHocPhi();
+    return;
+  }
+
+  const nextStudent = pendingStudents[currentIndex];
+  document.getElementById("thu-student").value = nextStudent[0];
+  updateTienThuHocPhi();
+}
+
 
