@@ -229,20 +229,19 @@ function showClassData(classId, filter = null) {
 
         if (ddRes.length > 0) {
           td.textContent = "🟢";
-
-          // ✅ Nếu là học sinh và ngày vừa điểm danh thì gắn class để scroll tới
-          if (
-            window.lastDiemDanh &&
-            String(window.lastDiemDanh.classId) === String(classId) &&
-            String(window.lastDiemDanh.studentId) === String(student_id) &&
-            window.lastDiemDanh.date === date
-          ) {
-            td.classList.add("just-marked");
-          }
-
         } else {
           td.textContent = "❌";
           td.style.color = "red";
+        }
+
+        // ✅ Gắn class just-marked nếu đúng học sinh + ngày vừa điểm danh
+        if (
+          window.lastDiemDanh &&
+          String(window.lastDiemDanh.classId) === String(classId) &&
+          String(window.lastDiemDanh.studentId) === String(student_id) &&
+          window.lastDiemDanh.date === date
+        ) {
+          td.classList.add("just-marked");
         }
 
         row.appendChild(td);

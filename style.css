@@ -408,3 +408,8 @@ tr:nth-child(even) {
   border: 2px solid white;
 }
 
+
+.just-marked {
+  outline: 2px solid orange;
+  background-color: #fff6d5;
+}
