@@ -263,9 +263,8 @@ setTimeout(() => {
   if (targetCell) {
     const rect = targetCell.getBoundingClientRect();
 
-    // Tính vị trí cuộn thực tế của toàn trang
-    const scrollX = window.scrollX + rect.left - window.innerWidth + rect.width + 20;
-    const scrollY = window.scrollY + rect.top - window.innerHeight + rect.height + 100;
+    const scrollX = window.scrollX + rect.left + rect.width - window.innerWidth + 32;
+    const scrollY = window.scrollY + rect.top + rect.height - window.innerHeight + 120;
 
     window.scrollTo({
       left: scrollX > 0 ? scrollX : 0,
