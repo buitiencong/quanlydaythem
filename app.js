@@ -258,13 +258,27 @@ function showClassData(classId, filter = null) {
     container.appendChild(infoDiv);   // dòng thông tin lớp
     container.appendChild(table);     // bảng học sinh
 
-    setTimeout(() => {
-      const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
-      if (targetCell) {
-        targetCell.scrollIntoView({ behavior: "smooth", inline: "end", block: "nearest" });
-        targetCell.classList.remove("just-marked");
-      }
-    }, 50);
+setTimeout(() => {
+  const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
+  if (targetCell) {
+    const cellRect = targetCell.getBoundingClientRect();
+    const container = document.querySelector(`#tab-${classId}`);
+    const containerRect = container.getBoundingClientRect();
+
+    // Tính vị trí cần cuộn tới để đưa ô về góc dưới bên phải
+    const offsetX = cellRect.left - containerRect.left - container.clientWidth + cellRect.width + 16;
+    const offsetY = cellRect.top - containerRect.top - container.clientHeight + cellRect.height + 16;
+
+    container.scrollBy({
+      top: offsetY > 0 ? offsetY : 0,
+      left: offsetX > 0 ? offsetX : 0,
+      behavior: "smooth"
+    });
+
+    targetCell.classList.remove("just-marked");
+  }
+}, 100); // tăng nhẹ delay để DOM render chắc chắn
+
     
   } catch (err) {
     container.innerHTML = "<p style='color:red'>Lỗi hiển thị dữ liệu: " + err.message + "</p>";
