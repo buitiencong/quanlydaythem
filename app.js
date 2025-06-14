@@ -15,10 +15,13 @@ initSqlJs({
   localforage.getItem("userDB").then(buffer => {
     if (buffer) {
       db = new SQL.Database(new Uint8Array(buffer));
-      document.getElementById("fileSelect").style.display = "none";
       loadClasses();
+    } else {
+      // Chưa có dữ liệu → hiển thị modal
+      openDbModal();
     }
   });
+
 
   document.getElementById("dbfile").addEventListener("change", event => {
     const reader = new FileReader();
@@ -26,7 +29,7 @@ initSqlJs({
       const uint8array = new Uint8Array(reader.result);
       db = new SQL.Database(uint8array);
       localforage.setItem("userDB", uint8array);
-      document.getElementById("fileSelect").style.display = "none";
+      closeDbModal();
       loadClasses();
     };
     reader.readAsArrayBuffer(event.target.files[0]);
@@ -1217,3 +1220,11 @@ btnChuaThu.addEventListener("click", () => {
   }
 });
 
+
+function openDbModal() {
+  document.getElementById("dbModal").style.display = "flex";
+}
+
+function closeDbModal() {
+  document.getElementById("dbModal").style.display = "none";
+}

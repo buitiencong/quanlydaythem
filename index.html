@@ -84,7 +84,7 @@
                 </svg>
             </span>
             <ul class="submenu">
-                <li onclick="onMenuAction('load-data')">🔄 Load file database</li>
+                <li onclick="openDbModal()">🔄 Load file database</li>
                 <li onclick="onMenuAction('xuat-sqlite')">📤 Xuất file SQLite</li>
                 <li onclick="onMenuAction('xuat-excel')">📗 Xuất file Excel</li>                
                 <li onclick="onMenuAction('xuat-pdf')">📕 Xuất file Pdf</li>
@@ -100,10 +100,16 @@
 
 
 
-    <div id="fileSelect">
-        <h2>📂 Chọn file SQLite (.db):</h2>
-        <input type="file" id="dbfile" accept=".db,.sqlite">
+    <div id="dbModal" class="modal">
+      <div class="modal-content">
+        <h2>📂 Chọn file dữ liệu (.db)</h2>
+        <input type="file" id="dbfile" accept=".db,.sqlite" required />
+        <div class="modal-actions">
+          <button onclick="closeDbModal()">❌ Huỷ</button>
+        </div>
+      </div>
     </div>
+
 
   <div id="tabs"></div>
   <div id="tabContents"></div>
