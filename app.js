@@ -733,8 +733,8 @@ function submitThemHs() {
   loadClasses(classId); // cập nhật tab đang mở nếu cần
 
   // ✅ Không đóng form — mà reset trường tên
-  tenInput.focus();              // Đưa lại con trỏ vào ô nhập
-  tenInput.select();             // ✅ Bôi đen nội dung vừa nhập
+  tenInput.value = ""; // ✅ xoá nội dung
+  tenInput.focus();    // ✅ đặt lại con trỏ
 }
 
 
