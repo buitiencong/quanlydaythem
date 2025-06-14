@@ -261,7 +261,7 @@ function showClassData(classId, filter = null) {
     setTimeout(() => {
       const targetCell = document.querySelector(`#tab-${classId} td.just-marked`);
       if (targetCell) {
-        targetCell.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        targetCell.scrollIntoView({ behavior: "smooth", inline: "end", block: "nearest" });
         targetCell.classList.remove("just-marked");
       }
     }, 50);
