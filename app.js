@@ -994,6 +994,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const viewportHeight = window.innerHeight;
     const totalHeight = document.body.scrollHeight;
 
+    // 👉 Chỉ ẩn nút khi người dùng đã gần chạm đáy
     if (scrollY + viewportHeight >= totalHeight - 100) {
       scrollBtn.style.display = "none";
     } else {
@@ -1001,10 +1002,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Gán sự kiện theo dõi cuộn
+  // Theo dõi cuộn
   window.addEventListener("scroll", toggleScrollButton);
 
-  // Kiểm tra ban đầu khi tải trang
-  toggleScrollButton();
+  // Đợi 50ms rồi kiểm tra ban đầu (đảm bảo layout đã render xong)
+  setTimeout(toggleScrollButton, 50);
 });
-
