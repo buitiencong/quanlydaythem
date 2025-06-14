@@ -6,12 +6,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <link rel="stylesheet" href="style.css" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
   <h2>📊 Lịch sử thu học phí</h2>
 
-  <div style="margin-bottom: 16px;">
+  <div style="margin-bottom: 10px; font-size: 16px;">
     🔍 Tìm theo tên: <input type="text" id="search-name" placeholder="Nhập tên học sinh..." />
     <button onclick="searchByName()">Tìm</button>
   </div>
@@ -19,11 +19,11 @@
     <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px;">
     <!-- Cột trái: 2 input date -->
     <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
-        <label>📅 Từ:
-        <input type="date" id="start-date" style="font-size: 20px; height: 36px; width: 100%;" />
+        <label>📅 Từ ngày:
+        <input type="date" id="start-date" style="font-size: 20px; height: 36px; width: 100%; margin-top: 5px;" />
         </label>
-        <label>đến:
-        <input type="date" id="end-date" style="font-size: 20px; height: 36px; width: 100%;" />
+        <label>Đến ngày:
+        <input type="date" id="end-date" style="font-size: 20px; height: 36px; width: 100%; margin-top: 5px" />
         </label>
     </div>
 
