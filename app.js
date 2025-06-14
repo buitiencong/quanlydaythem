@@ -500,7 +500,8 @@ function closeThemLop() {
 }
 
 function submitThemLop() {
-  const ten = document.getElementById("lop-ten").value.trim();
+  const tenRaw = document.getElementById("lop-ten").value.trim();
+  const ten = capitalizeWords(tenRaw);
   const ngay = document.getElementById("lop-ngay").value;
   const hocphiValue = document.getElementById("lop-hocphi").value.trim();
   const hocphi = parseInt(hocphiValue);
@@ -591,7 +592,8 @@ function loadLopInfoToForm() {
 
 function submitSuaLop() {
   const classId = document.getElementById("edit-class-select").value;
-  const ten = document.getElementById("edit-ten").value.trim();
+  const rawTen = document.getElementById("edit-ten").value.trim();
+  const ten = capitalizeWords(rawTen);
   const ngay = document.getElementById("edit-ngay").value;
   const hocphi = parseInt(document.getElementById("edit-hocphi").value) || 0;
   const thoigian = document.getElementById("edit-thoigian").value.trim();
@@ -663,6 +665,10 @@ function submitXoaLop() {
   loadClasses(); // Không truyền classId vì lớp đã bị xoá
 }
 
+// Viết hoa chữ cái đầu trong tên học sinh
+function capitalizeWords(str) {
+  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
 
 
 // Thêm học sinh
@@ -702,7 +708,9 @@ function closeThemHs() {
 function submitThemHs() {
   const classId = document.getElementById("hs-class-select").value;
   const tenInput = document.getElementById("hs-ten");
-  const ten = tenInput.value.trim();
+  const tenRaw = tenInput.value.trim();
+  const ten = capitalizeWords(tenRaw);
+
 
   if (!ten) {
     alert("Vui lòng nhập họ và tên học sinh.");
@@ -775,7 +783,8 @@ function fillOldStudentName() {
 
 function submitSuaHs() {
   const studentId = document.getElementById("edit-hs-select").value;
-  const newName = document.getElementById("edit-hs-name").value.trim();
+  const rawName = document.getElementById("edit-hs-name").value.trim();
+  const newName = capitalizeWords(rawName);
   const classId = document.getElementById("edit-hs-class").value;
 
   if (!newName) {
