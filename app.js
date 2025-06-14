@@ -17,12 +17,10 @@ initSqlJs({
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
     } else {
-      // Chỉ hiển thị nếu chưa từng load DB
-      if (!localStorage.getItem("hasOpenedDb")) {
-        openDbModal();
-      }
+      setTimeout(openDbModal, 100); // ✅ Trì hoãn để hiển thị như popup
     }
   });
+
 
 
 
@@ -1227,10 +1225,32 @@ btnChuaThu.addEventListener("click", () => {
 });
 
 
+// Đóng mở bảng chọn file .db
 function openDbModal() {
   document.getElementById("dbModal").style.display = "flex";
 }
 
 function closeDbModal() {
   document.getElementById("dbModal").style.display = "none";
+}
+
+
+// Hàm xuất file .db
+function exportSQLite() {
+  if (!db) {
+    alert("⚠️ Không có dữ liệu để xuất.");
+    return;
+  }
+
+  const binaryArray = db.export();
+  const blob = new Blob([binaryArray], { type: "application/octet-stream" });
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "dulieu_lophoc.db"; // Tên file khi tải xuống
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
