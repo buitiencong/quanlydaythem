@@ -252,14 +252,6 @@ function toggleSubmenu(el) {
   li.classList.toggle("open");
 }
 
-// Xử lý nút Điểm danh và Thu học phí
-function handleDiemDanh() {
-  alert("👉 Chức năng Điểm danh đang được phát triển.");
-}
-
-function handleThuHocPhi() {
-  alert("👉 Chức năng Thu học phí đang được phát triển.");
-}
 
 
 // Tự động đón menu con khi chạm ra ngoài
@@ -981,30 +973,108 @@ function updateThuHocPhiThongKe(classId) {
 }
 
 
-// Nút cuộn cuối trang
-function scrollToBottom() {
-  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+// Mở form Thu học phí
+function handleThuHocPhi() {
+  document.getElementById("thuHocPhiModal").style.display = "flex";
+
+  const classSelect = document.getElementById("thu-class");
+  classSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  const activeClassId = document.querySelector(".tab-button.active")?.dataset.classId;
+
+  result[0].values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    if (id == activeClassId) opt.selected = true;
+    classSelect.appendChild(opt);
+  });
+
+  onChangeClassInThu(); // Gọi khi mở lần đầu
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const scrollBtn = document.getElementById("scrollToBottomBtn");
+function closeThuHocPhi() {
+  document.getElementById("thuHocPhiModal").style.display = "none";
+}
 
-  function toggleScrollButton() {
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const totalHeight = document.body.scrollHeight;
+function onChangeClassInThu() {
+  const classId = document.getElementById("thu-class").value;
 
-    // 👉 Chỉ ẩn nút khi người dùng đã gần chạm đáy
-    if (scrollY + viewportHeight >= totalHeight - 100) {
-      scrollBtn.style.display = "none";
-    } else {
-      scrollBtn.style.display = "block";
-    }
+  // Nhảy tab lớp tương ứng
+  switchTab(classId);
+
+  // Tải danh sách học sinh
+  const studentSelect = document.getElementById("thu-student");
+  studentSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId}`);
+  result[0]?.values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    studentSelect.appendChild(opt);
+  });
+
+  // Tự động cập nhật số tiền cần thu
+  updateTienThuHocPhi();
+}
+
+
+function updateTienThuHocPhi() {
+  const classId = document.getElementById("thu-class").value;
+  const studentId = document.getElementById("thu-student").value;
+
+  // Lấy học phí lớp
+  const hocphiRes = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`);
+  const hocphi = hocphiRes[0]?.values[0][0] || 0;
+
+  // Đếm số buổi đã điểm danh
+  const buoiRes = db.exec(`
+    SELECT COUNT(*) FROM Attendance
+    WHERE class_id = ${classId} AND student_id = ${studentId} AND status = 1
+  `);
+  const sobuoi = buoiRes[0]?.values[0][0] || 0;
+  const sotien = sobuoi * hocphi;
+
+  document.getElementById("thu-money").value = sotien.toLocaleString() + " đ";
+}
+
+function submitThuHocPhi() {
+  const classId = document.getElementById("thu-class").value;
+  const studentId = document.getElementById("thu-student").value;
+
+  if (!classId || !studentId) {
+    alert("Vui lòng chọn lớp và học sinh.");
+    return;
   }
 
-  // Theo dõi cuộn
-  window.addEventListener("scroll", toggleScrollButton);
+  // Lấy tên lớp và tên học sinh
+  const className = document.getElementById("thu-class").selectedOptions[0].textContent;
+  const studentName = document.getElementById("thu-student").selectedOptions[0].textContent;
 
-  // Đợi 50ms rồi kiểm tra ban đầu (đảm bảo layout đã render xong)
-  setTimeout(toggleScrollButton, 50);
-});
+  // Tính lại số tiền
+  const hocphi = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
+  const sobuoi = db.exec(`
+    SELECT COUNT(*) FROM Attendance
+    WHERE class_id = ${classId} AND student_id = ${studentId} AND status = 1
+  `)?.[0]?.values[0][0] || 0;
+  const money = sobuoi * hocphi;
+
+  // Cập nhật nộp tiền
+  db.run(`UPDATE Students SET noptien = 1 WHERE student_id = ?`, [studentId]);
+
+  // Thêm bản ghi vào Thuhocphi
+  const date = new Date().toISOString().split("T")[0];
+  db.run(`
+    INSERT INTO Thuhocphi (Thuhocphi_date, Thuhocphi_money, class_name, student_name, student_id)
+    VALUES (?, ?, ?, ?, ?)
+  `, [date, money, className, studentName, studentId]);
+
+  saveToLocal();
+  closeThuHocPhi();
+  loadClasses(classId);
+
+  alert("✅ Đã ghi nhận thu học phí.");
+}
+
