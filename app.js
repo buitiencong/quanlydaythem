@@ -469,6 +469,9 @@ function submitDiemDanh(status) {
   // ✅ Cập nhật bảng ngay sau mỗi điểm danh
   showClassData(classId);
 
+  // ✅ Cập nhật thống kê thu học phí
+  updateThuHocPhiThongKe(classId);
+
   // ✅ Chuyển sang học sinh tiếp theo hoặc kết thúc
   const nextIndex = studentSelect.selectedIndex + 1;
   if (nextIndex < studentSelect.options.length) {
