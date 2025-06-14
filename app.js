@@ -196,11 +196,16 @@ function showClassData(classId, filter = null) {
           String(window.lastDiemDanh.classId) === String(classId) &&
           String(window.lastDiemDanh.studentId) === String(student_id)
         ) {
-          row.classList.add("just-updated");
-          setTimeout(() => {
-            row.classList.remove("just-updated");
-          }, 1000);
-        }
+        row.classList.add("just-updated");
+
+        // 🩹 Kích hoạt lại reflow để đảm bảo hiệu ứng khởi động trên Safari
+        // (thủ thuật bắt trình duyệt “thấy” sự thay đổi style)
+        void row.offsetWidth;
+
+        setTimeout(() => {
+          row.classList.remove("just-updated");
+        }, 1000);
+
 
 
       // ✅ Tô màu xen kẽ
