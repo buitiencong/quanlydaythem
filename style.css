@@ -10,8 +10,24 @@ body {
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* background: linear-gradient(to bottom, #AAEBF7 0%, white 21.3%, white 80.7%, #AAEBF7 100%); */
-  background-color: #AAEBF7;
+  
   padding: 10px;
+
+
+  background: 
+  linear-gradient(
+    14deg,
+    rgba(2, 0, 36, 0.8) 0%,
+    rgba(24, 24, 65, 0.7) 66%,
+    rgb(20, 76, 99) 100%
+  ),
+  radial-gradient(
+    circle,
+    rgba(2, 0, 36, 0.5) 0%,
+    rgba(32, 15, 53, 0.2) 65%,
+    rgba(14, 29, 28, 0.9) 100%
+  );
+
 }
 
 /* Nếu có container bao quanh, đảm bảo nó cũng full width */
@@ -168,8 +184,7 @@ table {
   flex-wrap: wrap;
   gap: 10px;
   background: #f8f8f8;
-  border-bottom: 1px solid white;
-  
+  border-bottom: 1px solid white;  
 }
 
 .action-buttons button {
@@ -459,6 +474,7 @@ tr:nth-child(even) {
   justify-content: center;
   align-items: center;
   font-size: 16px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .thongke-button:hover {
@@ -495,7 +511,11 @@ tr:nth-child(even) {
 
 /* Bật tắt nút Đã Thu - Chưa Thu */
 .thongke-button.active {
-  border: 2px solid red;
+  border: 1px solid white;
+  font-weight: bold;
+  background-color: #3b82f6;
+  box-shadow: 0 0 0 5px #3b83f65f;
+  color: #fff;
 }
 .thongke-button {
   border: 2px solid white;
