@@ -67,7 +67,7 @@ body {
   white-space: nowrap;
   cursor: pointer;
   color: black;
-  background-color: #AAEBF7;
+  background-color: #f0f9ff;
 }
 .submenu li:hover {
   background-color: #f0f0f0;
@@ -277,7 +277,7 @@ tr:nth-child(even) {
 }
 
 .modal-content {
-  background: #AAEBF7;
+  background: #f0f9ff;
   padding: 20px 24px;
   border-radius: 8px;
   width: 90%;
