@@ -604,16 +604,3 @@ tr:nth-child(even) {
 }
 
 
-.date-input {
-  appearance: none;          /* Loại bỏ style mặc định của trình duyệt */
-  -webkit-appearance: none;  /* Đặc biệt cho Safari */
-  background-color: white;
-  border: none;
-  border-radius: 0;
-  font-size: 16px;
-  font-family: inherit;
-  padding: 8px;
-  outline: none;
-  width: 100%;
-  box-sizing: border-box;
-}
