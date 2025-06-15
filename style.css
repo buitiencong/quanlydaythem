@@ -552,10 +552,10 @@ tr:nth-child(even) {
   transition: 400ms;
 }
 
-.button-lichsuthuhocphi:hover {
+.button-lichsuthuhocphi:active {
   background-color: white;
 }
 
-.button-lichsuthuhocphi:hover .text {
+.button-lichsuthuhocphi:active .text {
   color: #007ACC;
 }
