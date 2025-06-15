@@ -6,7 +6,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body>
  <h2 style="text-align: center;">📊 Lịch sử thu học phí</h2>
@@ -105,14 +105,20 @@
     min-width: 130px;
     flex-shrink: 0;
   ">
-    <button onclick="searchByDate()" style="font-size: 16px; padding: 10px 16px; white-space: nowrap;">🔍 Lọc</button>
+    <button class="button-lichsuthuhocphi" onclick="searchByDate()">
+      <span class="text">🔍 Lọc</span>
+    </button>
+
   </div>
 </div>
 
 
-    <div style="text-align: center; margin-bottom: 16px;">
-    <button onclick="loadPaymentHistory()" style="font-size: 16px; padding: 10px 16px;">🔄 Tải lại</button>
-    </div>
+<div style="display: flex; justify-content: center; margin-bottom: 16px;">
+  <button class="button-lichsuthuhocphi" onclick="loadPaymentHistory()">
+    <span class="text">Tải lại</span>
+  </button>
+</div>
+
 
 
 
