@@ -501,10 +501,6 @@ tr:nth-child(even) {
   box-shadow: 0 0 0 5px #3b83f65f;
   color: #fff;
 }
-.thongke-button {
-  border: 2px solid white;
-}
-
 
 /* Tô sáng ô điểm danh */
 .just-updated {
