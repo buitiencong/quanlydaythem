@@ -11,8 +11,19 @@
 <body>
  <h2 style="text-align: center; text-shadow: 0 1px 2px #ffffff;">📊 Lịch sử thu học phí</h2>
 
-    <!-- Tìm theo tên -->
-    <!-- 🔍 Tìm học sinh theo tên – dùng CSS thường -->
+    <!-- 🔍 Khối tìm kiếm (chia đôi theo chiều ngang) -->
+<div style="
+  border: 1px solid white;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+">
+
+  <!-- 🔍 Tìm theo tên -->
 <div class="search-container">
   <div class="search-box">
     
@@ -44,47 +55,32 @@
 </div>
 
 
+  <!-- Đường chia ngang -->
+  <div style="height: 1px; background-color: white; margin: 0 -16px;"></div>
 
-
-<!-- Lọc theo ngày -->
-<div style="
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: stretch;
-  margin-bottom: 16px;
-  font-size: 16px;
-  padding: 12px;
-  border: 1px solid white;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
-">
-  <!-- Cột trái: input ngày -->
-  <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 200px; margin-right: 8px;">
-    <div style="display: grid; grid-template-columns: 80px 1fr; align-items: center; column-gap: 6px;">
-      <span>📅 Từ:</span>
-      <input type="date" id="start-date" style="font-size: 18px; padding: 6px; width: 100%;" />
+  <!-- 📅 Tìm theo ngày -->
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch; font-size: 16px;">
+    <!-- Cột trái: input ngày -->
+    <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 200px; margin-right: 8px;">
+      <div style="display: grid; grid-template-columns: 80px 1fr; align-items: center; column-gap: 6px;">
+        <span>📅 Từ:</span>
+        <input type="date" id="start-date" style="font-size: 18px; padding: 6px; width: 100%;" />
+      </div>
+      <div style="display: grid; grid-template-columns: 80px 1fr; align-items: center; column-gap: 6px;">
+        <span>📅 Đến:</span>
+        <input type="date" id="end-date" style="font-size: 18px; padding: 6px; width: 100%;" />
+      </div>
     </div>
-    <div style="display: grid; grid-template-columns: 80px 1fr; align-items: center; column-gap: 6px;">
-      <span>📅 Đến:</span>
-      <input type="date" id="end-date" style="font-size: 18px; padding: 6px; width: 100%;" />
+
+    <!-- Cột phải: nút Lọc -->
+    <div style="display: flex; justify-content: flex-end; align-items: center; min-width: 130px; flex-shrink: 0;">
+      <button class="button-lichsuthuhocphi" onclick="searchByDate()">
+        <span class="text">🔍 Lọc</span>
+      </button>
     </div>
-  </div>
-
-  <!-- Cột phải: nút Lọc -->
-  <div style="
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    min-width: 130px;
-    flex-shrink: 0;
-  ">
-    <button class="button-lichsuthuhocphi" onclick="searchByDate()">
-      <span class="text">🔍 Lọc</span>
-    </button>
-
   </div>
 </div>
+
 
 
 <div style="display: flex; justify-content: center; margin-bottom: 16px;">
