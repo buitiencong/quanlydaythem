@@ -520,16 +520,7 @@ tr:nth-child(even) {
 
 
 
-
-
-
-
-
-
-
-
-
-/* From Uiverse.io by kamehame-ha */ 
+/* Button trang Lịch sử thu học phí */ 
 .button-lichsuthuhocphi {
   display: flex;
   justify-content: center;
@@ -537,10 +528,8 @@ tr:nth-child(even) {
   padding: 10px 15px;
   gap: 15px;
   background-color: #007ACC;
-  outline: 3px #007ACC solid;
-  outline-offset: -3px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid white;
   cursor: pointer;
   transition: 400ms;
 }
@@ -558,4 +547,73 @@ tr:nth-child(even) {
 
 .button-lichsuthuhocphi:active .text {
   color: #007ACC;
+}
+
+
+/* Search box lịch sử thu học phí */
+.search-container {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
+.search-box {
+  display: flex;
+  border-radius: 8px;
+  background-color: #e0e0e0;
+  padding: 6px;
+  width: 100%;
+  max-width: 500px;
+  align-items: center;
+}
+
+.search-icon {
+  background-color: white;
+  padding: 8px;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #ccc;
+}
+
+.search-input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+}
+
+.search-button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  margin-left: 8px;
+  font-weight: bold;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #005fa3;
+}
+
+
+.date-input {
+  appearance: none;          /* Loại bỏ style mặc định của trình duyệt */
+  -webkit-appearance: none;  /* Đặc biệt cho Safari */
+  background-color: white;
+  border: none;
+  border-radius: 0;
+  font-size: 16px;
+  font-family: inherit;
+  padding: 8px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
 }
