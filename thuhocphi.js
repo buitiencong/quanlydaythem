@@ -106,3 +106,21 @@ function deletePayment(id) {
   localforage.setItem("userDB", db.export());
   loadPaymentHistory();
 }
+
+
+function handleSearchClick() {
+  const btn = document.getElementById("search-btn");
+
+  // 👇 hiệu ứng scale nhỏ
+  btn.style.transform = "scale(0.95)";
+  btn.style.backgroundColor = "#005fa3"; // hiệu ứng màu đậm hơn
+
+  // Gọi chức năng tìm kiếm
+  searchByName();
+
+  // 👆 Khôi phục lại sau 200ms
+  setTimeout(() => {
+    btn.style.transform = "scale(1)";
+    btn.style.backgroundColor = "#007acc";
+  }, 200);
+}
