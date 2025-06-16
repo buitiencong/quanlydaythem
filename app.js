@@ -471,17 +471,24 @@ function closeDiemDanh() {
 
 function loadStudentsForClass() {
   const classId = document.getElementById("dd-class").value;
-  const studentSelect = document.getElementById("dd-student");
-  studentSelect.innerHTML = "";
 
-  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId}`);
-  result[0].values.forEach(([id, name]) => {
-    const opt = document.createElement("option");
-    opt.value = id;
-    opt.textContent = name;
-    studentSelect.appendChild(opt);
-  });
+  // 🔄 Tự động chuyển sang tab lớp tương ứng
+  if (classId) switchTab(classId);
+
+  const hsSelect = document.getElementById("dd-student");
+  hsSelect.innerHTML = "";
+
+  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId} ORDER BY student_name`);
+  if (result.length > 0) {
+    result[0].values.forEach(([id, name]) => {
+      const option = document.createElement("option");
+      option.value = id;
+      option.textContent = name;
+      hsSelect.appendChild(option);
+    });
+  }
 }
+
 
 function submitDiemDanh(status) {
   const classId = document.getElementById("dd-class").value;
