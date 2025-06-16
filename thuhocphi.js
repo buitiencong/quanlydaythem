@@ -20,7 +20,8 @@ function loadPaymentHistory(query = null) {
   table.innerHTML = "";
 
   let sql = `
-  SELECT Thuhocphi_id, strftime('%d/%m/%Y %H:%M', Thuhocphi_date) AS date,
+  SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date)
+ AS date,
          student_name, class_name, Thuhocphi_money
   FROM Thuhocphi
   ORDER BY Thuhocphi_date DESC
@@ -61,7 +62,8 @@ function searchByName() {
   if (!name) return;
 
   const sql = `
-    SELECT Thuhocphi_id, strftime('%d/%m/%Y %H:%M', Thuhocphi_date),
+    SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date)
+,
           student_name, class_name, Thuhocphi_money
     FROM Thuhocphi
     WHERE student_name LIKE '%${name}%'
@@ -82,7 +84,8 @@ function searchByDate() {
   }
 
   const sql = `
-    SELECT Thuhocphi_id, strftime('%d/%m/%Y %H:%M', Thuhocphi_date),
+    SELECT Thuhocphi_id, strftime('%d/%m/%Y', Thuhocphi_date)
+,
           student_name, class_name, Thuhocphi_money
     FROM Thuhocphi
     WHERE date(Thuhocphi_date) BETWEEN '${start}' AND '${end}'
