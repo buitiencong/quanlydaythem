@@ -162,6 +162,21 @@
       <input type="text" id="lop-diadiem" />
     </label>
 
+    <div style="margin-top: 10px;">
+      <label style="display: block; margin-bottom: 6px;">
+        Sao chép danh sách học sinh từ lớp khác:
+      </label>
+
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <select id="lop-copy-select" disabled style="flex: 1; padding: 6px; font-size: 16px;">
+          <option value="">-- Chọn lớp để sao chép --</option>
+        </select>
+
+        <input type="checkbox" id="lop-copy-checkbox" onchange="toggleCopyFromClass()" title="Cho phép sao chép"
+          style="width: 20px; height: 20px; flex-shrink: 0;" />
+      </div>
+    </div>    
+
     <div class="modal-actions">
       <button onclick="submitThemLop()">✅ Lưu</button>
       <button class="btn-cancel" onclick="closeThemLop()">🔙 Huỷ</button>

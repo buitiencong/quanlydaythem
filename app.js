@@ -543,18 +543,42 @@ function submitDiemDanh(status) {
 // Thêm lớp
 function handleThemLop() {
   document.getElementById("themLopModal").style.display = "flex";
-  // Xóa toàn bộ nội dung đã nhập trước đó
   document.getElementById("lop-ten").value = "";
   document.getElementById("lop-hocphi").value = "";
-  document.getElementById("lop-ngay").value = new Date().toISOString().split("T")[0]; // Gán mặc định hôm nay
+  document.getElementById("lop-ngay").value = new Date().toISOString().split("T")[0];
   document.getElementById("lop-thoigian").value = "";
   document.getElementById("lop-diadiem").value = "";
+
+  // ✅ Reset checkbox và combobox copy lớp
+  const checkbox = document.getElementById("lop-copy-checkbox");
+  const select = document.getElementById("lop-copy-select");
+  checkbox.checked = false;
+  select.disabled = true;
+  select.innerHTML = '<option value="">-- Chọn lớp để sao chép --</option>';
+
+  // ✅ Nạp danh sách lớp vào select
+  const result = db.exec(`SELECT class_id, class_name FROM Classes`);
+  result[0]?.values.forEach(([id, name]) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = name;
+    select.appendChild(opt);
+  });
 }
+
 
 
 function closeThemLop() {
   document.getElementById("themLopModal").style.display = "none";
 }
+
+// Check box Copy danh sách lớp
+function toggleCopyFromClass() {
+  const checkbox = document.getElementById("lop-copy-checkbox");
+  const select = document.getElementById("lop-copy-select");
+  select.disabled = !checkbox.checked;
+}
+
 
 function submitThemLop() {
   const tenRaw = document.getElementById("lop-ten").value.trim();
@@ -566,35 +590,41 @@ function submitThemLop() {
   const diadiem = document.getElementById("lop-diadiem").value.trim();
 
   let messages = [];
-
-  if (!ten) {
-    messages.push("Tên lớp");
-  }
-
-  // Kiểm tra người dùng chưa nhập gì hoặc nhập sai (vd: chữ)
-  if (!hocphiValue || isNaN(hocphi)) {
-    messages.push("Học phí");
-  }
+  if (!ten) messages.push("Tên lớp");
+  if (!hocphiValue || isNaN(hocphi)) messages.push("Học phí");
 
   if (messages.length > 0) {
     alert("Vui lòng nhập: " + messages.join(" và "));
     return;
   }
 
-  // Thêm vào CSDL
+  // ✅ Thêm lớp vào DB
   db.run(`
     INSERT INTO Classes (class_name, class_date_start, class_hocphi, class_time, class_diadiem)
     VALUES (?, ?, ?, ?, ?)
   `, [ten, ngay, hocphi, thoigian, diadiem]);
 
-  // Lấy ID vừa thêm
-  const result = db.exec(`SELECT seq FROM sqlite_sequence WHERE name='Classes'`);
-  const newClassId = result?.[0]?.values?.[0]?.[0];
+  // ✅ Lấy ID lớp vừa thêm (chính xác nhất)
+  const newClassId = db.exec(`SELECT last_insert_rowid()`)[0].values[0][0];
+
+  // ✅ Nếu người dùng chọn sao chép học sinh từ lớp khác
+  const checkbox = document.getElementById("lop-copy-checkbox");
+  const sourceClassId = document.getElementById("lop-copy-select").value;
+
+  if (checkbox.checked && sourceClassId) {
+    const students = db.exec(`
+      SELECT student_name FROM Students WHERE class_id = ${sourceClassId}
+    `);
+    students[0]?.values.forEach(([name]) => {
+      db.run(`INSERT INTO Students (student_name, class_id) VALUES (?, ?)`, [name, newClassId]);
+    });
+  }
 
   saveToLocal();
   closeThemLop();
   loadClasses(newClassId);
 }
+
 
 
 
