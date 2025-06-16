@@ -226,7 +226,7 @@ function showClassData(classId, filter = null) {
       // Số tiền = số buổi x học phí
       const soTien = soBuoi * class_hocphi;
       const tdTien = document.createElement("td");
-      tdTien.textContent = soTien.toLocaleString() + " đ";
+      tdTien.textContent = soTien.toLocaleString() + " ₫";
       tdTien.style.textAlign = "center";
       row.appendChild(tdTien);
 
@@ -1128,7 +1128,7 @@ function updateTienThuHocPhi() {
   const sobuoi = buoiRes[0]?.values[0][0] || 0;
   const sotien = sobuoi * hocphi;
 
-  document.getElementById("thu-money").value = sotien.toLocaleString() + " đ";
+  document.getElementById("thu-money").value = sotien.toLocaleString() + " ₫";
 }
 
 function submitThuHocPhi() {
@@ -1253,10 +1253,10 @@ function updateThuHocPhiThongKe(classId) {
 
     // Cập nhật giao diện
     document.getElementById("count-dathu").textContent = daThuCount;
-    document.getElementById("sum-dathu").textContent = tongTienDaThu.toLocaleString() + " đ";
+    document.getElementById("sum-dathu").textContent = tongTienDaThu.toLocaleString() + " ₫";
 
     document.getElementById("count-chuathu").textContent = chuaThuCount;
-    document.getElementById("sum-chuathu").textContent = tongTienChuaThu.toLocaleString() + " đ";
+    document.getElementById("sum-chuathu").textContent = tongTienChuaThu.toLocaleString() + " ₫";
 
     // Cập nhật progress
     const tong = tongTienDaThu + tongTienChuaThu;

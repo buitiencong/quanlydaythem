@@ -36,7 +36,7 @@ function loadPaymentHistory(query = null) {
       <td>${date}</td>
       <td>${name}</td>
       <td>${classname}</td>
-      <td>${Number(money).toLocaleString()} đ</td>
+      <td>${Number(money).toLocaleString()} ₫</td>
       <td>
         <button onclick="deletePayment(${id})"
             style="
