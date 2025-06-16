@@ -279,6 +279,7 @@ tr:nth-child(even) {
 
 .modal-content {
   background: #5b7b9d;
+  border: 1px solid white;
   padding: 20px 24px;
   border-radius: 8px;
   width: 90%;
