@@ -495,7 +495,7 @@ tr:nth-child(even) {
   background: #eee;
   border-radius: 6px;
   overflow: hidden;
-  height: 14px;
+  height: 10px;
 }
 
 .progress-bar-fill {
