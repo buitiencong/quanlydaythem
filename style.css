@@ -3,7 +3,7 @@ body, html {
   margin: 0;
   width: 100%;
   padding: 0;
-  touch-action: manipulation;
+  touch-action: manipulation; /* Chặn double tap */
 }
 
 /* Đảm bảo phần nội dung chiếm toàn bộ chiều ngang */
