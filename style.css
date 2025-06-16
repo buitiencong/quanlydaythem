@@ -278,8 +278,7 @@ tr:nth-child(even) {
 }
 
 .modal-content {
-  background: #5b7b9d;
-  border: 1px solid white;
+  background: #bae6fd;
   padding: 20px 24px;
   border-radius: 8px;
   width: 90%;
@@ -291,13 +290,15 @@ tr:nth-child(even) {
   margin-top: 0;
   text-align: center;
   color: white;
-  padding: 8px 12px;
+  padding: 12px 0;
   border-radius: 10px;
   background-color: #5b7b9d;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
 }
+
 
 
 
