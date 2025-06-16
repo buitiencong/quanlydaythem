@@ -289,7 +289,16 @@ tr:nth-child(even) {
 .modal-content h3 {
   margin-top: 0;
   text-align: center;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background-color: #5b7b9d;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
+
+
 
 .modal-content label {
   display: block;
