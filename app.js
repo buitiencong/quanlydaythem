@@ -1375,7 +1375,7 @@ function updateThuHocPhiThongKe(classId) {
     const chuaThuCountRes = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId} AND noptien = 0`);
     const chuaThuCount = chuaThuCountRes[0]?.values[0][0] || 0;
 
-    // Tính tổng số tiền đã thu (giống logic C#)
+    // Tính tổng số tiền đã thu
     const daThuAmountRes = db.exec(`
       SELECT SUM(Tong_so * class_hocphi) FROM (
         SELECT student_id, COUNT(*) AS Tong_so FROM Attendance
@@ -1389,7 +1389,7 @@ function updateThuHocPhiThongKe(classId) {
     `);
     const tongTienDaThu = daThuAmountRes[0]?.values[0][0] || 0;
 
-    // Tính tổng số tiền chưa thu (giống logic C#)
+    // Tính tổng số tiền chưa thu
     const chuaThuAmountRes = db.exec(`
       SELECT SUM(Tong_so * class_hocphi) FROM (
         SELECT student_id, COUNT(*) AS Tong_so FROM Attendance
@@ -1403,33 +1403,42 @@ function updateThuHocPhiThongKe(classId) {
     `);
     const tongTienChuaThu = chuaThuAmountRes[0]?.values[0][0] || 0;
 
-    // Cập nhật giao diện
+    // Cập nhật thống kê
     document.getElementById("count-dathu").textContent = daThuCount;
     document.getElementById("sum-dathu").textContent = tongTienDaThu.toLocaleString() + " ₫";
 
     document.getElementById("count-chuathu").textContent = chuaThuCount;
     document.getElementById("sum-chuathu").textContent = tongTienChuaThu.toLocaleString() + " ₫";
 
-    // Cập nhật progress
+    // Tính phần trăm tiến độ
     const tong = tongTienDaThu + tongTienChuaThu;
     const percent = tong > 0 ? Math.round((tongTienDaThu / tong) * 100) : 0;
 
+    // Cập nhật giao diện tiến độ
     const fill = document.getElementById("progress-bar");
-    const bubble = document.getElementById("progress-label");
+    const label = document.getElementById("progress-label");
     const container = document.querySelector(".bubble-progress-container");
 
     fill.style.width = percent + "%";
-    bubble.textContent = percent + "%";
+    label.textContent = percent + "%";
 
-    // Căn vị trí bong bóng theo phần trăm
+    // Di chuyển label theo chiều ngang
     const containerWidth = container.offsetWidth;
-    const bubbleX = (containerWidth * percent) / 100;
-    bubble.style.left = bubbleX + "px";
+    const labelX = (containerWidth * percent) / 100;
+    label.style.left = labelX + "px";
+
+    // Đổi màu nếu đủ 100%
+    if (percent >= 100) {
+      label.classList.add("full");
+    } else {
+      label.classList.remove("full");
+    }
 
   } catch (err) {
     console.error("Lỗi thống kê thu học phí:", err.message);
   }
 }
+
 
 
 // Gán sự kiến cho 2 nút Đã Thu và Chưa Thu
