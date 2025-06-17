@@ -113,7 +113,7 @@ function showToast(message, svgIcon = '') {
       transform: translateX(-50%);
       min-width: 300px;
       max-width: 90%;
-      background: #007acc;
+      background: #111111;
       color: white;
       padding: 12px 16px;
       border-radius: 8px;
