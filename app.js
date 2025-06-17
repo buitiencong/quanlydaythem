@@ -52,6 +52,47 @@ function saveToLocal() {
   }
 }
 
+// Kiểm tra và thông báo thêm vào màn hình chính
+function isRunningStandalone() {
+  return (window.matchMedia('(display-mode: standalone)').matches ||
+          window.navigator.standalone === true);
+}
+
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Hiện gợi ý người dùng thêm vào màn hình chính
+  const addPrompt = document.createElement('div');
+  addPrompt.innerHTML = `
+    <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
+      📲 Bạn muốn thêm ứng dụng này vào màn hình chính?
+      <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
+    </div>
+  `;
+  document.body.appendChild(addPrompt);
+
+  document.getElementById('btn-add').addEventListener('click', () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        addPrompt.remove();
+      });
+    }
+  });
+});
+
+// Nếu là iOS Safari mà chưa là standalone
+if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+  setTimeout(() => {
+    alert("📱 Để sử dụng tiện lợi hơn, hãy nhấn nút 'Chia sẻ' rồi chọn 'Thêm vào Màn hình chính'");
+  }, 1000);
+}
+
+
 
 
 // Định dạng ngày dd-mm-yy
@@ -1298,20 +1339,18 @@ function updateThuHocPhiThongKe(classId) {
     // Cập nhật progress
     const tong = tongTienDaThu + tongTienChuaThu;
     const percent = tong > 0 ? Math.round((tongTienDaThu / tong) * 100) : 0;
-    // document.getElementById("progress-percent").textContent = percent + "%";
-    // document.getElementById("progress-bar").style.width = percent + "%";
 
-const fill = document.getElementById("progress-bar");
-const bubble = document.getElementById("progress-bubble");
-const container = document.querySelector(".bubble-progress-container");
+    const fill = document.getElementById("progress-bar");
+    const bubble = document.getElementById("progress-bubble");
+    const container = document.querySelector(".bubble-progress-container");
 
-fill.style.width = percent + "%";
-bubble.textContent = percent + "%";
+    fill.style.width = percent + "%";
+    bubble.textContent = percent + "%";
 
-// Căn vị trí bong bóng theo phần trăm
-const containerWidth = container.offsetWidth;
-const bubbleX = (containerWidth * percent) / 100;
-bubble.style.left = bubbleX + "px";
+    // Căn vị trí bong bóng theo phần trăm
+    const containerWidth = container.offsetWidth;
+    const bubbleX = (containerWidth * percent) / 100;
+    bubble.style.left = bubbleX + "px";
 
   } catch (err) {
     console.error("Lỗi thống kê thu học phí:", err.message);
