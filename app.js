@@ -64,11 +64,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
 
-  // Hiện gợi ý người dùng thêm vào màn hình chính
+  // Hiện gợi ý người dùng thêm vào màn hình chính Android
   const addPrompt = document.createElement('div');
   addPrompt.innerHTML = `
     <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
-      📲 Bạn muốn thêm ứng dụng này vào màn hình chính?
+      📲 Thêm ứng dụng vào màn hình chính?
       <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
     </div>
   `;
@@ -88,7 +88,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 // Nếu là iOS Safari mà chưa là standalone
 if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
   setTimeout(() => {
-    alert("📱 Để sử dụng tiện lợi hơn, hãy nhấn nút 'Chia sẻ' rồi chọn 'Thêm vào Màn hình chính'");
+    alert("📱 Thêm ứng dụng vào màn hình chính: 'Chia sẻ' > 'Thêm vào Màn hình chính'");
   }, 1000);
 }
 
