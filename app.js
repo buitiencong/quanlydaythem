@@ -88,7 +88,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 // Nếu là iOS Safari mà chưa là standalone
 if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
   setTimeout(() => {
-    alert("📱 Thêm ứng dụng vào màn hình chính: 'Chia sẻ' > 'Thêm vào Màn hình chính'");
+    alert("📱 Thêm ứng dụng vào màn hình chính: \n'Chia sẻ' > 'Thêm vào Màn hình chính'");
   }, 1000);
 }
 
