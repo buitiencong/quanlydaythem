@@ -513,7 +513,7 @@ tr:nth-child(even) {
 
 .percent-label {
   position: absolute;
-  top: -24px;
+  top: -27px;
   left: 50%;
   transform: translateX(-50%);
   color: white;
