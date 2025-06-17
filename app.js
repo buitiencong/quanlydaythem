@@ -1489,15 +1489,9 @@ function exportSQLite() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  // ✅ Hiển thị thông báo phù hợp theo môi trường
+  // ✅ Hiển thị thông báo phù hợp theo môi trường web hoặc webapp
   if (isStandaloneIOS()) {
-    showToast(`
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="vertical-align: middle; margin-right: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25v11.25M3 16.5V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18v-1.5M3 16.5h18" />
-      </svg>
-      Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone:<br>
-      Chọn: <b>'Mở trong...'</b> → <b>'Lưu vào Tệp'</b> → <b>'Lưu'</b>
-    `);
+    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn: 'Chia sẻ' → 'Lưu vào Tệp' → 'Lưu'");
   } else {
     alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
   }
