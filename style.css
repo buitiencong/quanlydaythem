@@ -524,11 +524,6 @@ tr:nth-child(even) {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Đổ bóng chữ nhẹ nếu muốn */
 }
 
-.percent-label.full {
-  color: #e53935;
-  text-shadow: 0 1px 2px white
-}
-
 .percent-label::after {
   content: "";
   position: absolute;
@@ -540,7 +535,14 @@ tr:nth-child(even) {
   border-top: 5px solid #1C8139; /* Màu giống chữ hoặc tuỳ bạn */
 }
 
+.percent-label.full {
+  color: #e53935;
+  text-shadow: 0 1px 2px white
+}
 
+.percent-label.full::after {
+  border-top-color: #e53935;
+}
 
 /* Bật tắt nút Đã Thu - Chưa Thu */
 .thongke-button.active {
