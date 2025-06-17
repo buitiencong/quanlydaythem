@@ -88,9 +88,54 @@ window.addEventListener('beforeinstallprompt', (e) => {
 // Nếu là iOS Safari mà chưa là standalone
 if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
   setTimeout(() => {
-    alert("📱 Thêm ứng dụng vào màn hình chính: \n'Chia sẻ' > 'Thêm vào Màn hình chính'");
-  }, 1000);
+    showToast(
+      "📱 Trên Safari: Nhấn 'Chia sẻ' → 'Thêm vào Màn hình chính'",
+      `<svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+        <path d="M12 2L12 22M5 15L12 22L19 15" stroke="white" stroke-width="2" fill="none"/>
+      </svg>`
+    );
+  }, 1500);
 }
+
+
+// Hàm toast hỗ trợ IOS
+function showToast(message, svgIcon = '') {
+  const toast = document.createElement('div');
+  toast.innerHTML = `
+    <div style="
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #007acc;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-family: sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    ">
+      ${svgIcon}
+      <span>${message}</span>
+    </div>
+  `;
+  const el = toast.firstElementChild;
+  document.body.appendChild(el);
+
+  // Tự động biến mất sau 4 giây
+  setTimeout(() => {
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 500);
+  }, 4000);
+}
+
+
 
 
 
