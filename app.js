@@ -482,11 +482,18 @@ document.addEventListener("touchstart", function (e) {
 
 // Khi chọn menu con, ẩn tất cả menu cha
 function onMenuAction(action) {
-  // Ẩn menu đang mở
+  // Ẩn tất cả menu con
   document.querySelectorAll(".has-submenu.open").forEach(menu => {
     menu.classList.remove("open");
   });
+
+  // Nếu đang trên thiết bị nhỏ (mobile), ẩn luôn menu chính
+  const menuBar = document.querySelector(".menu-bar");
+  if (window.innerWidth <= 768 && menuBar.classList.contains("open")) {
+    menuBar.classList.remove("open");
+  }
 }
+
 
 document.addEventListener("click", function (e) {
   const clickedInsideMenu = e.target.closest(".menu-bar") || e.target.closest("#menuToggle");
