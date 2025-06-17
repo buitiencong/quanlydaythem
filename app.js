@@ -1545,3 +1545,62 @@ function autoExportIfNeeded() {
   exportSQLite(); // ✅ Gọi export
   localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
+
+
+// Tải cơ sở dữ liệu dựa theo môi trường sử dụng
+// Xác định môi trường
+function detectEnvironment() {
+  const ua = navigator.userAgent;
+
+  const isIOS = /iPhone|iPad|iPod/.test(ua);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isAndroid = /Android/.test(ua);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+
+  if (isIOS && isStandalone) return "ios-pwa";
+  if (isIOS && !isStandalone) return "ios-browser";
+  if (isAndroid && isStandalone) return "android-pwa";
+  if (isAndroid && !isStandalone) return "android-browser";
+  return "desktop";
+}
+
+// Hàm tải file
+function handleDownloadDb() {
+  const env = detectEnvironment();
+
+  if (env === "ios-pwa") {
+    // ❗ iOS PWA không tải file trực tiếp được → dùng chia sẻ
+    shareDbFile();
+  } else {
+    // ✅ Android, Desktop, iOS Safari tải bình thường
+    const a = document.createElement("a");
+    a.href = "/QuanLyDayThem.db";
+    a.download = "QuanLyDayThem.db";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
+// Hàm share đặc biệt trên IOS PWA (màn hình chính)
+async function shareDbFile() {
+  try {
+    const res = await fetch("/QuanLyDayThem.db");
+    const blob = await res.blob();
+    const file = new File([blob], "QuanLyDayThem.db", {
+      type: "application/octet-stream"
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        files: [file],
+        title: "Tải cơ sở dữ liệu",
+        text: "Chia sẻ hoặc lưu vào Tệp"
+      });
+    } else {
+      alert("⚠️ Trình duyệt không hỗ trợ chia sẻ file.");
+    }
+  } catch (err) {
+    alert("❌ Không thể chia sẻ file: " + err.message);
+  }
+}
