@@ -114,19 +114,21 @@ function showToast(message, svgIcon = '', centered = false) {
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: #007acc;
+      min-width: 300px;
+      max-width: 90%;
+      background: #212121;
       color: white;
       padding: 12px 16px;
       border-radius: 8px;
-      ${centered ? 'display: block; text-align: center;' : 'display: flex; align-items: center; gap: 10px;'}
+      display: flex;
+      align-items: center;
+      gap: 10px;
       font-size: 16px;
-      font-family: sans-serif;
       box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       z-index: 9999;
       opacity: 1;
       transition: opacity 0.5s ease;
-      min-width: 200px;
-      max-width: 90%;
+      ${centered ? 'display: block; text-align: center;' : 'display: flex; align-items: center; gap: 10px;'}
     ">
       ${svgIcon}
       <span>${message}</span>
@@ -135,10 +137,11 @@ function showToast(message, svgIcon = '', centered = false) {
   const el = toast.firstElementChild;
   document.body.appendChild(el);
 
+  // Tự động biến mất sau 10 giây
   setTimeout(() => {
     el.style.opacity = '0';
     setTimeout(() => el.remove(), 500);
-  }, 4000);
+  }, 10000);
 }
 
 
