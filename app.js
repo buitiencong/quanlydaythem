@@ -106,7 +106,7 @@ showToast(`
 
 
 // Hàm toast hỗ trợ IOS
-function showToast(message, svgIcon = '') {
+function showToast(message, svgIcon = '', centered = false) {
   const toast = document.createElement('div');
   toast.innerHTML = `
     <div style="
@@ -114,20 +114,19 @@ function showToast(message, svgIcon = '') {
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      min-width: 300px;
-      max-width: 90%;
-      background: #212121;
+      background: #007acc;
       color: white;
       padding: 12px 16px;
       border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      ${centered ? 'display: block; text-align: center;' : 'display: flex; align-items: center; gap: 10px;'}
       font-size: 16px;
+      font-family: sans-serif;
       box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       z-index: 9999;
       opacity: 1;
       transition: opacity 0.5s ease;
+      min-width: 200px;
+      max-width: 90%;
     ">
       ${svgIcon}
       <span>${message}</span>
@@ -136,11 +135,10 @@ function showToast(message, svgIcon = '') {
   const el = toast.firstElementChild;
   document.body.appendChild(el);
 
-  // Tự động biến mất sau 10 giây
   setTimeout(() => {
     el.style.opacity = '0';
     setTimeout(() => el.remove(), 500);
-  }, 10000);
+  }, 4000);
 }
 
 
@@ -634,7 +632,7 @@ function submitDiemDanh(status) {
   } else {
     // ✅ Cập nhật bảng rồi mới thông báo
     setTimeout(() => {
-      showToast("✅ Đã điểm danh xong");
+      showToast("✅ Đã điểm danh xong", '', true); // true = căn giữa
       closeDiemDanh();
     }, 10);
   }
