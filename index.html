@@ -85,7 +85,7 @@
             </span>
             <ul class="submenu">
                 <li onclick="openDbModal()">⚙️ Cài đặt cơ sở dữ liệu</li>
-                <li onclick="exportSQLite()">💾 Sao lưu file dữ liệu</li>
+                <li onclick="exportSQLite()">📦 Sao lưu file dữ liệu</li>
             </ul>
             </li>
         </ul>
@@ -98,26 +98,56 @@
 
 
 <!-- Form Chọn file dữ liệu -->
-    <div id="dbModal" class="modal-overlay" style="display: none;">
-      <div class="modal-content">
-        <h3>💾 Cơ sở dữ liệu</h3>
-          <h4>📥 Tải xuống file dữ liệu Gốc (QuanLyDayThem.db)</h4>
+<div id="dbModal" class="modal-overlay" style="display: none;">
+  <div class="modal-content">
+    <h3>💾 Cơ sở dữ liệu</h3>
+
+    <!-- 🔲 Khung chứa 2 phần -->
+    <div style="
+      border: 1px solid white;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 10px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    ">
+
+      <!-- 📥 Phần 1: Tải xuống -->
+      <div>
+        <h4 style="margin-top: 5px;">📥 Tải xuống file dữ liệu Gốc</h4>
+        <div style="display: flex; align-items: center; gap: 12px;">
           <button onclick="handleDownloadDb()">
             Tải xuống: Lưu vào Tệp
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-folder-closed-icon lucide-folder-closed" style="margin-left: 8px; vertical-align: middle;">
+              class="lucide lucide-folder-closed-icon lucide-folder-closed"
+              style="margin-left: 8px; vertical-align: middle;">
               <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
               <path d="M2 10h20"/>
             </svg>
           </button>
-          <h4>📂 Chọn file dữ liệu (.db)</h4>
-          <input type="file" id="dbfile" accept=".db,.sqlite" required />
-        <div class="modal-actions">
-          <button class="btn-cancel" onclick="closeDbModal()">🔙 Huỷ</button>
+          <label style="margin: 0;">QuanLyDayThem.db</label>
         </div>
+
+      </div>
+
+      <!-- 🔻 Đường kẻ chia -->
+      <div style="height: 1px; background-color: white; margin: 0 -16px;"></div>
+
+      <!-- 📂 Phần 2: Chọn file -->
+      <div>
+        <h4 style="margin-top: 5px;">📂 Chọn file dữ liệu (.db)</h4>
+        <input type="file" id="dbfile" accept=".db,.sqlite" required />
       </div>
     </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeDbModal()">🔙 Huỷ</button>
+    </div>
+  </div>
+</div>
 
 
   <div id="tabs"></div>
