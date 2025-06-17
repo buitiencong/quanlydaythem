@@ -482,13 +482,9 @@ tr:nth-child(even) {
   color: #333;
 }
 
+/* Progress bar */
 .progress-wrapper {
   margin-top: 0px;
-}
-
-.progress-label {
-  font-size: 14px;
-  margin-bottom: 4px;
 }
 
 .progress-bar-bg {
@@ -504,6 +500,42 @@ tr:nth-child(even) {
   height: 100%;
   transition: width 0.5s;
 }
+
+.bubble-progress-container {
+  position: relative;
+  height: 40px;
+  margin-top: 6px;
+}
+
+.bubble {
+  position: absolute;
+  top: -28px;
+  background: #4caf50;
+  color: white;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 20px;
+  transform: translateX(-50%);
+  transition: left 0.1s ease;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px; /* Khoảng cách từ bong bóng xuống tam giác */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #4caf50; /* Màu giống nền bong bóng */
+}
+
+
 
 /* Bật tắt nút Đã Thu - Chưa Thu */
 .thongke-button.active {

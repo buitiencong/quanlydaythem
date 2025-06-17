@@ -1298,8 +1298,21 @@ function updateThuHocPhiThongKe(classId) {
     // Cập nhật progress
     const tong = tongTienDaThu + tongTienChuaThu;
     const percent = tong > 0 ? Math.round((tongTienDaThu / tong) * 100) : 0;
-    document.getElementById("progress-percent").textContent = percent + "%";
-    document.getElementById("progress-bar").style.width = percent + "%";
+    // document.getElementById("progress-percent").textContent = percent + "%";
+    // document.getElementById("progress-bar").style.width = percent + "%";
+
+const fill = document.getElementById("progress-bar");
+const bubble = document.getElementById("progress-bubble");
+const container = document.querySelector(".bubble-progress-container");
+
+fill.style.width = percent + "%";
+bubble.textContent = percent + "%";
+
+// Căn vị trí bong bóng theo phần trăm
+const containerWidth = container.offsetWidth;
+const bubbleX = (containerWidth * percent) / 100;
+bubble.style.left = bubbleX + "px";
+
   } catch (err) {
     console.error("Lỗi thống kê thu học phí:", err.message);
   }
