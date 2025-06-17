@@ -510,7 +510,7 @@ tr:nth-child(even) {
 .bubble {
   position: absolute;
   top: -28px;
-  background: #4caf50;
+  background: #1C8139;
   color: white;
   padding: 4px 10px;
   font-size: 12px;
@@ -532,7 +532,7 @@ tr:nth-child(even) {
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 6px solid #4caf50; /* Màu giống nền bong bóng */
+  border-top: 6px solid #1C8139; /* Màu giống nền bong bóng */
 }
 
 
