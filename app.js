@@ -85,7 +85,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
   setTimeout(() => {
 showToast(`
-  📱 Thêm ứng dụng vào màn hình chính:<br>
+  📱 <b>Thêm ứng dụng vào màn hình chính:</b><br>
   <span style="margin-left: 20px;">
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin: 0 6px;">
     <path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
@@ -136,7 +136,7 @@ function showToast(message, svgIcon = '') {
   const el = toast.firstElementChild;
   document.body.appendChild(el);
 
-  // Tự động biến mất sau 4 giây
+  // Tự động biến mất sau 10 giây
   setTimeout(() => {
     el.style.opacity = '0';
     setTimeout(() => el.remove(), 500);
@@ -1491,7 +1491,13 @@ function exportSQLite() {
 
   // ✅ Hiển thị thông báo phù hợp theo môi trường
   if (isStandaloneIOS()) {
-    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn: 'Mở trong...' > 'Lưu vào Tệp' > 'Lưu'");
+    showToast(`
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="vertical-align: middle; margin-right: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25v11.25M3 16.5V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18v-1.5M3 16.5h18" />
+      </svg>
+      Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone:<br>
+      Chọn: <b>'Mở trong...'</b> → <b>'Lưu vào Tệp'</b> → <b>'Lưu'</b>
+    `);
   } else {
     alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
   }
