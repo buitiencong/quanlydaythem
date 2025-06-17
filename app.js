@@ -634,7 +634,7 @@ function submitDiemDanh(status) {
   } else {
     // ✅ Cập nhật bảng rồi mới thông báo
     setTimeout(() => {
-      alert("✅ Đã điểm danh xong");
+      showToast("✅ Đã điểm danh xong");
       closeDiemDanh();
     }, 10);
   }
@@ -1491,7 +1491,7 @@ function exportSQLite() {
 
   // ✅ Hiển thị thông báo phù hợp theo môi trường web hoặc webapp
   if (isStandaloneIOS()) {
-    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn: 'Chia sẻ' → 'Lưu vào Tệp' → 'Lưu'");
+    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn: Chia sẻ → Lưu vào Tệp → Lưu");
   } else {
     alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
   }
