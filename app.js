@@ -1491,7 +1491,6 @@ function closeDbModal() {
 
 
 // Hàm xuất file .db
-
 function exportSQLite() {
   if (!db) {
     alert("⚠️ Không có dữ liệu để xuất.");
@@ -1549,7 +1548,7 @@ async function shareDbFileFromBlob(blob, fileName) {
         text: "Lưu vào Tệp hoặc chia sẻ"
       });
     } catch (err) {
-      alert("❌ Huỷ chia sẻ: " + err.message);
+      alert("❌ Huỷ lưu file dữ liệu");
     }
   } else {
     alert("⚠️ Thiết bị không hỗ trợ chia sẻ file.");
@@ -1631,6 +1630,6 @@ async function shareDbFile() {
       alert("⚠️ Trình duyệt không hỗ trợ chia sẻ file.");
     }
   } catch (err) {
-    alert("❌ Huỷ tải file dữ liệu: " + err.message);
+    alert("❌ Huỷ tải file dữ liệu");
   }
 }
