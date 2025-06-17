@@ -84,7 +84,6 @@
                 </svg>
             </span>
             <ul class="submenu">
-                <li onclick="handleDownloadDb()">📥 Tải xuống file dữ liệu Gốc</li>
                 <li onclick="openDbModal()">🔄 Chọn file dữ liệu</li>
                 <li onclick="exportSQLite()">💾 Sao lưu file dữ liệu</li>
             </ul>
@@ -98,11 +97,14 @@
     </div>
 
 
-
+<!-- Form Chọn file dữ liệu -->
     <div id="dbModal" class="modal-overlay" style="display: none;">
       <div class="modal-content">
-        <h2>📂 Chọn file dữ liệu (.db)</h2>
-        <input type="file" id="dbfile" accept=".db,.sqlite" required />
+        <h3>💾 Cơ sở dữ liệu</h3>
+          <h4>📥 Tải xuống file dữ liệu Gốc</h4>
+          <button onclick="handleDownloadDb()">Tải xuống</button>
+          <h4>📂 Chọn file dữ liệu (.db)</h4>
+          <input type="file" id="dbfile" accept=".db,.sqlite" required />
         <div class="modal-actions">
           <button class="btn-cancel" onclick="closeDbModal()">🔙 Huỷ</button>
         </div>
@@ -114,298 +116,298 @@
   <div id="tabContents"></div>
 
   <!-- Form điểm danh (ẩn ban đầu) -->
-<div id="diemdanhModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>📅 Điểm danh</h3>
+  <div id="diemdanhModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>📅 Điểm danh</h3>
 
-    <label>Ngày:
-      <input type="date" id="dd-date" />
-    </label>
-
-    <label>Lớp:
-      <select id="dd-class" onchange="loadStudentsForClass()"></select>
-    </label>
-
-    <label>Họ và tên:
-      <select id="dd-student"></select>
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitDiemDanh(1)">🟢 Có</button>
-      <button onclick="submitDiemDanh(0)">❌ Nghỉ</button>
-      <button class="btn-cancel" onclick="closeDiemDanh()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Form Thêm lớp -->
-<div id="themLopModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>🏫 Thêm lớp</h3>
-
-    <label style="color: #ff0000;">Tên lớp: *
-      <input type="text" id="lop-ten" required />
-    </label>
-
-    <label style="color: #ff0000;">Học phí mỗi buổi: *
-      <input type="number" id="lop-hocphi" />
-    </label>
-    
-    <label>Ngày bắt đầu:
-      <input type="date" id="lop-ngay" />
-    </label>
-
-    <label>Thời gian học:
-      <input type="text" id="lop-thoigian" placeholder="VD: Tối thứ 2, 4, 6 - 18h30" />
-    </label>
-
-    <label>Địa điểm:
-      <input type="text" id="lop-diadiem" />
-    </label>
-
-    <div style="margin-top: 10px;">
-      <label style="display: block; margin-bottom: 6px;">
-        Sao chép danh sách học sinh từ lớp khác:
+      <label>Ngày:
+        <input type="date" id="dd-date" />
       </label>
 
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <select id="lop-copy-select" disabled style="flex: 1; padding: 6px; font-size: 18px;">
-          <option value="">-- Chọn lớp để sao chép --</option>
-        </select>
+      <label>Lớp:
+        <select id="dd-class" onchange="loadStudentsForClass()"></select>
+      </label>
 
-        <input type="checkbox" id="lop-copy-checkbox" onchange="toggleCopyFromClass()" title="Cho phép sao chép"
-          style="width: 20px; height: 20px; flex-shrink: 0;" />
-      </div>
-    </div>    
+      <label>Họ và tên:
+        <select id="dd-student"></select>
+      </label>
 
-    <div class="modal-actions">
-      <button onclick="submitThemLop()">➕ Lưu</button>
-      <button class="btn-cancel" onclick="closeThemLop()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Form Sửa lớp -->
-<div id="suaLopModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>🛠️ Sửa thông tin lớp</h3>
-
-    <label>Chọn lớp:
-      <select id="edit-class-select" onchange="loadLopInfoToForm()"></select>
-    </label>
-
-    <label>Tên lớp:
-      <input type="text" id="edit-ten" />
-    </label>
-
-    <label>Học phí mỗi buổi:
-      <input type="number" id="edit-hocphi" />
-    </label>
-
-    <label>Ngày bắt đầu:
-      <input type="date" id="edit-ngay" />
-    </label>    
-
-    <label>Thời gian học:
-      <input type="text" id="edit-thoigian" />
-    </label>
-
-    <label>Địa điểm:
-      <input type="text" id="edit-diadiem" />
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitSuaLop()">🛠️ Cập nhật</button>
-      <button class="btn-cancel" onclick="closeSuaLop()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Form Xóa lớp -->
-<div id="xoaLopModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>🗑️ Xóa lớp</h3>
-
-    <label>Chọn lớp cần xóa:
-      <select id="xoa-class-select" onchange="switchTab(this.value)"></select>
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitXoaLop()">🗑️ Xóa</button>
-      <button class="btn-cancel" onclick="closeXoaLop()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Form Thêm học sinh -->
-<div id="themHsModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>🙆‍♂️ Thêm học sinh</h3>
-
-    <label>Chọn lớp:
-      <select id="hs-class-select" onchange="onChangeClassInThemHs()"></select>
-    </label>
-
-    <label>Họ và tên học sinh:
-      <input type="text" id="hs-ten" placeholder="Nguyễn Văn A" />
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitThemHs()">➕ Lưu</button>
-      <button class="btn-cancel" onclick="closeThemHs()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Form Sửa học sinh -->
-<div id="suaHsModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>✍️ Sửa tên học sinh</h3>
-
-    <label>Chọn lớp:
-      <select id="edit-hs-class" onchange="loadStudentsForEdit(); onChangeClassInSuaHs();"></select>
-    </label>
-
-    <label>Chọn học sinh:
-      <select id="edit-hs-select" onchange="fillOldStudentName()"></select>
-    </label>
-
-    <label>Tên mới:
-      <input type="text" id="edit-hs-name" placeholder="Nhập tên mới..." />
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitSuaHs()">✍️ Cập nhật</button>
-      <button class="btn-cancel" onclick="closeSuaHs()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Form Xóa học sinh -->
-<div id="xoaHsModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>🙅‍♂️ Xóa học sinh</h3>
-
-    <label>Chọn lớp:
-      <select id="xoa-hs-class" onchange="loadStudentsForXoa(); onChangeClassInXoaHs();"></select>
-    </label>
-
-    <label>Chọn học sinh:
-      <select id="xoa-hs-select"></select>
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitXoaHs()">🗑️ Xóa</button>
-      <button class="btn-cancel" onclick="closeXoaHs()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Form Sửa ngày điểm danh -->
-<div id="suaNgayModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>📆 Sửa ngày điểm danh</h3>
-
-    <label>Chọn lớp:
-      <select id="sua-ngay-class" onchange="loadDatesForClass()"></select>
-    </label>
-
-    <label>Chọn ngày cần sửa:
-      <select id="sua-ngay-cu"></select>
-    </label>
-
-    <label>Ngày mới:
-      <input type="date" id="sua-ngay-moi" />
-    </label>
-
-    <div class="modal-actions">
-      <button onclick="submitSuaNgay()">✏️ Sửa</button>
-      <button onclick="submitXoaNgay()">🗑️ Xóa</button>
-      <button class="btn-cancel" onclick="closeSuaNgay()">🔙 Huỷ</button>
-    </div>
-  </div>
-</div>
-
-<!-- Khung theo dõi thu học phí -->
-<div id="hophithongke">
-  <div class="thongke-container">
-
-    <!-- Hàng "Đã thu" -->
-    <div class="thongke-row">
-      <button id="btn-dathu" class="thongke-button same-width">👍 Đã thu</button>
-      <div class="thongke-info">
-        <span id="count-dathu">0</span> học sinh – Số tiền: <span id="sum-dathu">0 đ</span>
+      <div class="modal-actions">
+        <button onclick="submitDiemDanh(1)">🟢 Có</button>
+        <button onclick="submitDiemDanh(0)">❌ Nghỉ</button>
+        <button class="btn-cancel" onclick="closeDiemDanh()">🔙 Huỷ</button>
       </div>
     </div>
+  </div>
 
-    <!-- Hàng "Chưa thu" -->
-    <div class="thongke-row">
-      <button id="btn-chuathu" class="thongke-button same-width">👎 Chưa thu</button>
-      <div class="thongke-info">
-        <span id="count-chuathu">0</span> học sinh – Số tiền: <span id="sum-chuathu">0 đ</span>
+
+  <!-- Form Thêm lớp -->
+  <div id="themLopModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>🏫 Thêm lớp</h3>
+
+      <label style="color: #ff0000;">Tên lớp: *
+        <input type="text" id="lop-ten" required />
+      </label>
+
+      <label style="color: #ff0000;">Học phí mỗi buổi: *
+        <input type="number" id="lop-hocphi" />
+      </label>
+      
+      <label>Ngày bắt đầu:
+        <input type="date" id="lop-ngay" />
+      </label>
+
+      <label>Thời gian học:
+        <input type="text" id="lop-thoigian" placeholder="VD: Tối thứ 2, 4, 6 - 18h30" />
+      </label>
+
+      <label>Địa điểm:
+        <input type="text" id="lop-diadiem" />
+      </label>
+
+      <div style="margin-top: 10px;">
+        <label style="display: block; margin-bottom: 6px;">
+          Sao chép danh sách học sinh từ lớp khác:
+        </label>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <select id="lop-copy-select" disabled style="flex: 1; padding: 6px; font-size: 18px;">
+            <option value="">-- Chọn lớp để sao chép --</option>
+          </select>
+
+          <input type="checkbox" id="lop-copy-checkbox" onchange="toggleCopyFromClass()" title="Cho phép sao chép"
+            style="width: 20px; height: 20px; flex-shrink: 0;" />
+        </div>
+      </div>    
+
+      <div class="modal-actions">
+        <button onclick="submitThemLop()">➕ Lưu</button>
+        <button class="btn-cancel" onclick="closeThemLop()">🔙 Huỷ</button>
       </div>
     </div>
+  </div>
 
-    <!-- Thanh progress bar -->
-    <div class="progress-wrapper">
-      <div class="bubble-progress-container">
-        <div class="percent-label" id="progress-label">%</div>
-        <div class="progress-bar-bg">
-          <div id="progress-bar" class="progress-bar-fill"></div>
+
+  <!-- Form Sửa lớp -->
+  <div id="suaLopModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>🛠️ Sửa thông tin lớp</h3>
+
+      <label>Chọn lớp:
+        <select id="edit-class-select" onchange="loadLopInfoToForm()"></select>
+      </label>
+
+      <label>Tên lớp:
+        <input type="text" id="edit-ten" />
+      </label>
+
+      <label>Học phí mỗi buổi:
+        <input type="number" id="edit-hocphi" />
+      </label>
+
+      <label>Ngày bắt đầu:
+        <input type="date" id="edit-ngay" />
+      </label>    
+
+      <label>Thời gian học:
+        <input type="text" id="edit-thoigian" />
+      </label>
+
+      <label>Địa điểm:
+        <input type="text" id="edit-diadiem" />
+      </label>
+
+      <div class="modal-actions">
+        <button onclick="submitSuaLop()">🛠️ Cập nhật</button>
+        <button class="btn-cancel" onclick="closeSuaLop()">🔙 Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Form Xóa lớp -->
+  <div id="xoaLopModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>🗑️ Xóa lớp</h3>
+
+      <label>Chọn lớp cần xóa:
+        <select id="xoa-class-select" onchange="switchTab(this.value)"></select>
+      </label>
+
+      <div class="modal-actions">
+        <button onclick="submitXoaLop()">🗑️ Xóa</button>
+        <button class="btn-cancel" onclick="closeXoaLop()">🔙 Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Form Thêm học sinh -->
+  <div id="themHsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>🙆‍♂️ Thêm học sinh</h3>
+
+      <label>Chọn lớp:
+        <select id="hs-class-select" onchange="onChangeClassInThemHs()"></select>
+      </label>
+
+      <label>Họ và tên học sinh:
+        <input type="text" id="hs-ten" placeholder="Nguyễn Văn A" />
+      </label>
+
+      <div class="modal-actions">
+        <button onclick="submitThemHs()">➕ Lưu</button>
+        <button class="btn-cancel" onclick="closeThemHs()">🔙 Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Form Sửa học sinh -->
+  <div id="suaHsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>✍️ Sửa tên học sinh</h3>
+
+      <label>Chọn lớp:
+        <select id="edit-hs-class" onchange="loadStudentsForEdit(); onChangeClassInSuaHs();"></select>
+      </label>
+
+      <label>Chọn học sinh:
+        <select id="edit-hs-select" onchange="fillOldStudentName()"></select>
+      </label>
+
+      <label>Tên mới:
+        <input type="text" id="edit-hs-name" placeholder="Nhập tên mới..." />
+      </label>
+
+      <div class="modal-actions">
+        <button onclick="submitSuaHs()">✍️ Cập nhật</button>
+        <button class="btn-cancel" onclick="closeSuaHs()">🔙 Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Form Xóa học sinh -->
+  <div id="xoaHsModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>🙅‍♂️ Xóa học sinh</h3>
+
+      <label>Chọn lớp:
+        <select id="xoa-hs-class" onchange="loadStudentsForXoa(); onChangeClassInXoaHs();"></select>
+      </label>
+
+      <label>Chọn học sinh:
+        <select id="xoa-hs-select"></select>
+      </label>
+
+      <div class="modal-actions">
+        <button onclick="submitXoaHs()">🗑️ Xóa</button>
+        <button class="btn-cancel" onclick="closeXoaHs()">🔙 Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Form Sửa ngày điểm danh -->
+  <div id="suaNgayModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>📆 Sửa ngày điểm danh</h3>
+
+      <label>Chọn lớp:
+        <select id="sua-ngay-class" onchange="loadDatesForClass()"></select>
+      </label>
+
+      <label>Chọn ngày cần sửa:
+        <select id="sua-ngay-cu"></select>
+      </label>
+
+      <label>Ngày mới:
+        <input type="date" id="sua-ngay-moi" />
+      </label>
+
+      <div class="modal-actions">
+        <button onclick="submitSuaNgay()">✏️ Sửa</button>
+        <button onclick="submitXoaNgay()">🗑️ Xóa</button>
+        <button class="btn-cancel" onclick="closeSuaNgay()">🔙 Huỷ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Khung theo dõi thu học phí -->
+  <div id="hophithongke">
+    <div class="thongke-container">
+
+      <!-- Hàng "Đã thu" -->
+      <div class="thongke-row">
+        <button id="btn-dathu" class="thongke-button same-width">👍 Đã thu</button>
+        <div class="thongke-info">
+          <span id="count-dathu">0</span> học sinh – Số tiền: <span id="sum-dathu">0 đ</span>
         </div>
       </div>
-    </div>
 
+      <!-- Hàng "Chưa thu" -->
+      <div class="thongke-row">
+        <button id="btn-chuathu" class="thongke-button same-width">👎 Chưa thu</button>
+        <div class="thongke-info">
+          <span id="count-chuathu">0</span> học sinh – Số tiền: <span id="sum-chuathu">0 đ</span>
+        </div>
+      </div>
+
+      <!-- Thanh progress bar -->
+      <div class="progress-wrapper">
+        <div class="bubble-progress-container">
+          <div class="percent-label" id="progress-label">%</div>
+          <div class="progress-bar-bg">
+            <div id="progress-bar" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
 
 
-<!-- Form Thu học phí -->
-<div id="thuHocPhiModal" class="modal-overlay" style="display: none;">
-  <div class="modal-content">
-    <h3>💰 Thu học phí</h3>
+  <!-- Form Thu học phí -->
+  <div id="thuHocPhiModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>💰 Thu học phí</h3>
 
-    <label>Chọn lớp:
-      <select id="thu-class" onchange="onChangeClassInThu()"></select>
-    </label>
+      <label>Chọn lớp:
+        <select id="thu-class" onchange="onChangeClassInThu()"></select>
+      </label>
 
-    <label>Chọn học sinh:
-      <select id="thu-student" onchange="updateTienThuHocPhi()"></select>
-    </label>
+      <label>Chọn học sinh:
+        <select id="thu-student" onchange="updateTienThuHocPhi()"></select>
+      </label>
 
-    <label>Số tiền cần thu:
-      <input type="text" id="thu-money" readonly />
-    </label>
+      <label>Số tiền cần thu:
+        <input type="text" id="thu-money" readonly />
+      </label>
 
-    <div class="modal-actions">
-      <button onclick="submitThuHocPhi()">🤑 Thu</button>
-      <button onclick="skipThuHocPhi()" style="font-size: 14px;">⏭ Bỏ qua</button>
-      <button class="btn-cancel" onclick="closeThuHocPhi()">🔙 Huỷ</button>
+      <div class="modal-actions">
+        <button onclick="submitThuHocPhi()">🤑 Thu</button>
+        <button onclick="skipThuHocPhi()" style="font-size: 14px;">⏭ Bỏ qua</button>
+        <button class="btn-cancel" onclick="closeThuHocPhi()">🔙 Huỷ</button>
+      </div>
+
+      <div class="status-bar-thuhocphi">
+        Thu học phí khi kết thúc lớp học.<br/>
+        Sau đó cần tạo lớp học mới.
+      </div>
+
     </div>
-
-    <div class="status-bar-thuhocphi">
-      Thu học phí khi kết thúc lớp học.<br/>
-      Sau đó cần tạo lớp học mới.
-    </div>
-
   </div>
-</div>
 
 
 
 
-<footer style="text-align: center; font-size: 14px; color: #333; padding: 10px 0 5px;">
-  <hr style="border: none; border-top: 1px solid gray; margin-bottom: 10px;" />
-  © 06/2025<strong> Bùi Tiến Công</strong> – buitiencong@gmail.com
-</footer>
+  <footer style="text-align: center; font-size: 14px; color: #333; padding: 10px 0 5px;">
+    <hr style="border: none; border-top: 1px solid gray; margin-bottom: 10px;" />
+    © 06/2025<strong> Bùi Tiến Công</strong> – buitiencong@gmail.com
+  </footer>
 
 </body>
 </html>

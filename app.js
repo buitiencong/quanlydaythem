@@ -1482,6 +1482,7 @@ btnChuaThu.addEventListener("click", () => {
 
 // Đóng mở bảng chọn file .db
 function openDbModal() {
+  onMenuAction();
   document.getElementById("dbModal").style.display = "flex";
 }
 
