@@ -1310,7 +1310,7 @@ function submitThuHocPhi() {
   currentIndex++;
   if (currentIndex >= pendingStudents.length) {
     setTimeout(() => {
-      alert("🎉 Đã thu học phí xong.");
+      showToast("🎉 Đã thu học phí xong.", '', true);
       closeThuHocPhi();
     }, 100);
     return;
