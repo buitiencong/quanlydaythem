@@ -485,7 +485,7 @@ tr:nth-child(even) {
 
 /* Progress bar */
 .progress-wrapper {
-  margin-top: 15px;
+  margin-top: 10px;
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: -30px;
@@ -511,33 +511,28 @@ tr:nth-child(even) {
   margin-top: 6px;
 }
 
-.bubble {
+.percent-label {
   position: absolute;
-  top: -30px;
-  background: #1C8139;
-  color: white;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 20px;
-  transform: translateX(-50%);
-  transition: left 0.1s ease;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.bubble::after {
-  content: "";
-  position: absolute;
-  bottom: -5px; /* Khoảng cách từ bong bóng xuống tam giác */
+  top: -24px;
   left: 50%;
   transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 6px solid #1C8139; /* Màu giống nền bong bóng */
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Đổ bóng chữ nhẹ nếu muốn */
+}
+
+.percent-label::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #1C8139; /* Màu giống chữ hoặc tuỳ bạn */
 }
 
 

@@ -1415,7 +1415,7 @@ function updateThuHocPhiThongKe(classId) {
     const percent = tong > 0 ? Math.round((tongTienDaThu / tong) * 100) : 0;
 
     const fill = document.getElementById("progress-bar");
-    const bubble = document.getElementById("progress-bubble");
+    const bubble = document.getElementById("progress-label");
     const container = document.querySelector(".bubble-progress-container");
 
     fill.style.width = percent + "%";
