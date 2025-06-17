@@ -1491,9 +1491,6 @@ function closeDbModal() {
 
 
 // Hàm xuất file .db
-function isStandaloneIOS() {
-  return window.navigator.standalone === true;
-}
 
 function exportSQLite() {
   if (!db) {
@@ -1501,15 +1498,26 @@ function exportSQLite() {
     return;
   }
 
+  // Chuẩn bị dữ liệu
   const binaryArray = db.export();
   const blob = new Blob([binaryArray], { type: "application/octet-stream" });
 
+  // Tên file theo ngày
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
   const dd = String(today.getDate()).padStart(2, '0');
   const fileName = `QuanLyDayThem_${dd}-${mm}-${yyyy}.db`;
 
+  const env = detectEnvironment();
+
+  // 🛑 Trường hợp đặc biệt: iOS PWA (không hỗ trợ tải trực tiếp)
+  if (env === "ios-pwa") {
+    shareDbFileFromBlob(blob, fileName);
+    return;
+  }
+
+  // ✅ Các trường hợp còn lại: tải trực tiếp
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -1519,13 +1527,35 @@ function exportSQLite() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  // ✅ Hiển thị thông báo phù hợp theo môi trường web hoặc webapp
-  if (isStandaloneIOS()) {
-    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone.\nChọn: Chia sẻ → Lưu vào Tệp → Lưu");
+  // ✅ Thông báo tùy môi trường
+  if (env === "ios-browser") {
+    alert("📦 Sau khi tải file, chọn 'Chia sẻ' → 'Lưu vào Tệp'");
   } else {
-    alert("📦 Sao lưu cơ sở dữ liệu vào ứng dụng Tệp của iPhone");
+    alert("📦 Đã tải file cơ sở dữ liệu thành công.");
   }
 }
+
+// Hàm phụ để lưu file .db bằng share trong PWA
+async function shareDbFileFromBlob(blob, fileName) {
+  const file = new File([blob], fileName, {
+    type: "application/octet-stream"
+  });
+
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({
+        files: [file],
+        title: "Sao lưu dữ liệu",
+        text: "Lưu vào Tệp hoặc chia sẻ"
+      });
+    } catch (err) {
+      alert("❌ Huỷ chia sẻ: " + err.message);
+    }
+  } else {
+    alert("⚠️ Thiết bị không hỗ trợ chia sẻ file.");
+  }
+}
+
 
 
 function autoExportIfNeeded() {
@@ -1601,6 +1631,6 @@ async function shareDbFile() {
       alert("⚠️ Trình duyệt không hỗ trợ chia sẻ file.");
     }
   } catch (err) {
-    alert("❌ Không thể chia sẻ file: " + err.message);
+    alert("❌ Huỷ tải file dữ liệu: " + err.message);
   }
 }
