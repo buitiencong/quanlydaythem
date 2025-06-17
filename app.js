@@ -526,6 +526,7 @@ document.addEventListener("touchstart", function (e) {
 
 // Form Điểm danh
 function handleDiemDanh() {
+  onMenuAction();
   document.getElementById("diemdanhModal").style.display = "flex";
 
   // Tự động chọn hôm nay
@@ -644,6 +645,7 @@ function submitDiemDanh(status) {
 
 // Thêm lớp
 function handleThemLop() {
+  onMenuAction();
   document.getElementById("themLopModal").style.display = "flex";
   document.getElementById("lop-ten").value = "";
   document.getElementById("lop-hocphi").value = "";
@@ -733,6 +735,7 @@ function submitThemLop() {
 
 // Sửa lớp
 function handleSuaLop() {
+  onMenuAction();
   document.getElementById("suaLopModal").style.display = "flex";
 
   const classSelect = document.getElementById("edit-class-select");
@@ -809,6 +812,7 @@ function submitSuaLop() {
 
 // Xóa lớp
 function handleXoaLop() {
+  onMenuAction();
   document.getElementById("xoaLopModal").style.display = "flex";
 
   const select = document.getElementById("xoa-class-select");
@@ -869,6 +873,7 @@ function submitXoaLop() {
 
 // Thêm học sinh
 function handleThemHs() {
+  onMenuAction();
   document.getElementById("themHsModal").style.display = "flex";
 
   const select = document.getElementById("hs-class-select");
@@ -930,6 +935,7 @@ function submitThemHs() {
 
 // Sửa học sinh
 function handleSuaHs() {
+  onMenuAction();
   document.getElementById("suaHsModal").style.display = "flex";
 
   const classSelect = document.getElementById("edit-hs-class");
@@ -1010,6 +1016,7 @@ function submitSuaHs() {
 
 // XÓa học sinh
 function handleXoaHs() {
+  onMenuAction();
   document.getElementById("xoaHsModal").style.display = "flex";
 
   const classSelect = document.getElementById("xoa-hs-class");
@@ -1078,6 +1085,7 @@ function submitXoaHs() {
 
 // Sửa ngày điểm danh
 function handleSuaNgay() {
+  onMenuAction();
   document.getElementById("suaNgayModal").style.display = "flex";
 
   const select = document.getElementById("sua-ngay-class");
@@ -1184,6 +1192,7 @@ let currentIndex = 0;     // Vị trí hiện tại trong danh sách
 
 
 function handleThuHocPhi() {
+  onMenuAction();
   document.getElementById("thuHocPhiModal").style.display = "flex";
 
   const classSelect = document.getElementById("thu-class");
