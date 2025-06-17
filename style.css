@@ -527,7 +527,7 @@ tr:nth-child(even) {
 .bubble::after {
   content: "";
   position: absolute;
-  bottom: -6px; /* Khoảng cách từ bong bóng xuống tam giác */
+  bottom: -5px; /* Khoảng cách từ bong bóng xuống tam giác */
   left: 50%;
   transform: translateX(-50%);
   width: 0;
