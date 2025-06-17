@@ -511,7 +511,7 @@ tr:nth-child(even) {
 
 .bubble {
   position: absolute;
-  top: -28px;
+  top: -30px;
   background: #1C8139;
   color: white;
   padding: 4px 10px;
