@@ -85,7 +85,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
   setTimeout(() => {
 showToast(`
-  <b>Thêm ứng dụng vào màn hình chính: 📱</b><br>
+  📱 <b>Thêm ứng dụng vào màn hình:</b><br>
   <span style="margin-left: 20px;">
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin: 0 6px;">
     <path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
