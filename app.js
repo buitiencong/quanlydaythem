@@ -581,7 +581,11 @@ function loadStudentsForClass() {
   const hsSelect = document.getElementById("dd-student");
   hsSelect.innerHTML = "";
 
-  const result = db.exec(`SELECT student_id, student_name FROM Students WHERE class_id = ${classId} ORDER BY student_name`);
+  const result = db.exec(`
+    SELECT student_id, student_name FROM Students 
+    WHERE class_id = ${classId}
+  `);
+
   if (result.length > 0) {
     result[0].values.forEach(([id, name]) => {
       const option = document.createElement("option");
