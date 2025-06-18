@@ -1570,6 +1570,7 @@ function exportSQLite() {
 
   // 🛑 Trường hợp đặc biệt: iOS PWA (không hỗ trợ tải trực tiếp)
   if (env === "ios-pwa") {
+    alert("Chọn 'Lưu vào Tệp 📁 🗀'");
     shareDbFileFromBlob(blob, fileName); // ✅ Sử dụng Web Share API đúng chuẩn
     return;
   }
