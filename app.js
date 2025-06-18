@@ -1583,10 +1583,11 @@ function exportSQLite() {
 
   // ✅ Thông báo tùy môi trường
   if (env === "ios-browser") {
-    alert("📦 Sau khi tải file, chọn 'Chia sẻ' → 'Lưu vào Tệp'");
+    alert("📦 Sau khi Tải về, File được lưu trong ứng dụng Tệp");
   } else {
     alert("📦 Đã tải file cơ sở dữ liệu thành công.");
   }
+  localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
 
 
@@ -1610,8 +1611,6 @@ async function shareDbFileFromBlob(blob, fileName) {
   } else {
     alert("⚠️ Thiết bị không hỗ trợ chia sẻ file. Hãy mở ứng dụng trong Safari hoặc cập nhật hệ điều hành.");
   }
-
-    localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
 
 
