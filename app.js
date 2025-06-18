@@ -1638,7 +1638,13 @@ function autoExportIfNeeded() {
     if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến ngày, không export
   }
 
-  alert("🔔 Tiến hành sao lưu dữ liệu định kỳ. \nMenu quản lý\n💾 Cơ sở dữ liệu\n📦 Sao lưu file dữ liệu");
+  alert(
+  "🔔 Tiến hành sao lưu dữ liệu định kỳ.\n\n" +
+  "☰ Menu quản lý\n" +
+  "  └── 💾 Cơ sở dữ liệu\n" +
+  "       └── 📦 Sao lưu file dữ liệu"
+);
+
 }
 
 
