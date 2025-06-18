@@ -1590,7 +1590,7 @@ function exportSQLite() {
   if (env === "ios-browser") {
     alert("📦 Sau khi Tải về, File được lưu trong ứng dụng Tệp");
   } else {
-    showToast("📦 Đã sao lưu dữ liệu thành công");
+    showToast("📦 Đã sao lưu dữ liệu thành công", '', true);
   }
   localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
@@ -1614,7 +1614,7 @@ async function shareDbFileFromBlob(blob, fileName) {
 
     // ✅ Sau khi chia sẻ thành công
     localStorage.setItem(LAST_EXPORT_KEY, new Date().toISOString());
-    showToast("📦 Đã sao lưu dữ liệu thành công");
+    showToast("📦 Đã sao lưu dữ liệu thành công", '', true);
 
     } catch (err) {
       alert("❌ Bạn đã huỷ sao lưu cơ sở dữ liệu.");
@@ -1630,7 +1630,7 @@ async function shareDbFileFromBlob(blob, fileName) {
 
 function autoExportIfNeeded() {
   const LAST_EXPORT_KEY = "lastDbExportDate";
-  const EXPORT_INTERVAL_DAYS = 0.0005; // 15 ngày
+  const EXPORT_INTERVAL_DAYS = 15; // 15 ngày
   const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
   const now = new Date();
 
