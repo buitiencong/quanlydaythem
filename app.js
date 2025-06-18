@@ -1617,7 +1617,7 @@ async function shareDbFileFromBlob(blob, fileName) {
 
 function autoExportIfNeeded() {
   const LAST_EXPORT_KEY = "lastDbExportDate";
-  const EXPORT_INTERVAL_DAYS = 15; // 15 ngày
+  const EXPORT_INTERVAL_DAYS = 0.0001; // 15 ngày
   const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
   const now = new Date();
 
