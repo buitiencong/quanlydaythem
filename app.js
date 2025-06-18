@@ -58,14 +58,19 @@ function checkIfNoClasses() {
 }
 
 // Check xem trong lớp có học sinh nào chưa
+let _checkStudentOnce = false;
+
 function checkIfNoStudents(classId) {
+  if (_checkStudentOnce) return; // ✅ chỉ cho phép chạy 1 lần
+  _checkStudentOnce = true;
+
   try {
     const result = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`);
     const count = result[0]?.values?.[0]?.[0] || 0;
 
     if (count === 0) {
-      alert("⚠️ Lớp hiện tại chưa có học sinh nào. Vui lòng thêm học sinh.");
-      setTimeout(() => handleThemHs(), 50); // tránh xung đột với alert
+      alert("⚠️ Lớp vừa tạo chưa có học sinh. Vui lòng thêm học sinh.");
+      setTimeout(() => handleThemHs(), 100); // ✅ delay ngắn sau alert
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra học sinh:", err.message);
@@ -774,10 +779,18 @@ function submitThemLop() {
   saveToLocal();
   closeThemLop();
   loadClasses(newClassId);
+
+  // ✅ Delay đảm bảo DOM, tab và dữ liệu render xong
   setTimeout(() => {
-    switchTab(newClassId);        // Đảm bảo tab đã được kích hoạt
-    checkIfNoStudents(newClassId); // Kiểm tra sau khi đã render đầy đủ
-  }, 100); // Delay nhỏ để DOM sẵn sàng
+    switchTab(newClassId);
+
+    // Delay thêm trước khi kiểm tra học sinh (rất quan trọng)
+    setTimeout(() => {
+      checkIfNoStudents(newClassId);
+    }, 150); // ✅ Tăng delay để tránh alert lặp
+
+  }, 150); // ✅ Delay đầu tiên cho việc render tab
+
 }
 
 
