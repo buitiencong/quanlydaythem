@@ -1607,6 +1607,9 @@ async function shareDbFileFromBlob(blob, fileName) {
         title: "Sao lưu dữ liệu",
         text: "Lưu vào Tệp hoặc chia sẻ"
       });
+
+    // ✅ Sau khi chia sẻ thành công
+    localStorage.setItem(LAST_EXPORT_KEY, new Date().toISOString());
     } catch (err) {
       alert("❌ Bạn đã huỷ hoặc không chia sẻ file.");
       console.error("Lỗi chia sẻ:", err);
