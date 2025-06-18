@@ -1713,6 +1713,7 @@ async function shareDbFile() {
 
 // Hàm đóng mở Form hướng dẫn backup trong PWA
 function openBackupModal(onConfirm) {
+  onMenuAction();
   const modal = document.getElementById("backupModal");
   modal.style.display = "flex";
   modal.dataset.confirmCallback = onConfirm?.name || "";
