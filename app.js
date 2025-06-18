@@ -58,24 +58,25 @@ function checkIfNoClasses() {
 }
 
 // Check xem trong lớp có học sinh nào chưa
-let _checkStudentOnce = false;
+const alertedEmptyClasses = new Set(); // ✅ Ghi nhớ lớp đã báo
 
 function checkIfNoStudents(classId) {
-  if (_checkStudentOnce) return; // ✅ chỉ cho phép chạy 1 lần
-  _checkStudentOnce = true;
+  if (alertedEmptyClasses.has(classId)) return; // ✅ đã báo rồi thì bỏ qua
 
   try {
     const result = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`);
     const count = result[0]?.values?.[0]?.[0] || 0;
 
     if (count === 0) {
-      alert("⚠️ Lớp vừa tạo chưa có học sinh. Vui lòng thêm học sinh.");
-      setTimeout(() => handleThemHs(), 100); // ✅ delay ngắn sau alert
+      alertedEmptyClasses.add(classId); // ✅ đánh dấu đã cảnh báo
+      alert("⚠️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
+      setTimeout(() => handleThemHs(), 100); // mở form sau alert
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra học sinh:", err.message);
   }
 }
+
 
 
 
@@ -251,11 +252,14 @@ function switchTab(classId) {
   document.querySelectorAll(".tab-content").forEach(div => {
     div.classList.toggle("active", div.id === `tab-${classId}`);
   });
+
   showClassData(classId);
-    // ✅ Cập nhật thống kê thu học phí
   updateThuHocPhiThongKe(classId);
+
+  // ✅ Gọi kiểm tra học sinh nếu chưa có
   checkIfNoStudents(classId);
 }
+
 
 
 // Hiển thị bảng danh sách học sinh
