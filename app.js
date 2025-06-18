@@ -1601,7 +1601,7 @@ async function shareDbFileFromBlob(blob, fileName) {
   });
 
   const LAST_EXPORT_KEY = "lastDbExportDate"; // 🔧 THÊM DÒNG NÀY
-  
+
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
@@ -1638,7 +1638,7 @@ function autoExportIfNeeded() {
     if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến ngày, không export
   }
 
-  alert("🔔 Đã lâu bạn chưa sao lưu. Vào Menu > 💾 Cơ sở dữ liệu > 📤 Xuất file để sao lưu thủ công nhé!");
+  alert("🔔 Tiến hành sao lưu dữ liệu định kỳ. \nMenu quản lý\n💾 Cơ sở dữ liệu\n📦 Sao lưu file dữ liệu");
 }
 
 
