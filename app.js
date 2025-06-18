@@ -1551,6 +1551,9 @@ function exportSQLite() {
     alert("⚠️ Không có dữ liệu để xuất.");
     return;
   }
+  // Khai báo biến lưu lần cuối sao lưu
+  const LAST_EXPORT_KEY = "lastDbExportDate"; 
+  const now = new Date();  
 
   // Chuẩn bị dữ liệu
   const binaryArray = db.export();
