@@ -65,7 +65,7 @@ function checkIfNoStudents(classId) {
 
     if (count === 0) {
       alert("⚠️ Lớp hiện tại chưa có học sinh nào. Vui lòng thêm học sinh.");
-      handleThemHs(); // 👈 mở modal thêm học sinh
+      setTimeout(() => handleThemHs(), 50); // tránh xung đột với alert
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra học sinh:", err.message);
@@ -774,7 +774,10 @@ function submitThemLop() {
   saveToLocal();
   closeThemLop();
   loadClasses(newClassId);
-  checkIfNoStudents(newClassId);
+  setTimeout(() => {
+    switchTab(newClassId);        // Đảm bảo tab đã được kích hoạt
+    checkIfNoStudents(newClassId); // Kiểm tra sau khi đã render đầy đủ
+  }, 100); // Delay nhỏ để DOM sẵn sàng
 }
 
 
