@@ -1615,38 +1615,22 @@ async function shareDbFileFromBlob(blob, fileName) {
 
 
 
-// function autoExportIfNeeded() {
-//   const LAST_EXPORT_KEY = "lastDbExportDate";
-//   const EXPORT_INTERVAL_DAYS = 0.0001; // 15 ngày
-//   const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
-//   const now = new Date();
-
-//   if (lastExport) {
-//     const lastDate = new Date(lastExport);
-//     const diffTime = now - lastDate;
-//     const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-//     if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến 7 ngày, không export
-//   }
-
-//   exportSQLite(); // ✅ Gọi export
-//   localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
-// }
-
-
 function autoExportIfNeeded() {
-  const lastExport = parseInt(localStorage.getItem("lastExportTime") || "0", 10);
-  const now = Date.now();
+  const LAST_EXPORT_KEY = "lastDbExportDate";
+  const EXPORT_INTERVAL_DAYS = 0.0001; // 15 ngày
+  const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
+  const now = new Date();
 
-  const secondsPassed = (now - lastExport) / 1000;
+  if (lastExport) {
+    const lastDate = new Date(lastExport);
+    const diffTime = now - lastDate;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-  if (secondsPassed >= 8) {
-    const shouldShow = confirm("⏱ Đã hơn 8 giây chưa sao lưu. Nhấn OK để xuất file.");
-    if (shouldShow) {
-      exportSQLite();
-      localStorage.setItem("lastExportTime", now.toString());
-    }
+    if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến 7 ngày, không export
   }
+
+  exportSQLite(); // ✅ Gọi export
+  localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
 
 
