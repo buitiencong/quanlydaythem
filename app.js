@@ -57,6 +57,22 @@ function checkIfNoClasses() {
   }
 }
 
+// Check xem trong lớp có học sinh nào chưa
+function checkIfNoStudents(classId) {
+  try {
+    const result = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`);
+    const count = result[0]?.values?.[0]?.[0] || 0;
+
+    if (count === 0) {
+      alert("⚠️ Lớp hiện tại chưa có học sinh nào. Vui lòng thêm học sinh.");
+      setTimeout(() => handleThemHs(), 100); // tránh mở modal ngay trong alert
+          }
+  } catch (err) {
+    console.error("Lỗi khi kiểm tra học sinh:", err.message);
+  }
+}
+
+
 
 // Hàm để lưu các thay đổi cơ sở dữ liệu
 function saveToLocal() {
@@ -233,6 +249,7 @@ function switchTab(classId) {
   showClassData(classId);
     // ✅ Cập nhật thống kê thu học phí
   updateThuHocPhiThongKe(classId);
+  checkIfNoStudents(classId);
 }
 
 
@@ -757,6 +774,7 @@ function submitThemLop() {
   saveToLocal();
   closeThemLop();
   loadClasses(newClassId);
+  checkIfNoStudents(newClassId);
 }
 
 
@@ -904,7 +922,6 @@ function submitXoaLop() {
 
 // Thêm học sinh
 function handleThemHs() {
-  onMenuAction();
   document.getElementById("themHsModal").style.display = "flex";
 
   const select = document.getElementById("hs-class-select");
@@ -918,18 +935,20 @@ function handleThemHs() {
     const opt = document.createElement("option");
     opt.value = id;
     opt.textContent = name;
-    if (id == activeClassId) opt.selected = true;
+    if (id == activeClassId) opt.selected = true; // ✅ Đặt lớp đang chọn
     select.appendChild(opt);
   });
 
-  // ✅ Focus vào trường tên và xóa tên (nếu có)
   const tenInput = document.getElementById("hs-ten");
-  tenInput.value = ""; // ✅ Xoá nội dung cũ
+  tenInput.value = "";
+  setTimeout(() => tenInput.focus(), 10);
 
-  setTimeout(() => {
-    tenInput.focus();
-  }, 10);
+  // ✅ Gọi để hiển thị đúng lớp nếu cần
+  if (activeClassId) {
+    switchTab(activeClassId);
+  }
 }
+
 
 
 function closeThemHs() {
