@@ -1610,6 +1610,8 @@ async function shareDbFileFromBlob(blob, fileName) {
   } else {
     alert("⚠️ Thiết bị không hỗ trợ chia sẻ file. Hãy mở ứng dụng trong Safari hoặc cập nhật hệ điều hành.");
   }
+
+    localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
 
 
@@ -1617,7 +1619,7 @@ async function shareDbFileFromBlob(blob, fileName) {
 
 function autoExportIfNeeded() {
   const LAST_EXPORT_KEY = "lastDbExportDate";
-  const EXPORT_INTERVAL_DAYS = 0.0001; // 15 ngày
+  const EXPORT_INTERVAL_DAYS = 0.0005; // 15 ngày
   const lastExport = localStorage.getItem(LAST_EXPORT_KEY);
   const now = new Date();
 
@@ -1626,11 +1628,10 @@ function autoExportIfNeeded() {
     const diffTime = now - lastDate;
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-    if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến 7 ngày, không export
+    if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến ngày, không export
   }
 
-  exportSQLite(); // ✅ Gọi export
-  localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
+  alert("🔔 Đã lâu bạn chưa sao lưu. Vào Menu > 💾 Cơ sở dữ liệu > 📤 Xuất file để sao lưu thủ công nhé!");
 }
 
 
