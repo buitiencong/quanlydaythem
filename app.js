@@ -1567,7 +1567,7 @@ function exportSQLite() {
 
   // 🛑 Trường hợp đặc biệt: iOS PWA (không hỗ trợ tải trực tiếp)
   if (env === "ios-pwa") {
-    shareDbFileFromBlob(blob, fileName);
+    shareDbFileFromBlob(blob, fileName); // ✅ Sử dụng Web Share API đúng chuẩn
     return;
   }
 
@@ -1589,6 +1589,7 @@ function exportSQLite() {
   }
 }
 
+
 // Hàm phụ để lưu file .db bằng share trong PWA
 async function shareDbFileFromBlob(blob, fileName) {
   const file = new File([blob], fileName, {
@@ -1603,12 +1604,14 @@ async function shareDbFileFromBlob(blob, fileName) {
         text: "Lưu vào Tệp hoặc chia sẻ"
       });
     } catch (err) {
-      alert("❌ Huỷ lưu file dữ liệu");
+      alert("❌ Bạn đã huỷ hoặc không chia sẻ file.");
+      console.error("Lỗi chia sẻ:", err);
     }
   } else {
-    alert("⚠️ Thiết bị không hỗ trợ chia sẻ file.");
+    alert("⚠️ Thiết bị không hỗ trợ chia sẻ file. Hãy mở ứng dụng trong Safari hoặc cập nhật hệ điều hành.");
   }
 }
+
 
 
 
