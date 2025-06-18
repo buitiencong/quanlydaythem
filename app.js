@@ -1588,7 +1588,7 @@ function exportSQLite() {
   if (env === "ios-browser") {
     alert("📦 Sau khi Tải về, File được lưu trong ứng dụng Tệp");
   } else {
-    alert("📦 Đã tải file cơ sở dữ liệu thành công.");
+    showToast("📦 Đã sao lưu dữ liệu thành công");
   }
   localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
@@ -1612,6 +1612,8 @@ async function shareDbFileFromBlob(blob, fileName) {
 
     // ✅ Sau khi chia sẻ thành công
     localStorage.setItem(LAST_EXPORT_KEY, new Date().toISOString());
+    showToast("📦 Đã sao lưu dữ liệu thành công");
+
     } catch (err) {
       alert("❌ Bạn đã huỷ hoặc không chia sẻ file.");
       console.error("Lỗi chia sẻ:", err);
@@ -1639,7 +1641,7 @@ function autoExportIfNeeded() {
   }
 
   alert(
-  "🔔 Tiến hành sao lưu dữ liệu định kỳ.\n\n" +
+  "🔔 Hãy tiến hành sao lưu dữ liệu định kỳ:\n\n" +
   "☰ Menu quản lý\n" +
   "  └── 💾 Cơ sở dữ liệu\n" +
   "       └── 📦 Sao lưu file dữ liệu"
