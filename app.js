@@ -1617,7 +1617,7 @@ async function shareDbFileFromBlob(blob, fileName) {
     showToast("📦 Đã sao lưu dữ liệu thành công");
 
     } catch (err) {
-      alert("❌ Bạn đã huỷ hoặc không chia sẻ file.");
+      alert("❌ Bạn đã huỷ sao lưu cơ sở dữ liệu.");
       console.error("Lỗi chia sẻ:", err);
     }
   } else {
