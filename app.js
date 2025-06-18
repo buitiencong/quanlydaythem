@@ -784,16 +784,9 @@ function submitThemLop() {
   closeThemLop();
   loadClasses(newClassId);
 
-  // ✅ Delay đảm bảo DOM, tab và dữ liệu render xong
   setTimeout(() => {
-    switchTab(newClassId);
-
-    // Delay thêm trước khi kiểm tra học sinh (rất quan trọng)
-    setTimeout(() => {
-      checkIfNoStudents(newClassId);
-    }, 150); // ✅ Tăng delay để tránh alert lặp
-
-  }, 150); // ✅ Delay đầu tiên cho việc render tab
+    switchTab(newClassId); // ✅ KHÔNG cần gọi checkIfNoStudents ở đây nữa
+  }, 150);
 
 }
 
