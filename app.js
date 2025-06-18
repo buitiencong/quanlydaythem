@@ -65,8 +65,8 @@ function checkIfNoStudents(classId) {
 
     if (count === 0) {
       alert("⚠️ Lớp hiện tại chưa có học sinh nào. Vui lòng thêm học sinh.");
-      setTimeout(() => handleThemHs(), 100); // tránh mở modal ngay trong alert
-          }
+      handleThemHs(); // 👈 mở modal thêm học sinh
+    }
   } catch (err) {
     console.error("Lỗi khi kiểm tra học sinh:", err.message);
   }
