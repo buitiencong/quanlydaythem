@@ -246,6 +246,9 @@ function loadClasses(selectedClassId = null) {
 
 
 function switchTab(classId) {
+  const currentActive = document.querySelector(".tab-button.active")?.dataset.classId;
+  if (currentActive == classId) return; // ✅ tab đã active rồi → không làm lại
+
   document.querySelectorAll(".tab-button").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.classId == classId);
   });
@@ -255,10 +258,9 @@ function switchTab(classId) {
 
   showClassData(classId);
   updateThuHocPhiThongKe(classId);
-
-  // ✅ Gọi kiểm tra học sinh nếu chưa có
-  checkIfNoStudents(classId);
+  checkIfNoStudents(classId); // ✅ gọi kiểm tra học sinh ở đây là đúng
 }
+
 
 
 
@@ -784,9 +786,12 @@ function submitThemLop() {
   closeThemLop();
   loadClasses(newClassId);
 
+  // ✅ Không cần switchTab nữa — tab đã active sẵn trong loadClasses()
+  // ✅ Gọi checkIfNoStudents thủ công với delay nhỏ
   setTimeout(() => {
-    switchTab(newClassId); // ✅ KHÔNG cần gọi checkIfNoStudents ở đây nữa
-  }, 150);
+    checkIfNoStudents(newClassId);
+  }, 100);
+
 
 }
 
