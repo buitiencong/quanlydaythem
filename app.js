@@ -24,20 +24,38 @@ initSqlJs({
     }
   });
 
-  document.getElementById("dbfile").addEventListener("change", event => {
+  document.getElementById("dbfile").addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
     const reader = new FileReader();
+
     reader.onload = function () {
       const uint8array = new Uint8Array(reader.result);
       db = new SQL.Database(uint8array);
       localforage.setItem("userDB", uint8array);
-      localStorage.setItem("hasOpenedDb", "1"); // ✅ đánh dấu đã chọn DB
+      localStorage.setItem("hasOpenedDb", "1");
       closeDbModal();
       loadClasses();
+      checkIfNoClasses(); // ✅ kiểm tra có lớp không
     };
 
-    reader.readAsArrayBuffer(event.target.files[0]);
+    reader.readAsArrayBuffer(file);
   });
 });
+
+// Check xem có danh sách lớp nào được tạo hay chưa
+function checkIfNoClasses() {
+  try {
+    const result = db.exec("SELECT COUNT(*) FROM Classes");
+    const count = result[0]?.values[0][0] || 0;
+    if (count === 0) {
+      alert("⚠️ Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
+    }
+  } catch (err) {
+    console.error("Lỗi khi kiểm tra lớp:", err.message);
+  }
+}
+
 
 // Hàm để lưu các thay đổi cơ sở dữ liệu
 function saveToLocal() {
