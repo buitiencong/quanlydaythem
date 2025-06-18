@@ -1552,9 +1552,11 @@ function exportSQLite() {
     return;
   }
 
+  // Chuẩn bị dữ liệu
   const binaryArray = db.export();
   const blob = new Blob([binaryArray], { type: "application/octet-stream" });
 
+  // Tên file theo ngày
   const today = new Date();
   const yyyy = today.getFullYear();
   const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -1563,12 +1565,13 @@ function exportSQLite() {
 
   const env = detectEnvironment();
 
+  // 🛑 Trường hợp đặc biệt: iOS PWA (không hỗ trợ tải trực tiếp)
   if (env === "ios-pwa") {
-    // ⚠️ Không tự gọi navigator.share — phải dùng nút riêng
-    prepareManualShare(blob, fileName);
+    shareDbFileFromBlob(blob, fileName); // ✅ Sử dụng Web Share API đúng chuẩn
     return;
   }
 
+  // ✅ Các trường hợp còn lại: tải trực tiếp
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -1578,55 +1581,40 @@ function exportSQLite() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
+  // ✅ Thông báo tùy môi trường
   if (env === "ios-browser") {
     alert("📦 Sau khi tải file, chọn 'Chia sẻ' → 'Lưu vào Tệp'");
   } else {
     alert("📦 Đã tải file cơ sở dữ liệu thành công.");
   }
-
-  localStorage.setItem("lastDbExportDate", new Date().toISOString());
 }
 
 
 // Hàm phụ để lưu file .db bằng share trong PWA
-let pendingShareFile = null;
+async function shareDbFileFromBlob(blob, fileName) {
+  const file = new File([blob], fileName, {
+    type: "application/octet-stream"
+  });
 
-function prepareManualShare(blob, fileName) {
-  pendingShareFile = new File([blob], fileName, { type: "application/octet-stream" });
-
-  alert("📤 Đã đến lúc sao lưu dữ liệu.\nVui lòng nhấn nút 'Chia sẻ dữ liệu' bên dưới.");
-  document.getElementById("manualShareBtn").style.display = "block";
-}
-
-
-async function manualShareDb() {
-  if (!pendingShareFile) {
-    alert("⚠️ Không có tệp nào để chia sẻ.");
-    return;
-  }
-
-  if (navigator.canShare && navigator.canShare({ files: [pendingShareFile] })) {
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
-        files: [pendingShareFile],
+        files: [file],
         title: "Sao lưu dữ liệu",
-        text: "Chia sẻ hoặc lưu vào Tệp"
+        text: "Lưu vào Tệp hoặc chia sẻ"
       });
-      localStorage.setItem("lastDbExportDate", new Date().toISOString());
-      document.getElementById("manualShareBtn").style.display = "none";
     } catch (err) {
       alert("❌ Bạn đã huỷ hoặc không chia sẻ file.");
-      console.error("Chia sẻ thất bại:", err);
+      console.error("Lỗi chia sẻ:", err);
     }
   } else {
-    alert("⚠️ Trình duyệt không hỗ trợ chia sẻ file.");
+    alert("⚠️ Thiết bị không hỗ trợ chia sẻ file. Hãy mở ứng dụng trong Safari hoặc cập nhật hệ điều hành.");
   }
 }
 
 
 
 
-// Hàm tự động nhắc backup
 function autoExportIfNeeded() {
   const LAST_EXPORT_KEY = "lastDbExportDate";
   const EXPORT_INTERVAL_DAYS = 0.0001; // 15 ngày
@@ -1637,19 +1625,13 @@ function autoExportIfNeeded() {
     const lastDate = new Date(lastExport);
     const diffTime = now - lastDate;
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
-    if (diffDays < EXPORT_INTERVAL_DAYS) return;
+
+    if (diffDays < EXPORT_INTERVAL_DAYS) return; // ✅ Chưa đến 7 ngày, không export
   }
 
-  const env = detectEnvironment();
-
-  if (env === "ios-pwa") {
-    // Gọi exportSQLite → sẽ chuẩn bị file và hiển thị nút chia sẻ
-    exportSQLite();
-  } else {
-    exportSQLite(); // Tự tải file hoặc chia sẻ tuỳ môi trường
-  }
+  exportSQLite(); // ✅ Gọi export
+  localStorage.setItem(LAST_EXPORT_KEY, now.toISOString()); // ✅ Ghi nhận lần export
 }
-
 
 
 // Tải cơ sở dữ liệu dựa theo môi trường sử dụng
