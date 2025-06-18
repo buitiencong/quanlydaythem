@@ -61,19 +61,19 @@ function checkIfNoClasses() {
 const alertedEmptyClasses = new Set(); // ✅ Ghi nhớ lớp đã báo
 
 function checkIfNoStudents(classId) {
-  if (alertedEmptyClasses.has(classId)) return; // ✅ đã báo rồi thì bỏ qua
+  if (alertedEmptyClasses.has(classId)) return; // ✅ tránh lặp alert
 
   try {
     const result = db.exec(`SELECT COUNT(*) FROM Students WHERE class_id = ${classId}`);
     const count = result[0]?.values?.[0]?.[0] || 0;
 
     if (count === 0) {
-      alertedEmptyClasses.add(classId); // ✅ đánh dấu đã cảnh báo
+      alertedEmptyClasses.add(classId); // ✅ đánh dấu đã alert
       alert("⚠️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
-      setTimeout(() => handleThemHs(), 100); // mở form sau alert
+      setTimeout(() => handleThemHs(), 100);
     }
   } catch (err) {
-    console.error("Lỗi khi kiểm tra học sinh:", err.message);
+    console.error("Lỗi kiểm tra học sinh:", err.message);
   }
 }
 
