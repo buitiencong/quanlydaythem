@@ -49,7 +49,7 @@ function checkIfNoClasses() {
     const result = db.exec("SELECT COUNT(*) FROM Classes");
     const count = result[0]?.values[0][0] || 0;
     if (count === 0) {
-      alert("⚠️ Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
+      alert("🏫 Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
       handleThemLop(); // 👈 mở form thêm lớp sau alert
     }
   } catch (err) {
@@ -64,7 +64,7 @@ function checkIfNoStudents(classId) {
     const count = result[0]?.values?.[0]?.[0] || 0;
 
     if (count === 0) {
-      alert("⚠️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
+      alert("🤷‍♂️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
       setTimeout(() => handleThemHs(), 100);
     }
   } catch (err) {
