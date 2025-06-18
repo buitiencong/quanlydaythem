@@ -1600,6 +1600,8 @@ async function shareDbFileFromBlob(blob, fileName) {
     type: "application/octet-stream"
   });
 
+  const LAST_EXPORT_KEY = "lastDbExportDate"; // 🔧 THÊM DÒNG NÀY
+  
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
     try {
       await navigator.share({
