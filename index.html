@@ -439,11 +439,25 @@
     </div>
   </div>
 
+  <!-- Form Hướng dẫn back up -->
   <div id="backupModal" class="modal-overlay" style="display: none;">
     <div class="modal-content">
-      <h3>📤 Hướng dẫn sao lưu</h3>
-      <p>Chọn <b>“Lưu vào Tệp 📁”</b> khi giao diện chia sẻ xuất hiện,<br>
-      sau đó chọn vị trí và lưu lại file.</p>
+      <h3>📦 Hướng dẫn sao lưu</h3>
+      <p>
+        Sau khi bấm <b>Tiếp Tục</b><br>
+        Chọn <b>Lưu vào Tệp 
+          <span class="icon-folder">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-folder-closed-icon lucide-folder-closed">
+              <path
+                d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+              <path d="M2 10h20" />
+            </svg>
+          </span>
+        </b><br>
+        Chọn vị trí và bấm <b>Lưu</b>
+      </p>
       <div class="modal-actions">
         <button onclick="closeBackupModal(true)">Tiếp tục</button>
         <button class="btn-cancel" onclick="closeBackupModal(false)">Huỷ</button>
