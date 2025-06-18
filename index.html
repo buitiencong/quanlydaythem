@@ -439,10 +439,17 @@
     </div>
   </div>
 
-
-<button id="manualShareBtn" onclick="manualShareDb()" style="display: none;">
-  📤 Chia sẻ dữ liệu sao lưu
-</button>
+  <div id="backupModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h3>📤 Hướng dẫn sao lưu</h3>
+      <p>Chọn <b>“Lưu vào Tệp 📁”</b> khi giao diện chia sẻ xuất hiện,<br>
+      sau đó chọn vị trí và lưu lại file.</p>
+      <div class="modal-actions">
+        <button onclick="closeBackupModal(true)">Tiếp tục</button>
+        <button class="btn-cancel" onclick="closeBackupModal(false)">Huỷ</button>
+      </div>
+    </div>
+  </div>
 
 
   <footer style="text-align: center; font-size: 14px; color: #333; padding: 10px 0 5px;">

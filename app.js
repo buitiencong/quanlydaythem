@@ -1570,10 +1570,11 @@ function exportSQLite() {
 
   // 🛑 Trường hợp đặc biệt: iOS PWA (không hỗ trợ tải trực tiếp)
   if (env === "ios-pwa") {
-    alert("Chọn 'Lưu vào Tệp 📁 🗀'");
-    shareDbFileFromBlob(blob, fileName); // ✅ Sử dụng Web Share API đúng chuẩn
+    window._modalConfirmAction = () => shareDbFileFromBlob(blob, fileName);
+    openBackupModal(window._modalConfirmAction);
     return;
   }
+
 
   // ✅ Các trường hợp còn lại: tải trực tiếp
   const url = URL.createObjectURL(blob);
@@ -1707,5 +1708,22 @@ async function shareDbFile() {
     }
   } catch (err) {
     alert("❌ Huỷ tải file dữ liệu");
+  }
+}
+
+// Hàm đóng mở Form hướng dẫn backup trong PWA
+function openBackupModal(onConfirm) {
+  const modal = document.getElementById("backupModal");
+  modal.style.display = "flex";
+  modal.dataset.confirmCallback = onConfirm?.name || "";
+  window._modalConfirmAction = onConfirm;
+}
+
+function closeBackupModal(confirmed) {
+  const modal = document.getElementById("backupModal");
+  modal.style.display = "none";
+
+  if (confirmed && typeof window._modalConfirmAction === "function") {
+    window._modalConfirmAction();
   }
 }
