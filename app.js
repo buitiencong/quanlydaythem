@@ -50,6 +50,7 @@ function checkIfNoClasses() {
     const count = result[0]?.values[0][0] || 0;
     if (count === 0) {
       alert("⚠️ Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
+      handleThemLop(); // 👈 mở form thêm lớp sau alert
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra lớp:", err.message);
