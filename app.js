@@ -16,7 +16,7 @@ initSqlJs({
     if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
-
+      checkIfNoClasses();
       // ✅ Thêm dòng này — CHỈ GỌI khi DB đã sẵn sàng
       autoExportIfNeeded();
     } else {
@@ -885,6 +885,7 @@ function submitXoaLop() {
   saveToLocal();
   closeXoaLop();
   loadClasses(); // Không truyền classId vì lớp đã bị xoá
+  checkIfNoClasses();
 }
 
 // Viết hoa chữ cái đầu trong tên học sinh
