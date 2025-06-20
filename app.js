@@ -1731,10 +1731,9 @@ function closeAddToScreenModal(confirmed) {
   document.getElementById("addtoscreenios")?.style.setProperty("display", "none");
   document.getElementById("addtoscreenadr")?.style.setProperty("display", "none");
 
-  // ✅ Đánh dấu đã đóng hướng dẫn
   isIntroClosed = true;
 
-  // ✅ Nếu là Android và người dùng xác nhận → gọi prompt
+  // ✅ Gọi prompt nếu được bấm từ Android + người dùng xác nhận
   if (confirmed && deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(() => {
@@ -1742,12 +1741,14 @@ function closeAddToScreenModal(confirmed) {
     });
   }
 
-  // ✅ Gọi lại các bước khởi tạo nếu đã chờ
+  // ✅ Tiếp tục khởi động app (nếu có delay)
   if (window._pendingInitAfterIntro) {
     setTimeout(() => {
       window._pendingInitAfterIntro();
       window._pendingInitAfterIntro = null;
-    }, 100); // chờ 100ms để DOM update (ẩn modal) rồi mới alert
+    }, 100);
   }
 }
+
+
 
