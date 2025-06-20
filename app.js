@@ -78,7 +78,24 @@ autoExportIfNeeded();
       localStorage.setItem("hasOpenedDb", "1");
       closeDbModal();
       loadClasses();
-      checkIfNoClasses(); // ✅ kiểm tra có lớp không
+      loadClasses();
+
+      // Nếu đang chạy dưới PWA (standalone) → không có form hướng dẫn ⇒ gọi luôn
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isStandalone) {
+        isIntroClosed = true; // ✅ đảm bảo điều kiện
+      }
+
+      if (isIntroClosed) {
+        checkIfNoClasses();
+        autoExportIfNeeded();
+      } else {
+        window._pendingInitAfterIntro = () => {
+          checkIfNoClasses();
+          autoExportIfNeeded();
+        };
+      }
+
     };
 
     reader.readAsArrayBuffer(file);
