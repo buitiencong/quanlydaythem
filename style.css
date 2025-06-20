@@ -606,6 +606,7 @@ tr:nth-child(even) {
 
 .button-lichsuthuhocphi .loc {
   color: white;
+  font-weight: bold;
   font-size: 14px;
   transition: 400ms;
 }
