@@ -57,9 +57,16 @@ initSqlJs({
       loadClasses();
 
       // ✅ Nếu đã đóng form hướng dẫn → chạy ngay
-      checkIfNoClasses();
-autoExportIfNeeded();
-
+      if (isIntroClosed) {
+        checkIfNoClasses();
+        autoExportIfNeeded();
+      } else {
+        // ✅ Nếu chưa → chờ đến khi đóng form
+        window._pendingInitAfterIntro = () => {
+          checkIfNoClasses();
+          autoExportIfNeeded();
+        };
+      }
     } else {
       initNewDatabase(); // ✅ KHỞI TẠO DB MỚI nếu không có
     }
@@ -77,7 +84,6 @@ autoExportIfNeeded();
       localforage.setItem("userDB", uint8array);
       localStorage.setItem("hasOpenedDb", "1");
       closeDbModal();
-      loadClasses();
       loadClasses();
 
       // Nếu đang chạy dưới PWA (standalone) → không có form hướng dẫn ⇒ gọi luôn
