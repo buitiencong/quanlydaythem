@@ -1735,8 +1735,8 @@ function autoExportIfNeeded() {
   alert(
   "🔔 Hãy tiến hành sao lưu dữ liệu định kỳ:\n\n" +
   "☰ Menu quản lý\n" +
-  "  └── 💾 Cơ sở dữ liệu\n" +
-  "       └── 📦 Sao lưu file dữ liệu"
+  "  └─ 💾 Cơ sở dữ liệu\n" +
+  "       └─ 📦 Sao lưu file dữ liệu"
 );
 
 }
