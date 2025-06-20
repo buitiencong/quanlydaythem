@@ -392,6 +392,9 @@ tr:nth-child(even) {
   background: #0071e2;
 }
 
+.btn-boqua {
+  font-size: 14x;
+}
 
 /* 🎨 Nút Huỷ */
 .modal-actions .btn-cancel {
@@ -685,8 +688,7 @@ tr:nth-child(even) {
     font-size: 14px;
   }
 
-  .modal-actions button,
-  .modal-actions .btn-cancel {
+  .btn-boqua {
     font-size: 13px;
   }
 }
