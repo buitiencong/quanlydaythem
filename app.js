@@ -156,13 +156,17 @@ function checkIfNoClasses() {
     const result = db.exec("SELECT COUNT(*) FROM Classes");
     const count = result[0]?.values[0][0] || 0;
     if (count === 0) {
-      alert("🏫 Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
-      handleThemLop(); // 👈 mở form thêm lớp sau alert
+      // ✅ Trì hoãn 1 chút để đảm bảo alert không bị chặn trong PWA
+      setTimeout(() => {
+        alert("🏫 Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
+        handleThemLop(); // 👈 mở form thêm lớp sau alert
+      }, 200);
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra lớp:", err.message);
   }
 }
+
 
 // Check xem trong lớp có học sinh nào chưa
 function checkIfNoStudents(classId) {
