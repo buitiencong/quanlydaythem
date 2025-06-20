@@ -5,6 +5,8 @@ let thuFilterState = {
   chuathu: false
 };
 
+let deferredPrompt = null;
+
 document.addEventListener("DOMContentLoaded", () => {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
@@ -13,9 +15,19 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ iOS: hiển thị hướng dẫn ngay lập tức
   if (!isStandalone && isIOS) {
     showToast(`
-      📱 <b>Thêm ứng dụng vào màn hình chính:</b><br>
-      <span style="margin-left: 20px;">🔗 Nhấn <b>Chia sẻ</b></span><br>
-      <span style="margin-left: 20px;">➕ Chọn <b>Thêm vào Màn hình chính</b></span>
+      📱 <b>Thêm ứng dụng vào màn hình:</b><br>
+      <span style="margin-left: 20px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin: 0 6px;">
+        <path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+      </svg>
+      Chia sẻ</span><br>
+      <span style="margin-left: 20px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin: 0 6px;">
+        <rect width="18" height="18" x="3" y="3" rx="2"/>
+        <path d="M8 12h8"/><path d="M12 8v8"/>
+      </svg>
+      Thêm vào Màn hình chính
+      </span>
     `);
   }
 
@@ -23,12 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!isStandalone && isAndroid && deferredPrompt) {
     // Hiển thị gợi ý thêm ứng dụng bằng nút "Thêm"
     const addPrompt = document.createElement('div');
-    addPrompt.innerHTML = `
-      <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
-        📲 Thêm ứng dụng vào màn hình chính?
-        <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
-      </div>
-    `;
+      addPrompt.innerHTML = `
+        <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
+          📲 Thêm ứng dụng vào màn hình chính?
+          <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
+        </div>
+      `;
     document.body.appendChild(addPrompt);
 
     document.getElementById('btn-add').addEventListener('click', () => {
@@ -39,7 +51,25 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  // Xử lý mở menu cho mobile
+  const toggleBtn = document.getElementById("menuToggle");
+  const menuBar = document.querySelector(".menu-bar");
+
+  if (toggleBtn && menuBar) {
+    toggleBtn.addEventListener("click", () => {
+      menuBar.classList.toggle("open");
+    });
+  }
+
+  // 👇 Thêm đoạn này để cập nhật thống kê khi vừa vào trang
+  const classId = document.querySelector(".tab-button.active")?.dataset.classId;
+  if (classId) {
+    updateThuHocPhiThongKe(classId);
+  }
+
 });
+
 
 
 // Khởi tạo SQLite và kiểm tra dữ liệu từ IndexedDB
@@ -159,8 +189,6 @@ function checkIfNoStudents(classId) {
 }
 
 
-
-
 // Hàm để lưu các thay đổi cơ sở dữ liệu
 function saveToLocal() {
   if (db) {
@@ -170,61 +198,11 @@ function saveToLocal() {
 }
 
 
-// Kiểm tra và thông báo thêm vào màn hình chính
-function isRunningStandalone() {
-  return (window.matchMedia('(display-mode: standalone)').matches ||
-          window.navigator.standalone === true);
-}
-
-let deferredPrompt = null;
 
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-
-  // Hiện gợi ý người dùng thêm vào màn hình chính Android
-  const addPrompt = document.createElement('div');
-  addPrompt.innerHTML = `
-    <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
-      📲 Thêm ứng dụng vào màn hình chính?
-      <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
-    </div>
-  `;
-  document.body.appendChild(addPrompt);
-
-  document.getElementById('btn-add').addEventListener('click', () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
-        addPrompt.remove();
-      });
-    }
-  });
 });
-
-// Nếu là iOS Safari mà chưa là standalone
-if (!isRunningStandalone() && /iPhone|iPad|iPod/.test(navigator.userAgent)) {
-  setTimeout(() => {
-showToast(`
-  📱 <b>Thêm ứng dụng vào màn hình:</b><br>
-  <span style="margin-left: 20px;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin: 0 6px;">
-    <path d="M12 2v13"/><path d="m16 6-4-4-4 4"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-  </svg>
-  Chia sẻ</span><br>
-  <span style="margin-left: 20px;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin: 0 6px;">
-    <rect width="18" height="18" x="3" y="3" rx="2"/>
-    <path d="M8 12h8"/><path d="M12 8v8"/>
-  </svg>
-  Thêm vào Màn hình chính
-  </span>
-`);
-
-  }, 1500);
-}
-
 
 
 // Hàm toast hỗ trợ IOS
@@ -265,10 +243,6 @@ function showToast(message, svgIcon = '', centered = false) {
     setTimeout(() => el.remove(), 500);
   }, 10000);
 }
-
-
-
-
 
 
 // Định dạng ngày dd-mm-yy
@@ -523,23 +497,7 @@ function showClassData(classId, filter = null) {
 }
 
 
-// ✅ Hàm xử lý mở menu (cho mobile)
-document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("menuToggle");
-  const menuBar = document.querySelector(".menu-bar");
 
-  if (toggleBtn && menuBar) {
-    toggleBtn.addEventListener("click", () => {
-      menuBar.classList.toggle("open");
-    });
-  }
-
-  // 👇 Thêm đoạn này để cập nhật thống kê khi vừa vào trang
-  const classId = document.querySelector(".tab-button.active")?.dataset.classId;
-  if (classId) {
-    updateThuHocPhiThongKe(classId);
-  }
-});
 
 
 // ✅ Hàm mở/đóng submenu (cho iPhone)
