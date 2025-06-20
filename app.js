@@ -180,7 +180,7 @@ function checkIfNoClasses() {
     if (count === 0) {
       // ✅ Trì hoãn 1 chút để đảm bảo alert không bị chặn trong PWA
       setTimeout(() => {
-        alert("🏫 Chưa có lớp nào được tạo. Vui lòng tạo lớp mới để bắt đầu.");
+        alert("🏫 Chưa có lớp nào được tạo.\nHãy tạo lớp mới để bắt đầu.");
         handleThemLop(); // 👈 mở form thêm lớp sau alert
       }, 200);
     }
@@ -198,7 +198,7 @@ function checkIfNoStudents(classId) {
 
     if (count === 0) {
       setTimeout(() => {
-        alert("🤷‍♂️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
+        alert("🤷‍♂️ Lớp này chưa có học sinh.\nHãy thêm học sinh.");
         setTimeout(() => handleThemHs(), 100); // vẫn giữ delay nhẹ sau alert
       }, 0);
     }
@@ -826,7 +826,7 @@ function submitThemLop() {
   if (!hocphiValue || isNaN(hocphi)) messages.push("Học phí");
 
   if (messages.length > 0) {
-    alert("Vui lòng nhập: " + messages.join(" và "));
+    alert("Hãy nhập: " + messages.join(" và "));
     return;
   }
 
@@ -928,7 +928,7 @@ function submitSuaLop() {
   const diadiem = document.getElementById("edit-diadiem").value.trim();
 
   if (!ten || !ngay) {
-    alert("Vui lòng nhập đầy đủ Tên lớp và Ngày bắt đầu.");
+    alert("Hãy nhập đầy đủ Tên lớp và Ngày bắt đầu.");
     return;
   }
 
@@ -1051,7 +1051,7 @@ function submitThemHs() {
 
 
   if (!ten) {
-    alert("Vui lòng nhập họ và tên học sinh.");
+    alert("Hãy nhập họ và tên học sinh.");
     return;
   }
 
@@ -1140,7 +1140,7 @@ function submitSuaHs() {
   const classId = document.getElementById("edit-hs-class").value;
 
   if (!newName) {
-    alert("Vui lòng nhập tên mới.");
+    alert("Hãy nhập tên mới.");
     return;
   }
 
@@ -1278,7 +1278,7 @@ function submitSuaNgay() {
   const newDate = document.getElementById("sua-ngay-moi").value;
 
   if (!oldDate || !newDate) {
-    alert("Vui lòng chọn đủ ngày cũ và ngày mới.");
+    alert("Hãy chọn đủ ngày cũ và ngày mới.");
     return;
   }
 
@@ -1298,7 +1298,7 @@ function submitXoaNgay() {
   const date = document.getElementById("sua-ngay-cu").value;
 
   if (!date) {
-    alert("Vui lòng chọn ngày cần xoá.");
+    alert("Hãy chọn ngày cần xoá.");
     return;
   }
 
@@ -1711,7 +1711,7 @@ async function shareDbFileFromBlob(blob, fileName) {
       console.error("Lỗi chia sẻ:", err);
     }
   } else {
-    alert("⚠️ Thiết bị không hỗ trợ chia sẻ file. Hãy mở ứng dụng trong Safari hoặc cập nhật hệ điều hành.");
+    alert("⚠️ Thiết bị không hỗ trợ chia sẻ file.\nHãy mở ứng dụng trong Safari hoặc cập nhật hệ điều hành.");
   }
 }
 
