@@ -1714,46 +1714,7 @@ function detectEnvironment() {
   return "desktop";
 }
 
-// Hàm tải file
-function handleDownloadDb() {
-  const env = detectEnvironment();
 
-  if (env === "ios-pwa") {
-    // ❗ iOS PWA không tải file trực tiếp được → dùng chia sẻ
-    shareDbFile();
-  } else {
-    // ✅ Android, Desktop, iOS Safari tải bình thường
-    const a = document.createElement("a");
-    a.href = "/QuanLyDayThem.db";
-    a.download = "QuanLyDayThem.db";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-}
-
-// Hàm share đặc biệt trên IOS PWA (màn hình chính)
-async function shareDbFile() {
-  try {
-    const res = await fetch("/QuanLyDayThem.db");
-    const blob = await res.blob();
-    const file = new File([blob], "QuanLyDayThem.db", {
-      type: "application/octet-stream"
-    });
-
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({
-        files: [file],
-        title: "Tải cơ sở dữ liệu",
-        text: "Chia sẻ hoặc lưu vào Tệp"
-      });
-    } else {
-      alert("⚠️ Trình duyệt không hỗ trợ chia sẻ file.");
-    }
-  } catch (err) {
-    alert("❌ Huỷ tải file dữ liệu");
-  }
-}
 
 // Hàm đóng mở Form hướng dẫn backup trong PWA
 function openBackupModal(onConfirm) {

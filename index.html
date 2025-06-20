@@ -103,40 +103,7 @@
     <h3>⚙️ Cài đặt cơ sở dữ liệu</h3>
 
     <!-- 🔲 Khung chứa 2 phần -->
-    <div style="
-      border: 1px solid white;
-      border-radius: 8px;
-      padding: 10px 16px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background-color: white;
-    ">
 
-      <!-- 📥 Phần 1: Tải xuống -->
-      <div>
-        <h4 style="margin-top: 5px;">📥 Tải xuống file dữ liệu Gốc</h4>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <button onclick="handleDownloadDb()" style="background-color: #39bda7; border-radius: 6px; border-color: white; color: white; font-size: 14px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); padding: 5px 10px; cursor: pointer;">
-            Lưu vào Tệp
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="lucide lucide-folder-closed-icon lucide-folder-closed"
-              style="margin-left: 8px; vertical-align: middle;">
-              <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
-              <path d="M2 10h20"/>
-            </svg>
-          </button>
-          <label style="margin: 0; font-size: 14px;">QuanLyDayThem.db</label>
-        </div>
-
-      </div>
-
-      <!-- 🔻 Đường kẻ chia -->
-      <div style="height: 2px; background-color: #bae6fd; margin: 0 -18px;"></div>
-
-      <!-- 📂 Phần 2: Chọn file -->
       <div>
         <h4 style="margin-top: 5px;">📂 Chọn file dữ liệu (.db)</h4>
         <input type="file" id="dbfile" accept=".db,.sqlite" required />
@@ -146,7 +113,7 @@
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeDbModal()">🔙 Huỷ</button>
     </div>
-  </div>
+
 </div>
 
 
