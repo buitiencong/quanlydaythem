@@ -20,7 +20,7 @@ initSqlJs({
       // ✅ Thêm dòng này — CHỈ GỌI khi DB đã sẵn sàng
       autoExportIfNeeded();
     } else {
-      setTimeout(openDbModal, 100);
+      initNewDatabase(); // ✅ KHỞI TẠO DB MỚI NẾU KHÔNG CÓ
     }
   });
 
@@ -42,6 +42,56 @@ initSqlJs({
     reader.readAsArrayBuffer(file);
   });
 });
+
+
+// Khởi tạo Cơ sở dữ liệu
+function initNewDatabase() {
+  db = new SQL.Database();
+
+  db.run(`
+    CREATE TABLE IF NOT EXISTS Classes (
+      class_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      class_name NVARCHAR(255) NOT NULL,
+      class_date_start DATE NOT NULL, 
+      class_hocphi INTEGER NOT NULL,
+      class_time NVARCHAR(255),
+      class_diadiem NVARCHAR(255)
+    );
+
+    CREATE TABLE IF NOT EXISTS Students (
+      student_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      student_name NVARCHAR(100) NOT NULL,
+      class_id INTEGER,
+      noptien INTEGER DEFAULT 0 CHECK (noptien IN (0, 1)),
+      FOREIGN KEY (class_id) REFERENCES Classes(class_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Attendance (
+      attendance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      student_id INTEGER,
+      class_id INTEGER,
+      attendance_date DATE NOT NULL,
+      status INTEGER,
+      FOREIGN KEY (student_id) REFERENCES Students(student_id),
+      FOREIGN KEY (class_id) REFERENCES Classes(class_id)
+    );
+
+    CREATE TABLE IF NOT EXISTS Thuhocphi (
+      Thuhocphi_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      Thuhocphi_date DATE,
+      Thuhocphi_money REAL,
+      class_name NVARCHAR(255),
+      student_name NVARCHAR(255),
+      student_id INTEGER
+    );
+  `);
+
+  saveToLocal();         // ✅ Lưu DB mới vào localforage
+  loadClasses();         // ✅ Cập nhật UI
+  checkIfNoClasses();    // ✅ Thông báo nếu chưa có lớp
+}
+
+
 
 // Check xem có danh sách lớp nào được tạo hay chưa
 function checkIfNoClasses() {
