@@ -420,18 +420,7 @@ function showClassData(classId, filter = null) {
           setTimeout(() => {
             row.classList.remove("just-updated");
           }, 1000);
-        } else if (
-          window.lastBoQua &&
-          String(window.lastBoQua.classId) === String(classId) &&
-          String(window.lastBoQua.studentId) === String(student_id)
-        ) {
-          row.classList.add("just-skipped");
-          setTimeout(() => {
-            row.classList.remove("just-skipped");
-          }, 1000);
         }
-
-
 
 
       // ✅ Tô màu xen kẽ
@@ -1465,10 +1454,6 @@ function submitThuHocPhi() {
 function skipThuHocPhi() {
   const classId = document.getElementById("thu-class").value;
 
-  // Đánh dấu học sinh bị bỏ qua
-  const skippedId = pendingStudents[currentIndex]?.[0];
-  window.lastBoQua = { classId, studentId: skippedId };
-
   currentIndex++;
   if (currentIndex >= pendingStudents.length) {
     checkThuHocPhiHoanTat(classId);
@@ -1479,7 +1464,6 @@ function skipThuHocPhi() {
   document.getElementById("thu-student").value = nextStudent[0];
   updateTienThuHocPhi();
 }
-
 
 
 
