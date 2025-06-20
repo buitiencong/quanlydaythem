@@ -19,27 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("addtoscreenios")?.style.setProperty("display", "flex");
   }
 
-  // ✅ Android: trigger sớm beforeinstallprompt nếu đã sẵn sàng
-  if (!isStandalone && isAndroid && deferredPrompt) {
-    // Hiển thị gợi ý thêm ứng dụng bằng nút "Thêm"
-    const addPrompt = document.createElement('div');
-      addPrompt.innerHTML = `
-        <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
-          📲 Thêm ứng dụng vào màn hình chính?
-          <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
-        </div>
-      `;
-    document.body.appendChild(addPrompt);
-
-    document.getElementById('btn-add').addEventListener('click', () => {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
-        addPrompt.remove();
-      });
-    });
-  }
-
   // Xử lý mở menu cho mobile
   const toggleBtn = document.getElementById("menuToggle");
   const menuBar = document.querySelector(".menu-bar");
@@ -205,10 +184,18 @@ function saveToLocal() {
 
 
 
-window.addEventListener('beforeinstallprompt', (e) => {
+window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
+
+  // ✅ Hiển thị Form ngay lập tức khi prompt được hệ thống phát hiện
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+
+  if (!isStandalone) {
+    document.getElementById("addtoscreenadr")?.style.setProperty("display", "flex");
+  }
 });
+
 
 
 // Hàm toast hỗ trợ IOS
