@@ -6,6 +6,8 @@ let thuFilterState = {
 };
 
 let deferredPrompt = null;
+let isIntroClosed = false;
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
@@ -68,13 +70,23 @@ initSqlJs({
     if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
-      checkIfNoClasses();
-      // ✅ Thêm dòng này — CHỈ GỌI khi DB đã sẵn sàng
-      autoExportIfNeeded();
+
+      // ✅ Nếu đã đóng form hướng dẫn → chạy ngay
+      if (isIntroClosed) {
+        checkIfNoClasses();
+        autoExportIfNeeded();
+      } else {
+        // ✅ Nếu chưa → chờ đến khi đóng form
+        window._pendingInitAfterIntro = () => {
+          checkIfNoClasses();
+          autoExportIfNeeded();
+        };
+      }
     } else {
-      initNewDatabase(); // ✅ KHỞI TẠO DB MỚI NẾU KHÔNG CÓ
+      initNewDatabase(); // ✅ KHỞI TẠO DB MỚI nếu không có
     }
   });
+
 
   document.getElementById("dbfile").addEventListener("change", function () {
     const file = this.files[0];
@@ -1724,11 +1736,21 @@ function closeAddToScreenModal(confirmed) {
   document.getElementById("addtoscreenios")?.style.setProperty("display", "none");
   document.getElementById("addtoscreenadr")?.style.setProperty("display", "none");
 
-  // Nếu là Android và người dùng xác nhận → gọi prompt
+  // ✅ Đánh dấu đã đóng hướng dẫn
+  isIntroClosed = true;
+
+  // ✅ Nếu là Android và người dùng xác nhận → gọi prompt
   if (confirmed && deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(() => {
       deferredPrompt = null;
     });
   }
+
+  // ✅ Gọi lại các bước khởi tạo nếu đã chờ
+  if (window._pendingInitAfterIntro) {
+    window._pendingInitAfterIntro();
+    window._pendingInitAfterIntro = null;
+  }
 }
+
