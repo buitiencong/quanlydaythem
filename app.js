@@ -1432,28 +1432,22 @@ function submitThuHocPhi() {
 
   saveToLocal();
 
-  // Ghi nhớ để highlight
+  // Ghi nhớ học sinh vừa thu học phí để highlight
   window.lastDiemDanh = {
     classId,
     studentId,
-    active: true
+    active: true // ✅ để trigger highlight
   };
 
-  // Cập nhật lại giao diện
+  // ✅ Trì hoãn một chút để Safari có thời gian render animation
   setTimeout(() => {
     loadClasses(classId);
     updateThuHocPhiThongKe(classId);
   }, 30);
 
-  // Kiểm tra xem còn ai chưa thu không (truy vấn lại DB)
-  const result = db.exec(`
-    SELECT student_id, student_name FROM Students
-    WHERE class_id = ${classId} AND noptien = 0
-  `);
-  pendingStudents = result[0]?.values || [];
-  currentIndex = 0;
-
-  if (pendingStudents.length === 0) {
+  // Chuyển sang học sinh tiếp theo
+  currentIndex++;
+  if (currentIndex >= pendingStudents.length) {
     setTimeout(() => {
       showToast("🎉 Đã thu học phí xong.", '', true);
       closeThuHocPhi();
@@ -1461,7 +1455,6 @@ function submitThuHocPhi() {
     return;
   }
 
-  // Cập nhật form cho học sinh kế tiếp
   const nextStudent = pendingStudents[currentIndex];
   document.getElementById("thu-student").value = nextStudent[0];
   updateTienThuHocPhi();
@@ -1469,24 +1462,16 @@ function submitThuHocPhi() {
 
 
 function skipThuHocPhi() {
-  const classId = document.getElementById("thu-class").value;
+  if (pendingStudents.length === 0) {
+    alert("🎉 Đã duyệt hết danh sách.");
+    closeThuHocPhi();
+    return;
+  }
 
   currentIndex++;
 
   if (currentIndex >= pendingStudents.length) {
-    // Kiểm tra còn ai chưa thu học phí không
-    const result = db.exec(`
-      SELECT COUNT(*) FROM Students
-      WHERE class_id = ${classId} AND noptien = 0
-    `);
-    const count = result[0]?.values[0][0] || 0;
-
-    if (count === 0) {
-      showToast("🎉 Đã thu học phí xong.", '', true);
-    } else {
-      alert("📋 Đã duyệt hết danh sách (vẫn còn học sinh chưa thu).");
-    }
-
+    alert("🎉 Đã duyệt hết danh sách.");
     closeThuHocPhi();
     return;
   }
@@ -1495,7 +1480,6 @@ function skipThuHocPhi() {
   document.getElementById("thu-student").value = nextStudent[0];
   updateTienThuHocPhi();
 }
-
 
 function updateThuHocPhiThongKe(classId) {
   try {
