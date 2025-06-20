@@ -572,6 +572,16 @@ tr:nth-child(even) {
   100% { background-color: inherit; }
 }
 
+/* Tô sáng học sinh vừa bị bỏ qua */
+.just-skipped {
+  animation: rowFlashSkipped 1s ease-in-out;
+}
+
+@keyframes rowFlashSkipped {
+  0%   { background-color: #ffd6d6; }  /* đỏ nhạt */
+  50%  { background-color: #ffcaca; }
+  100% { background-color: inherit; }
+}
 
 
 
