@@ -593,7 +593,9 @@ tr:nth-child(even) {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px 10px;
+  padding: 10px;
+  padding-left: 5px;
+  padding-right: 10px;
   gap: 15px;
   background-color: #007ACC;
   border-radius: 5px;
@@ -605,7 +607,7 @@ tr:nth-child(even) {
 .button-lichsuthuhocphi .text {
   color: white;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   transition: 400ms;
 }
 
@@ -691,5 +693,9 @@ tr:nth-child(even) {
   .modal-actions .btn-boqua {
     font-size: 12px;
   }
-}
 
+  .search-button {
+  padding: 8px 8px;
+  margin-left: 8px;
+  }
+}
