@@ -5,6 +5,42 @@ let thuFilterState = {
   chuathu: false
 };
 
+document.addEventListener("DOMContentLoaded", () => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
+
+  // ✅ iOS: hiển thị hướng dẫn ngay lập tức
+  if (!isStandalone && isIOS) {
+    showToast(`
+      📱 <b>Thêm ứng dụng vào màn hình chính:</b><br>
+      <span style="margin-left: 20px;">🔗 Nhấn <b>Chia sẻ</b></span><br>
+      <span style="margin-left: 20px;">➕ Chọn <b>Thêm vào Màn hình chính</b></span>
+    `);
+  }
+
+  // ✅ Android: trigger sớm beforeinstallprompt nếu đã sẵn sàng
+  if (!isStandalone && isAndroid && deferredPrompt) {
+    // Hiển thị gợi ý thêm ứng dụng bằng nút "Thêm"
+    const addPrompt = document.createElement('div');
+    addPrompt.innerHTML = `
+      <div style="position: fixed; bottom: 10px; left: 10px; right: 10px; background: #007acc; color: white; padding: 15px; text-align: center; border-radius: 10px; z-index: 10000;">
+        📲 Thêm ứng dụng vào màn hình chính?
+        <button id="btn-add" style="margin-left: 10px; padding: 5px 10px; background: white; color: #007acc; border: none; border-radius: 5px;">Thêm</button>
+      </div>
+    `;
+    document.body.appendChild(addPrompt);
+
+    document.getElementById('btn-add').addEventListener('click', () => {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        addPrompt.remove();
+      });
+    });
+  }
+});
+
 
 // Khởi tạo SQLite và kiểm tra dữ liệu từ IndexedDB
 initSqlJs({
@@ -16,10 +52,7 @@ initSqlJs({
     if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
-      // ✅ Trì hoãn thông báo "Chưa tạo lớp" vài giây để hướng dẫn iOS/PWA hiện trước
-      setTimeout(() => {
-        checkIfNoClasses();
-      }, 3500);  // 3.5 giây, bạn có thể chỉnh lại theo ý
+      checkIfNoClasses();
       // ✅ Thêm dòng này — CHỈ GỌI khi DB đã sẵn sàng
       autoExportIfNeeded();
     } else {
