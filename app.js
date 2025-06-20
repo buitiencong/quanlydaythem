@@ -356,8 +356,6 @@ function showClassData(classId, filter = null) {
     const studentResult = db.exec(query);
     const students = studentResult[0]?.values || [];
 
-
-
     // ✅ Lấy danh sách ngày điểm danh
     const datesResult = db.exec(`
       SELECT DISTINCT attendance_date FROM Attendance
@@ -410,18 +408,26 @@ function showClassData(classId, filter = null) {
       const [student_id, student_name] = students[index];
       const row = document.createElement("tr");
 
-        // Gắn class để highlight nếu là học sinh vừa điểm danh
-        if (
-          window.lastDiemDanh &&
-          String(window.lastDiemDanh.classId) === String(classId) &&
-          String(window.lastDiemDanh.studentId) === String(student_id)
-        ) {
-          row.classList.add("just-updated");
-          setTimeout(() => {
-            row.classList.remove("just-updated");
-          }, 1000);
-        }
-
+      // ✅ Highlight học sinh vừa thu hoặc vừa bỏ qua
+      if (
+        window.lastDiemDanh &&
+        String(window.lastDiemDanh.classId) === String(classId) &&
+        String(window.lastDiemDanh.studentId) === String(student_id)
+      ) {
+        row.classList.add("just-updated");
+        setTimeout(() => {
+          row.classList.remove("just-updated");
+        }, 1000);
+      } else if (
+        window.lastBoQua &&
+        String(window.lastBoQua.classId) === String(classId) &&
+        String(window.lastBoQua.studentId) === String(student_id)
+      ) {
+        row.classList.add("just-skipped");
+        setTimeout(() => {
+          row.classList.remove("just-skipped");
+        }, 1000);
+      }
 
       // ✅ Tô màu xen kẽ
       row.style.backgroundColor = index % 2 === 0 ? "#ffffff" : "#f0faff";
@@ -450,7 +456,7 @@ function showClassData(classId, filter = null) {
       tdTien.style.textAlign = "center";
       row.appendChild(tdTien);
 
-      // Cột các ngày điểm danh
+      // Các cột ngày điểm danh
       for (const date of allDates) {
         const ddRes = db.exec(`
           SELECT 1 FROM Attendance
@@ -467,7 +473,7 @@ function showClassData(classId, filter = null) {
           td.style.color = "red";
         }
 
-        // ✅ Gắn class just-marked nếu đúng học sinh + ngày vừa điểm danh
+        // ✅ Highlight ngày vừa điểm danh (nếu có)
         if (
           window.lastDiemDanh &&
           String(window.lastDiemDanh.classId) === String(classId) &&
@@ -480,20 +486,23 @@ function showClassData(classId, filter = null) {
         row.appendChild(td);
       }
 
-
       tbody.appendChild(row);
     }
 
     table.appendChild(tbody);
 
-    // ✅ Hiển thị lên giao diện
+    // ✅ Hiển thị bảng
     container.innerHTML = "";
-    container.appendChild(infoDiv);   // dòng thông tin lớp
-    container.appendChild(table);     // bảng học sinh
+    container.appendChild(infoDiv);
+    container.appendChild(table);
 
+    // ✅ Scroll đến dòng vừa tương tác
     setTimeout(() => {
-      const targetRow = document.querySelector(`#tab-${classId} tr.just-updated`);
-      if (targetRow && window.lastDiemDanh?.active === true) {
+      const targetRow =
+        document.querySelector(`#tab-${classId} tr.just-updated`) ||
+        document.querySelector(`#tab-${classId} tr.just-skipped`);
+      
+      if (targetRow && (window.lastDiemDanh?.active || window.lastBoQua?.active)) {
         const rect = targetRow.getBoundingClientRect();
 
         const scrollX = window.scrollX + rect.left + rect.width - window.innerWidth + 32;
@@ -505,17 +514,16 @@ function showClassData(classId, filter = null) {
           behavior: "smooth"
         });
 
-        window.lastDiemDanh = null; // reset để tránh cuộn sai lần sau
+        // ✅ Reset cả hai biến highlight
+        window.lastDiemDanh = null;
+        window.lastBoQua = null;
       }
     }, 100);
-
-
-
-    
   } catch (err) {
     container.innerHTML = "<p style='color:red'>Lỗi hiển thị dữ liệu: " + err.message + "</p>";
   }
 }
+
 
 
 
@@ -1454,9 +1462,21 @@ function submitThuHocPhi() {
 function skipThuHocPhi() {
   const classId = document.getElementById("thu-class").value;
 
+  // ✅ Gán học sinh bị bỏ qua
+  const skippedId = pendingStudents[currentIndex]?.[0];
+  window.lastDiemDanh = null; // Xoá highlight vàng nếu có
+  window.lastBoQua = { classId, studentId: skippedId, active: true };
+
+  // ✅ Gọi loadClasses để render lại bảng và highlight
+  setTimeout(() => {
+    loadClasses(classId);
+  }, 30);
+
   currentIndex++;
   if (currentIndex >= pendingStudents.length) {
-    checkThuHocPhiHoanTat(classId);
+    setTimeout(() => {
+      checkThuHocPhiHoanTat(classId);
+    }, 100);
     return;
   }
 
