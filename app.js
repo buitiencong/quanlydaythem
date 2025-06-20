@@ -57,16 +57,9 @@ initSqlJs({
       loadClasses();
 
       // ✅ Nếu đã đóng form hướng dẫn → chạy ngay
-      if (isIntroClosed) {
-        checkIfNoClasses();
-        autoExportIfNeeded();
-      } else {
-        // ✅ Nếu chưa → chờ đến khi đóng form
-        window._pendingInitAfterIntro = () => {
-          checkIfNoClasses();
-          autoExportIfNeeded();
-        };
-      }
+      checkIfNoClasses();
+autoExportIfNeeded();
+
     } else {
       initNewDatabase(); // ✅ KHỞI TẠO DB MỚI nếu không có
     }
@@ -158,7 +151,7 @@ function checkIfNoClasses() {
     if (count === 0) {
       // ✅ Trì hoãn 1 chút để đảm bảo alert không bị chặn trong PWA
       setTimeout(() => {
-        alert("🏫 Cơ sở dữ liệu chưa có lớp nào. Vui lòng tạo lớp mới để bắt đầu.");
+        alert("🏫 Chưa có lớp nào được tạo. Vui lòng tạo lớp mới để bắt đầu.");
         handleThemLop(); // 👈 mở form thêm lớp sau alert
       }, 200);
     }
