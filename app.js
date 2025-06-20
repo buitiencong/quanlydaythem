@@ -16,7 +16,10 @@ initSqlJs({
     if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
-      checkIfNoClasses();
+      // ✅ Trì hoãn thông báo "Chưa tạo lớp" vài giây để hướng dẫn iOS/PWA hiện trước
+      setTimeout(() => {
+        checkIfNoClasses();
+      }, 3500);  // 3.5 giây, bạn có thể chỉnh lại theo ý
       // ✅ Thêm dòng này — CHỈ GỌI khi DB đã sẵn sàng
       autoExportIfNeeded();
     } else {
