@@ -392,7 +392,7 @@ tr:nth-child(even) {
   background: #0071e2;
 }
 
-.btn-boqua {
+.modal-actions .btn-boqua {
   font-size: 14px;
 }
 
@@ -688,7 +688,7 @@ tr:nth-child(even) {
     font-size: 14px;
   }
 
-  .btn-boqua {
+  .modal-actions .btn-boqua {
     font-size: 13px;
   }
 }
