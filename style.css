@@ -604,10 +604,16 @@ tr:nth-child(even) {
   transition: 400ms;
 }
 
-.button-lichsuthuhocphi .text {
+.button-lichsuthuhocphi .loc {
+  color: white;
+  font-size: 14px;
+  transition: 400ms;
+}
+
+.button-lichsuthuhocphi .tai_lai {
   color: white;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   transition: 400ms;
 }
 
