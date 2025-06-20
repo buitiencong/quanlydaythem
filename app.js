@@ -1783,21 +1783,29 @@ document.querySelectorAll('#themLopModal input').forEach((input, index, inputs) 
     if (e.key === 'Enter') {
       e.preventDefault();
 
+      let focused = false;
       for (let i = index + 1; i < inputs.length; i++) {
         const next = inputs[i];
-        // ❌ Bỏ qua nếu là checkbox, bị disabled, hoặc type="date"
         if (
           !next.disabled &&
           next.type !== 'checkbox' &&
           next.type !== 'date'
         ) {
           next.focus();
-          return;
+          focused = true;
+          break;
         }
+      }
+
+      // 👉 Nếu không còn input nào phù hợp để focus
+      if (!focused) {
+        const saveBtn = document.querySelector('#themLopModal .modal-actions button');
+        if (saveBtn) saveBtn.focus();
       }
     }
   });
 });
+
 
 
 
