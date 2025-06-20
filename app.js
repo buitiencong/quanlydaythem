@@ -195,13 +195,16 @@ function checkIfNoStudents(classId) {
     const count = result[0]?.values?.[0]?.[0] || 0;
 
     if (count === 0) {
-      alert("🤷‍♂️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
-      setTimeout(() => handleThemHs(), 100);
+      setTimeout(() => {
+        alert("🤷‍♂️ Lớp này chưa có học sinh. Vui lòng thêm học sinh.");
+        setTimeout(() => handleThemHs(), 100); // vẫn giữ delay nhẹ sau alert
+      }, 0);
     }
   } catch (err) {
     console.error("Lỗi kiểm tra học sinh:", err.message);
   }
 }
+
 
 
 // Hàm để lưu các thay đổi cơ sở dữ liệu
