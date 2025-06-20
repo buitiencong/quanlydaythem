@@ -1740,6 +1740,7 @@ function closeBackupModal(confirmed) {
   }
 }
 
+// Hàm đóng Form hướng dẫn thêm vào màn hình chính
 function closeAddToScreenModal(confirmed) {
   document.getElementById("addtoscreenios")?.style.setProperty("display", "none");
   document.getElementById("addtoscreenadr")?.style.setProperty("display", "none");
@@ -1757,8 +1758,10 @@ function closeAddToScreenModal(confirmed) {
 
   // ✅ Gọi lại các bước khởi tạo nếu đã chờ
   if (window._pendingInitAfterIntro) {
-    window._pendingInitAfterIntro();
-    window._pendingInitAfterIntro = null;
+    setTimeout(() => {
+      window._pendingInitAfterIntro();
+      window._pendingInitAfterIntro = null;
+    }, 100); // chờ 100ms để DOM update (ẩn modal) rồi mới alert
   }
 }
 
