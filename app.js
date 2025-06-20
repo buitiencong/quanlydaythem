@@ -19,6 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("addtoscreenios")?.style.setProperty("display", "flex");
   }
 
+  if (!isStandalone && isAndroid) {
+    setTimeout(() => {
+      document.getElementById("addtoscreenadr")?.style.setProperty("display", "flex");
+    }, 1000); // có thể chờ 1s để DOM ổn định
+  }
+
   // Xử lý mở menu cho mobile
   const toggleBtn = document.getElementById("menuToggle");
   const menuBar = document.querySelector(".menu-bar");
@@ -187,13 +193,6 @@ function saveToLocal() {
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-
-  // ✅ Hiển thị Form ngay lập tức khi prompt được hệ thống phát hiện
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-
-  if (!isStandalone) {
-    document.getElementById("addtoscreenadr")?.style.setProperty("display", "flex");
-  }
 });
 
 
