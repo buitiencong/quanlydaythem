@@ -1777,5 +1777,20 @@ function closeAddToScreenModal(confirmed) {
   }
 }
 
+// Hàm tự động nhảy input khi nhập liệu
+document.querySelectorAll('#themLopModal input').forEach((input, index, inputs) => {
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // ngăn submit form nếu có
+      // tìm input tiếp theo (bỏ qua checkbox hoặc bị ẩn)
+      for (let i = index + 1; i < inputs.length; i++) {
+        if (!inputs[i].disabled && inputs[i].type !== 'checkbox') {
+          inputs[i].focus();
+          return;
+        }
+      }
+    }
+  });
+});
 
 
