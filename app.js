@@ -420,9 +420,7 @@ function showClassData(classId, filter = null) {
           setTimeout(() => {
             row.classList.remove("just-updated");
           }, 1000);
-        }
-
-        if (
+        } else if (
           window.lastBoQua &&
           String(window.lastBoQua.classId) === String(classId) &&
           String(window.lastBoQua.studentId) === String(student_id)
@@ -432,6 +430,7 @@ function showClassData(classId, filter = null) {
             row.classList.remove("just-skipped");
           }, 1000);
         }
+
 
 
 
