@@ -680,7 +680,7 @@ tr:nth-child(even) {
 }
 
 /* Giảm cỡ chữ 2 nút Thu học phí và Điểm danh trên thiết bị màn hình nhỏ */
-@media (max-width: 375px) {
+@media (max-width: 390px) {
   .action-buttons button {
     font-size: 13px;
   }
