@@ -51,26 +51,32 @@ initSqlJs({
 }).then(SQLLib => {
   SQL = SQLLib;
 
+  // ✅ Gán đúng lúc khi PWA khởi động
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isStandalone) {
+    isIntroClosed = true;
+  }
+
   localforage.getItem("userDB").then(buffer => {
     if (buffer instanceof Uint8Array || buffer?.length) {
       db = new SQL.Database(new Uint8Array(buffer));
       loadClasses();
 
-      // ✅ Nếu đã đóng form hướng dẫn → chạy ngay
       if (isIntroClosed) {
         checkIfNoClasses();
         autoExportIfNeeded();
       } else {
-        // ✅ Nếu chưa → chờ đến khi đóng form
         window._pendingInitAfterIntro = () => {
           checkIfNoClasses();
           autoExportIfNeeded();
         };
       }
     } else {
-      initNewDatabase(); // ✅ KHỞI TẠO DB MỚI nếu không có
+      initNewDatabase();
     }
   });
+});
+
 
 
   document.getElementById("dbfile").addEventListener("change", function () {
@@ -172,20 +178,16 @@ function checkIfNoClasses() {
     const result = db.exec("SELECT COUNT(*) FROM Classes");
     const count = result[0]?.values[0][0] || 0;
     if (count === 0) {
-      // ✅ Lắng nghe tương tác đầu tiên
-      const onFirstInteraction = () => {
+      // ✅ Trì hoãn 1 chút để đảm bảo alert không bị chặn trong PWA
+      setTimeout(() => {
         alert("🏫 Chưa có lớp nào được tạo. Vui lòng tạo lớp mới để bắt đầu.");
-        handleThemLop();
-        document.removeEventListener("click", onFirstInteraction);
-      };
-
-      document.addEventListener("click", onFirstInteraction, { once: true });
+        handleThemLop(); // 👈 mở form thêm lớp sau alert
+      }, 200);
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra lớp:", err.message);
   }
 }
-
 
 
 // Check xem trong lớp có học sinh nào chưa
