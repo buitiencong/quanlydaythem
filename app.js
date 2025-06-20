@@ -1406,15 +1406,13 @@ function submitThuHocPhi() {
   const classId = document.getElementById("thu-class").value;
 
   if (pendingStudents.length === 0) {
-    alert("🎉 Đã thu học phí xong.");
-    closeThuHocPhi();
+    checkThuHocPhiHoanTat(classId);
     return;
   }
 
   const [studentId, studentName] = pendingStudents[currentIndex];
   const className = document.getElementById("thu-class").selectedOptions[0].textContent;
 
-  // Tính tiền
   const hocphi = db.exec(`SELECT class_hocphi FROM Classes WHERE class_id = ${classId}`)?.[0]?.values[0][0] || 0;
   const sobuoi = db.exec(`
     SELECT COUNT(*) FROM Attendance
@@ -1422,7 +1420,6 @@ function submitThuHocPhi() {
   `)?.[0]?.values[0][0] || 0;
   const money = sobuoi * hocphi;
 
-  // Cập nhật DB
   db.run(`UPDATE Students SET noptien = 1 WHERE student_id = ?`, [studentId]);
   const date = new Date().toISOString().split("T")[0];
   db.run(`
@@ -1432,25 +1429,17 @@ function submitThuHocPhi() {
 
   saveToLocal();
 
-  // Ghi nhớ học sinh vừa thu học phí để highlight
-  window.lastDiemDanh = {
-    classId,
-    studentId,
-    active: true // ✅ để trigger highlight
-  };
+  window.lastDiemDanh = { classId, studentId, active: true };
 
-  // ✅ Trì hoãn một chút để Safari có thời gian render animation
   setTimeout(() => {
     loadClasses(classId);
     updateThuHocPhiThongKe(classId);
   }, 30);
 
-  // Chuyển sang học sinh tiếp theo
   currentIndex++;
   if (currentIndex >= pendingStudents.length) {
     setTimeout(() => {
-      showToast("🎉 Đã thu học phí xong.", '', true);
-      closeThuHocPhi();
+      checkThuHocPhiHoanTat(classId);
     }, 100);
     return;
   }
@@ -1461,18 +1450,13 @@ function submitThuHocPhi() {
 }
 
 
+
 function skipThuHocPhi() {
-  if (pendingStudents.length === 0) {
-    alert("🎉 Đã duyệt hết danh sách.");
-    closeThuHocPhi();
-    return;
-  }
+  const classId = document.getElementById("thu-class").value;
 
   currentIndex++;
-
   if (currentIndex >= pendingStudents.length) {
-    alert("🎉 Đã duyệt hết danh sách.");
-    closeThuHocPhi();
+    checkThuHocPhiHoanTat(classId);
     return;
   }
 
@@ -1480,6 +1464,27 @@ function skipThuHocPhi() {
   document.getElementById("thu-student").value = nextStudent[0];
   updateTienThuHocPhi();
 }
+
+
+
+// Kiểm tra xem trong lớp còn học sinh nào chưa thu học phí không
+function checkThuHocPhiHoanTat(classId) {
+  const result = db.exec(`
+    SELECT COUNT(*) FROM Students
+    WHERE class_id = ${classId} AND noptien = 0
+  `);
+  const count = result[0]?.values?.[0]?.[0] || 0;
+
+  if (count === 0) {
+    showToast("🎉 Đã thu học phí xong.", '', true);
+  } else {
+    showToast("📋 Đã duyệt hết danh sách", '', true); // (vẫn còn học sinh chưa thu).
+  }
+
+  closeThuHocPhi();
+}
+
+
 
 function updateThuHocPhiThongKe(classId) {
   try {
