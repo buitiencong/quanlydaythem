@@ -594,8 +594,6 @@ tr:nth-child(even) {
   justify-content: center;
   align-items: center;
   padding: 10px;
-  padding-left: 5px;
-  padding-right: 10px;
   gap: 15px;
   background-color: #007ACC;
   border-radius: 5px;
