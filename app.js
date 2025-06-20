@@ -152,7 +152,15 @@ function initNewDatabase() {
 
   saveToLocal();         // ✅ Lưu DB mới vào localforage
   loadClasses();         // ✅ Cập nhật UI
-  checkIfNoClasses();    // ✅ Thông báo nếu chưa có lớp
+  if (isIntroClosed) {
+    checkIfNoClasses();
+    autoExportIfNeeded();
+  } else {
+    window._pendingInitAfterIntro = () => {
+      checkIfNoClasses();
+      autoExportIfNeeded();
+    };
+  }
 }
 
 
