@@ -180,7 +180,7 @@ function checkIfNoClasses() {
     if (count === 0) {
       // ✅ Trì hoãn 1 chút để đảm bảo alert không bị chặn trong PWA
       setTimeout(() => {
-        alert("🏫 Chưa có lớp nào được tạo.\n"+"      Hãy tạo lớp mới để bắt đầu.");
+        alert("🏫 Chưa có lớp nào được tạo.\n"+"       Hãy tạo lớp mới để bắt đầu.");
         handleThemLop(); // 👈 mở form thêm lớp sau alert
       }, 200);
     }
@@ -198,7 +198,7 @@ function checkIfNoStudents(classId) {
 
     if (count === 0) {
       setTimeout(() => {
-        alert("🤷‍♂️ Lớp này chưa có học sinh.\nHãy thêm học sinh.");
+        alert("🤷‍♂️ Lớp này chưa có học sinh.\n"+"       Hãy thêm học sinh.");
         setTimeout(() => handleThemHs(), 100); // vẫn giữ delay nhẹ sau alert
       }, 0);
     }
