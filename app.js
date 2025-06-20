@@ -40,7 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
   if (classId) {
     updateThuHocPhiThongKe(classId);
   }
-
+  // ✅ Gọi hàm nhảy Enter cho cả 2 modal sau khi DOM sẵn sàng
+  enableEnterToJump('#themLopModal', '.modal-actions button');
+  enableEnterToJump('#suaLopModal', '.modal-actions button');
 });
 
 
@@ -1778,33 +1780,36 @@ function closeAddToScreenModal(confirmed) {
 }
 
 // Hàm tự động nhảy input khi nhập liệu
-document.querySelectorAll('#themLopModal input').forEach((input, index, inputs) => {
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
+function enableEnterToJump(formSelector, finalButtonSelector) {
+  const inputs = document.querySelectorAll(`${formSelector} input`);
+  inputs.forEach((input, index) => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
 
-      let focused = false;
-      for (let i = index + 1; i < inputs.length; i++) {
-        const next = inputs[i];
-        if (
-          !next.disabled &&
-          next.type !== 'checkbox' &&
-          next.type !== 'date'
-        ) {
-          next.focus();
-          focused = true;
-          break;
+        let focused = false;
+        for (let i = index + 1; i < inputs.length; i++) {
+          const next = inputs[i];
+          if (
+            !next.disabled &&
+            next.type !== 'checkbox' &&
+            next.type !== 'date'
+          ) {
+            next.focus();
+            focused = true;
+            break;
+          }
+        }
+
+        if (!focused) {
+          const saveBtn = document.querySelector(`${formSelector} ${finalButtonSelector}`);
+          if (saveBtn) saveBtn.focus();
         }
       }
-
-      // 👉 Nếu không còn input nào phù hợp để focus
-      if (!focused) {
-        const saveBtn = document.querySelector('#themLopModal .modal-actions button');
-        if (saveBtn) saveBtn.focus();
-      }
-    }
+    });
   });
-});
+}
+
 
 
 
