@@ -51,7 +51,7 @@ initSqlJs({
 }).then(SQLLib => {
   SQL = SQLLib;
 
-  // ✅ Gán đúng lúc khi PWA khởi động
+  // ✅ Thêm dòng sau để tránh lỗi khi chạy dưới PWA (không có form intro)
   const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   if (isStandalone) {
     isIntroClosed = true;
@@ -72,11 +72,9 @@ initSqlJs({
         };
       }
     } else {
-      initNewDatabase();
+      initNewDatabase(); // ✅ KHỞI TẠO DB MỚI nếu không có
     }
   });
-});
-
 
 
   document.getElementById("dbfile").addEventListener("change", function () {
