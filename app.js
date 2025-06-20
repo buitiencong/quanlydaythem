@@ -1781,16 +1781,23 @@ function closeAddToScreenModal(confirmed) {
 document.querySelectorAll('#themLopModal input').forEach((input, index, inputs) => {
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // ngăn submit form nếu có
-      // tìm input tiếp theo (bỏ qua checkbox hoặc bị ẩn)
+      e.preventDefault();
+
       for (let i = index + 1; i < inputs.length; i++) {
-        if (!inputs[i].disabled && inputs[i].type !== 'checkbox') {
-          inputs[i].focus();
+        const next = inputs[i];
+        // ❌ Bỏ qua nếu là checkbox, bị disabled, hoặc type="date"
+        if (
+          !next.disabled &&
+          next.type !== 'checkbox' &&
+          next.type !== 'date'
+        ) {
+          next.focus();
           return;
         }
       }
     }
   });
 });
+
 
 
