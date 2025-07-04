@@ -150,11 +150,12 @@
       <h3>🏫 Thêm lớp</h3>
 
       <label style="color: #ff0000;">Tên lớp: *
-        <input type="text" id="lop-ten" required />
+        <input type="text" id="lop-ten" style="text-transform: capitalize;" required />
       </label>
 
       <label style="color: #ff0000;">Học phí mỗi buổi: *
-        <input type="number" id="lop-hocphi" />
+        <!-- <input type="number" id="lop-hocphi" /> -->
+        <input type="tel" inputmode="numeric" id="lop-hocphi" class="currency-input"/>
       </label>
       
       <label>Ngày bắt đầu:
@@ -201,12 +202,13 @@
         <select id="edit-class-select" onchange="loadLopInfoToForm()"></select>
       </label>
 
-      <label>Tên lớp:
-        <input type="text" id="edit-ten" />
+      <label>Tên lớp mới:
+        <input type="text" id="edit-ten" style="text-transform: capitalize;"/>
       </label>
 
       <label>Học phí mỗi buổi:
-        <input type="number" id="edit-hocphi" />
+        <!-- <input type="number" id="edit-hocphi" /> -->
+        <input type="tel" inputmode="numeric" id="edit-hocphi" class="currency-input"/>
       </label>
 
       <label>Ngày bắt đầu:
@@ -257,7 +259,7 @@
       </label>
 
       <label>Họ và tên học sinh:
-        <input type="text" id="hs-ten" placeholder="Nguyễn Văn A" />
+        <input type="text" id="hs-ten" placeholder="Nguyễn Văn A" style="text-transform: capitalize;"/>
       </label>
 
       <div class="modal-actions">
@@ -282,7 +284,7 @@
       </label>
 
       <label>Tên mới:
-        <input type="text" id="edit-hs-name" placeholder="Nhập tên mới..." />
+        <input type="text" id="edit-hs-name" placeholder="Nhập tên mới..." style="text-transform: capitalize;"/>
       </label>
 
       <div class="modal-actions">

@@ -45,8 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
   enableEnterToJump('#suaLopModal', '.modal-actions button');
 
   // Gắn formatter vào các input tiền
-  attachCurrencyFormatter(document.getElementById("lop-hocphi"));
-  attachCurrencyFormatter(document.getElementById("edit-hocphi"));
+attachCurrencyFormatter("#lop-hocphi");
+attachCurrencyFormatter("#edit-hocphi");
+
 });
 
 
@@ -820,14 +821,20 @@ function submitThemLop() {
   const tenRaw = document.getElementById("lop-ten").value.trim();
   const ten = capitalizeWords(tenRaw);
   const ngay = document.getElementById("lop-ngay").value;
+
   const hocphiInput = document.getElementById("lop-hocphi");
-  const hocphi = parseInt(hocphiInput.dataset.rawValue || '0');
+
+  // ✅ Tự lấy lại số nếu người dùng chưa blur
+  const raw = hocphiInput.value.replace(/[^\d]/g, "");
+  hocphiInput.dataset.rawValue = raw;
+  const hocphi = parseInt(raw || "0");
+
   const thoigian = document.getElementById("lop-thoigian").value.trim();
   const diadiem = document.getElementById("lop-diadiem").value.trim();
 
   let messages = [];
   if (!ten) messages.push("Tên lớp");
-  if (!hocphiValue || isNaN(hocphi)) messages.push("Học phí");
+  if (isNaN(hocphi) || hocphi <= 0) messages.push("Học phí");
 
   if (messages.length > 0) {
     alert("Hãy nhập: " + messages.join(" và "));
@@ -840,17 +847,14 @@ function submitThemLop() {
     VALUES (?, ?, ?, ?, ?)
   `, [ten, ngay, hocphi, thoigian, diadiem]);
 
-  // ✅ Lấy ID lớp vừa thêm (chính xác nhất)
   const newClassId = db.exec(`SELECT last_insert_rowid()`)[0].values[0][0];
 
-  // ✅ Nếu người dùng chọn sao chép học sinh từ lớp khác
+  // ✅ Sao chép học sinh nếu cần
   const checkbox = document.getElementById("lop-copy-checkbox");
   const sourceClassId = document.getElementById("lop-copy-select").value;
 
   if (checkbox.checked && sourceClassId) {
-    const students = db.exec(`
-      SELECT student_name FROM Students WHERE class_id = ${sourceClassId}
-    `);
+    const students = db.exec(`SELECT student_name FROM Students WHERE class_id = ${sourceClassId}`);
     students[0]?.values.forEach(([name]) => {
       db.run(`INSERT INTO Students (student_name, class_id) VALUES (?, ?)`, [name, newClassId]);
     });
@@ -860,14 +864,12 @@ function submitThemLop() {
   closeThemLop();
   loadClasses(newClassId);
 
-  // ✅ Không cần switchTab nữa — tab đã active sẵn trong loadClasses()
-  // ✅ Gọi checkIfNoStudents thủ công với delay nhỏ
   setTimeout(() => {
     checkIfNoStudents(newClassId);
   }, 100);
-
-
 }
+
+
 
 
 
@@ -927,13 +929,22 @@ function submitSuaLop() {
   const rawTen = document.getElementById("edit-ten").value.trim();
   const ten = capitalizeWords(rawTen);
   const ngay = document.getElementById("edit-ngay").value;
+
   const hocphiInput = document.getElementById("edit-hocphi");
-  const hocphi = parseInt(hocphiInput.dataset.rawValue || '0');
+  const raw = hocphiInput.value.replace(/[^\d]/g, "");
+  hocphiInput.dataset.rawValue = raw;
+  const hocphi = parseInt(raw || "0");
+
   const thoigian = document.getElementById("edit-thoigian").value.trim();
   const diadiem = document.getElementById("edit-diadiem").value.trim();
 
-  if (!ten || !ngay) {
-    alert("Hãy nhập đầy đủ Tên lớp và Ngày bắt đầu.");
+  let messages = [];
+  if (!ten) messages.push("Tên lớp");
+  if (!ngay) messages.push("Ngày bắt đầu");
+  if (isNaN(hocphi) || hocphi <= 0) messages.push("Học phí");
+
+  if (messages.length > 0) {
+    alert("Hãy nhập: " + messages.join(" và "));
     return;
   }
 
@@ -949,6 +960,7 @@ function submitSuaLop() {
   // ✅ Load lại danh sách lớp và chọn đúng lớp vừa sửa
   loadClasses(classId);
 }
+
 
 
 // Xóa lớp
@@ -1877,5 +1889,9 @@ function attachCurrencyFormatter(selector) {
 
   input.dataset.hasCurrencyListener = "true";
 }
+
+
+
+
 
 

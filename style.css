@@ -318,7 +318,6 @@ tr:nth-child(even) {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
-  text-transform: capitalize;
 }
 .modal-content input[type="date"] {
   width: 100%;
