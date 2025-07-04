@@ -43,6 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // ✅ Gọi hàm nhảy Enter cho cả 2 modal sau khi DOM sẵn sàng
   enableEnterToJump('#themLopModal', '.modal-actions button');
   enableEnterToJump('#suaLopModal', '.modal-actions button');
+
+  // Gắn formatter vào các input tiền
+  attachCurrencyFormatter(document.getElementById("lop-hocphi"));
+  attachCurrencyFormatter(document.getElementById("edit-hocphi"));
 });
 
 
@@ -816,8 +820,8 @@ function submitThemLop() {
   const tenRaw = document.getElementById("lop-ten").value.trim();
   const ten = capitalizeWords(tenRaw);
   const ngay = document.getElementById("lop-ngay").value;
-  const hocphiValue = document.getElementById("lop-hocphi").value.trim();
-  const hocphi = parseInt(hocphiValue);
+  const hocphiInput = document.getElementById("lop-hocphi");
+  const hocphi = parseInt(hocphiInput.dataset.rawValue || '0');
   const thoigian = document.getElementById("lop-thoigian").value.trim();
   const diadiem = document.getElementById("lop-diadiem").value.trim();
 
@@ -923,7 +927,8 @@ function submitSuaLop() {
   const rawTen = document.getElementById("edit-ten").value.trim();
   const ten = capitalizeWords(rawTen);
   const ngay = document.getElementById("edit-ngay").value;
-  const hocphi = parseInt(document.getElementById("edit-hocphi").value) || 0;
+  const hocphiInput = document.getElementById("edit-hocphi");
+  const hocphi = parseInt(hocphiInput.dataset.rawValue || '0');
   const thoigian = document.getElementById("edit-thoigian").value.trim();
   const diadiem = document.getElementById("edit-diadiem").value.trim();
 
@@ -1836,6 +1841,41 @@ function enableEnterToJump(formSelector, finalButtonSelector) {
 }
 
 
+// Định dạng tiền kiểu Việt Nam, ví dụ: "100.000 đ"
+function attachCurrencyFormatter(selector) {
+  const input = document.querySelector(selector);
+  if (!input) return;
 
+  if (input.dataset.hasCurrencyListener) return;
+
+  input.addEventListener("input", function (e) {
+    const inputEl = this;
+    const selectionStart = inputEl.selectionStart;
+
+    // Lấy số thuần tuý từ chuỗi
+    const raw = inputEl.value.replace(/[^\d]/g, "");
+
+    if (!raw) {
+      inputEl.value = "";
+      return;
+    }
+
+    // Định dạng lại chuỗi số
+    const formatted = Number(raw).toLocaleString("vi-VN") + " đ";
+
+    // Tính chênh lệch độ dài chuỗi trước/sau định dạng
+    const oldLength = inputEl.value.length;
+    inputEl.value = formatted;
+    const newLength = formatted.length;
+    const diff = newLength - oldLength;
+
+    // Cập nhật lại vị trí con trỏ gần nhất (nếu có thể)
+    let newPos = selectionStart + diff;
+    newPos = Math.min(newPos, inputEl.value.length - 2); // tránh chèn sau " đ"
+    inputEl.setSelectionRange(newPos, newPos);
+  });
+
+  input.dataset.hasCurrencyListener = "true";
+}
 
 
